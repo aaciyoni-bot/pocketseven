@@ -1882,7 +1882,7 @@
                         {currentView === 'leaders' && activeClub && <LeadersView user={effUser} showToast={showToast} />}
                         {currentView === 'backoffice' && activeClub && <BackofficeView user={effUser} clubSettings={clubSettings} showToast={showToast} />}
                         {currentView === 'poker-create' && <PokerCreateView user={effUser} clubSettings={clubSettings} onBack={() => { setLobbyTab('poker'); changeView('lobby'); }} onCreated={() => { setLobbyTab('poker'); changeView('lobby'); showToast("Poker table opened!", "success"); }} />}
-                        {currentView === 'poker-table' && <PokerTable tableDocId={activeTable?.docId} user={effUser} onLeave={() => { setLobbyTab('poker'); changeView('lobby'); }} showToast={showToast} />}
+                        {currentView === 'poker-table' && <PokerTable tableDocId={activeTable?.docId} user={effUser} clubSettings={clubSettings} onLeave={() => { setLobbyTab('poker'); changeView('lobby'); }} showToast={showToast} />}
                         {currentView === 'durak-table' && <DurakTable tableDocId={activeTable?.docId} user={effUser} clubSettings={clubSettings} onLeave={() => { setLobbyTab('durak'); changeView('lobby'); }} showToast={showToast} />}
                         {currentView === 'ofc-table' && <OFCTable tableDocId={activeTable?.docId} user={effUser} clubSettings={clubSettings} onLeave={() => { setLobbyTab('ofc'); changeView('lobby'); }} showToast={showToast} />}
                     </main>
@@ -2984,12 +2984,10 @@
                         {/* Install prompt on the home screen — visible only when the app isn't installed yet (see InstallBanner). */}
                         <InstallBanner variant="lobby" />
 
-                        {/* Poker-first: land on poker tables. Other games are a marginal switcher; tournaments live inside the Poker tab. */}
+                        {/* Pocket Seven is poker-only — no other games are offered. */}
                         <div className="flex items-center gap-1.5 mb-7">
                             {[
                                 { id: 'poker', label: 'Poker', suit: '♠', n: pokerTables.length },
-                                { id: 'durak', label: 'Durak', icon: 'fa-shield-halved', n: durakTables.length },
-                                { id: 'ofc', label: 'Chinese Poker', icon: 'fa-table-cells', n: ofcTables.length },
                             ].map(g => (
                                 <button key={g.id} onClick={() => setTab(g.id)} className={`flex-1 justify-center px-2.5 py-2 rounded-xl font-black text-sm border transition-all flex items-center gap-1.5 whitespace-nowrap ${tab === g.id ? 'bg-emerald-500/20 border-emerald-400/60 text-emerald-200 shadow-[0_4px_16px_rgba(6,182,212,0.2)]' : 'bg-slate-900/60 border-white/10 text-slate-400 hover:text-white'}`}>
                                     {g.suit ? <SuitGlyph s={g.suit} color="currentColor" size="0.9em"/> : <i className={`fa-solid ${g.icon} text-xs`}></i>}
@@ -4222,7 +4220,7 @@
         /* ================================================================
            Poker table - מנוע + תצוגה
            ================================================================ */
-        function PokerTable({ tableDocId, user, onLeave, showToast }) {
+        function PokerTable({ tableDocId, user, clubSettings, onLeave, showToast }) {
             const [tableState, setTableState] = useState(null);
             const [loading, setLoading] = useState(true);
             const [godView, setGodView] = useState(false);
@@ -5019,6 +5017,7 @@
                מצטרפים כשיש לפחות אדם אחד בשולחן, בהפסקות בין ידיים, עד שהשולחן מתמלא. */
             useEffect(() => {
                 if (!isSuperAdmin || !tableState) return;
+                if (clubSettings?.botsAuto !== true) return; // בוטים אוטומטית רק אם הופעל במפורש; אחרת ידני בלבד
                 if (!['waiting','showdown'].includes(gs.phase)) return;
                 const iv = setInterval(async () => {
                     try {
@@ -5048,7 +5047,7 @@
                     } catch(e) {}
                 }, 3500);
                 return () => clearInterval(iv);
-            }, [gs.phase, playersCount, isSuperAdmin]);
+            }, [gs.phase, playersCount, isSuperAdmin, clubSettings?.botsAuto]);
 
             /* ---------- טיימר תור ---------- */
             useEffect(() => {
@@ -5420,12 +5419,22 @@
                     <div className="flex-1 relative flex items-center justify-center p-3 sm:p-5 min-h-0">
 
                         {/* GOD: מה יבוא בשולחן */}
-                        {godView && ['preflop','discard','flop','turn','river'].includes(gs.phase) && (gs.deck || []).length >= 8 && (() => {
-                            const d = gs.deck; const L = d.length; const bl = (gs.board || []).length;
+                        {godView && ['preflop','discard','flop','turn','river'].includes(gs.phase) && (() => {
+                            const board = gs.board || []; const bl = board.length;
+                            let fin = null; // הבורד הסופי (5 קלפים)
+                            if (srvEngine) {
+                                if ((godFinal || []).length === 5) fin = godFinal;
+                            } else if ((gs.deck || []).length >= 8) {
+                                const d = [...gs.deck]; const p2 = [...board];
+                                if (p2.length === 0) { d.pop(); p2.push(d.pop(), d.pop(), d.pop()); }
+                                while (p2.length >= 3 && p2.length < 5 && d.length >= 2) { d.pop(); p2.push(d.pop()); }
+                                if (p2.length === 5) fin = p2;
+                            }
+                            if (!fin || fin.some(c => !c)) return null;
                             const nxt = [];
-                            if (bl === 0) { nxt.push(['Flop', [d[L-2], d[L-3], d[L-4]]]); nxt.push(['Turn', [d[L-6]]]); nxt.push(['River', [d[L-8]]]); }
-                            else if (bl === 3) { nxt.push(['Turn', [d[L-2]]]); nxt.push(['River', [d[L-4]]]); }
-                            else if (bl === 4) { nxt.push(['River', [d[L-2]]]); }
+                            if (bl < 3) nxt.push(['Flop', fin.slice(bl, 3)]);
+                            if (bl < 4) nxt.push(['Turn', [fin[3]]]);
+                            if (bl < 5) nxt.push(['River', [fin[4]]]);
                             if (!nxt.length) return null;
                             return (
                                 <div className="absolute top-1 left-1/2 -translate-x-1/2 z-[80] flex items-center gap-3 bg-purple-950/90 border border-purple-500/50 rounded-2xl px-4 py-1.5 backdrop-blur shadow-xl">
