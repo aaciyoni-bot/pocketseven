@@ -35,4 +35,4 @@ jobs:
       - name: Deploy functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: firebase deploy --only functions --project pocketnine --non-interactive --force
+        run: firebase deploy --only functions --project pocketnine-51af8 --non-interactive --force

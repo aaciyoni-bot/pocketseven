@@ -26,4 +26,4 @@ jobs:
       - name: Deploy Firestore rules
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: firebase deploy --only firestore:rules --project pocketnine --non-interactive --force
+        run: firebase deploy --only firestore:rules --project pocketnine-51af8 --non-interactive --force
