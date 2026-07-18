@@ -1,7 +1,7 @@
 {
-  "name": "PocketNine",
-  "short_name": "PocketNine",
-  "description": "PocketNine \u2014 The Private Card Room. Poker, OFC & Durak clubs with friends.",
+  "name": "Pocket Seven",
+  "short_name": "Pocket Seven",
+  "description": "Pocket Seven — The Poker Club. Private poker clubs & tournaments with friends.",
   "id": "/",
   "start_url": "./",
   "scope": "./",
@@ -9,8 +9,8 @@
   "orientation": "portrait",
   "dir": "ltr",
   "lang": "en",
-  "background_color": "#f3f2f2",
-  "theme_color": "#f3f2f2",
+  "background_color": "#0C0908",
+  "theme_color": "#0C0908",
   "categories": [
     "games",
     "entertainment"
@@ -19,7 +19,7 @@
   "related_applications": [
     {
       "platform": "webapp",
-      "url": "https://pocketnine.com/manifest.json"
+      "url": "https://pocketseven.com/manifest.json"
     }
   ],
   "icons": [

@@ -3,25 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PocketNine</title>
+    <title>Pocket Seven</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#05070f">
+    <meta name="theme-color" content="#0C0908">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="POCKETNINE">
+    <meta name="apple-mobile-web-app-title" content="POCKET SEVEN">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Pocket Seven type: Cinzel (display/brand), Inter (UI/numbers), Noto Sans Hebrew (RTL) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Hebrew:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -29,8 +25,8 @@
             theme: {
                 extend: {
                     colors: {
-                        slate: { 950: '#05070f', 900: '#0c1322', 800: '#161f33', 700: '#26334d' },
-                        gold: { 400: '#f5c860', 500: '#e3ae4e' },
+                        slate: { 950: '#0C0908', 900: '#160B0A', 800: '#1C1211', 700: '#3a2420' },
+                        gold: { 400: '#F8C830', 500: '#D89830' },
                         emerald: { 50:'#ecfeff',100:'#cffafe',200:'#a5f3fc',300:'#67e8f9',400:'#22d3ee',500:'#06b6d4',600:'#0891b2',700:'#0e7490',800:'#155e75',900:'#164e63',950:'#083344' }
                     },
                     fontFamily: { sans: ['Heebo', 'sans-serif'], rubik: ['Rubik', 'sans-serif'] }
@@ -436,26 +432,36 @@
         .cube-emerald, .cube-rose, .cube-sky, .cube-amber, .cube-cyan, .cube-purple, .cube-indigo, .cube-teal, .cube-orange, .cube-lime, .cube-gold { --cubeA: #22d3ee; }
 
         /* לוגו נושם */
-        /* ═══ POCKETNINE Design Tokens v2 ═══ */
+        /* ═══ POCKET SEVEN Design Tokens ═══ (extracted from the app: gold accent,
+           bordeaux grounds, green felt, victory blue) */
         :root {
-            --pt-bg: #07090F; --pt-card: #0E1219; --pt-raised: #141926;
-            --pt-line: rgba(255,255,255,0.06);
-            --pt-text: #EDF0F4; --pt-text-2: #8B95A7; --pt-text-3: #565F70;
-            --pt-gold: #D5B36B; --pt-gold-deep: #A98544;
-            --pt-green: #3DD68C; --pt-red: #F0556D;
-            --pt-shadow: 0 8px 28px rgba(0,0,0,0.45);
+            --ps-ground: #0C0908; --ps-ground2: #140D0C;
+            --ps-panel: #1C1211; --ps-panel2: #271010;
+            --ps-line: rgba(248,200,48,0.15); --ps-line2: rgba(255,240,220,0.08);
+            --ps-gold: #F8C830; --ps-gold-deep: #D89830; --ps-gold-light: #F8D030;
+            --ps-felt: #217D4E; --ps-felt-l: #3C8A56; --ps-felt-d: #14432c;
+            --ps-blue: #2E5C8F; --ps-blue-deep: #08386D;
+            --ps-text: #F3EBDE; --ps-muted: #B29B8B; --ps-ink: #1A0E04;
+            --ps-red: #c0392b; --ps-green: #217D4E;
+            /* keep the inherited --pt-* names working, remapped to Pocket Seven */
+            --pt-bg: #0C0908; --pt-card: #1C1211; --pt-raised: #271010;
+            --pt-line: rgba(248,200,48,0.15);
+            --pt-text: #F3EBDE; --pt-text-2: #B29B8B; --pt-text-3: #8a7a6e;
+            --pt-gold: #F8C830; --pt-gold-deep: #D89830;
+            --pt-green: #217D4E; --pt-red: #c0392b;
+            --pt-shadow: 0 10px 30px rgba(0,0,0,0.55);
         }
         /* משקלים: אין 800-900. מספרים tabular */
         .font-black, .font-extrabold { font-weight: 700 !important; letter-spacing: 0 !important; }
         [dir="ltr"] .tbl-stakes, .tbl-buyin-val, .stack-capsule { font-variant-numeric: tabular-nums; }
         /* כפתור זהב ראשי */
         .btn-gold {
-            background: linear-gradient(180deg, #E2C685, #C9A45A);
-            color: #241A08 !important; font-weight: 700;
-            border: 1px solid rgba(255,236,195,0.5); border-radius: 10px;
-            box-shadow: var(--pt-shadow);
+            background: linear-gradient(180deg, #F8D030, #D89830);
+            color: #1A0E04 !important; font-weight: 700; letter-spacing: 0.02em;
+            border: 1px solid rgba(255,240,190,0.6); border-radius: 10px;
+            box-shadow: 0 8px 22px rgba(216,152,48,0.28), inset 0 1px 0 rgba(255,255,255,0.45);
         }
-        .btn-gold:hover { filter: brightness(1.05); }
+        .btn-gold:hover { filter: brightness(1.06); }
         .btn-outline {
             background: transparent; color: var(--pt-text-2) !important; font-weight: 600;
             border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
@@ -475,55 +481,96 @@
             color: var(--pt-gold); font-weight: 700; font-size: 18px; font-family: 'Rubik', sans-serif;
         }
         .pt-hero {
-            border-radius: var(--pn-radius, 2px); border: 1px solid var(--pn-line, #201e1d);
+            border-radius: 16px; border: 1px solid var(--ps-line);
             background:
-                repeating-linear-gradient(90deg, transparent 0 46px, rgba(32,30,29,0.06) 46px 47px),
-                linear-gradient(180deg, #ffffff, #f3f2f2);
-            box-shadow: 0 1px 3px rgba(32,30,29,.14);
+                radial-gradient(120% 140% at 88% -20%, rgba(248,200,48,0.12), transparent 55%),
+                linear-gradient(180deg, #271010, #14090b);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.55), inset 0 1px 0 rgba(248,200,48,0.12);
             position: relative; overflow: hidden;
         }
-        .pt-hero::after { content: '9'; position: absolute; right: 24px; top: 50%; transform: translateY(-54%) rotate(8deg); font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; font-size: 120px; color: rgba(0,136,176,0.16); }
-        .pt-hero::before { content: '◉ THE PRIVATE CARD ROOM — EST. 2026 ◉'; position: absolute; left: 24px; top: 50%; transform: translateY(-50%); font-size: 11px; letter-spacing: .3em; color: #8f8a85; }
+        .pt-hero::after { content: '7'; position: absolute; right: 26px; top: 50%; transform: translateY(-54%) rotate(6deg); font-family: 'Cinzel', Georgia, serif; font-weight: 900; font-size: 130px; color: rgba(248,200,48,0.18); line-height: 1; }
+        .pt-hero::before { content: 'THE POKER CLUB'; position: absolute; left: 24px; top: 50%; transform: translateY(-50%); font-size: 11px; letter-spacing: .34em; color: var(--ps-muted); font-family: 'Inter', sans-serif; }
 
-        /* ═══════════ POCKETNINE «The Press Room» theme layer ═══════════
-           Paper, ink and registration plates. Overrides the inherited dark chrome:
-           light #f3f2f2 paper, Source Serif 4 everywhere, 2px radius, cyan for
-           interaction, magenta as rare spot. Iterated further as design assets land. */
-        :root {
-            --pn-bg: #f3f2f2; --pn-card: #ffffff; --pn-raised: #ffffff;
-            --pn-line: #201e1d; --pn-text: #201e1d; --pn-text-2: #5c5854; --pn-text-3: #8f8a85;
-            --pn-accent: #0088b0; --pn-accent-deep: #005f7c;
-            --pn-green: #1a7d4e; --pn-red: #c22f2f; --pn-felt: #dfe9ec; --pn-radius: 2px;
-            --pn-nlh: #0088b0; --pn-plo: #d6006c; --pn-plo5: #b08900; --pn-plo6: #201e1d; --pn-pine: #587a84;
-            /* remap the inherited gold tokens to Press Room ink/cyan */
-            --pt-bg: #f3f2f2; --pt-card: #ffffff; --pt-raised: #ffffff;
-            --pt-line: rgba(32,30,29,0.9); --pt-text: #201e1d; --pt-text-2: #5c5854; --pt-text-3: #8f8a85;
-            --pt-gold: #0088b0; --pt-gold-deep: #005f7c; --pt-green: #1a7d4e; --pt-red: #c22f2f;
-            --pt-shadow: 0 4px 12px rgba(32,30,29,0.16);
+        /* ═══════════ POCKET SEVEN theme layer ═══════════
+           Premium dark casino: bordeaux-black grounds, metallic gold accent,
+           green felt, Cinzel display + Inter UI. Overrides the inherited cyan
+           chrome — stays dark so every component keeps its contrast. */
+        html, body, .bg-slate-950 { background: var(--ps-ground) !important; color: var(--ps-text); }
+        #root {
+            background:
+                radial-gradient(1200px 760px at 50% -12%, rgba(107,20,20,0.55), transparent 60%),
+                radial-gradient(900px 620px at 92% 112%, rgba(248,200,48,0.06), transparent 55%),
+                radial-gradient(760px 520px at 6% 108%, rgba(46,92,143,0.06), transparent 55%),
+                linear-gradient(180deg, #11050C 0%, #0C0908 60%) !important;
         }
-        html, body, .bg-slate-950 { background: var(--pn-bg) !important; color: var(--pn-text); }
-        /* Serif chrome — inherited, so Font Awesome's own font-family still wins on icons */
-        html, body, #root, button, input, select, textarea { font-family: 'Source Serif 4', Georgia, serif; }
+        .aurora-bg { background: transparent !important; animation: none !important; }
+        /* type: Inter for chrome/numbers, Cinzel for brand & headings */
+        html, body, #root, button, input, select, textarea { font-family: 'Inter', 'Noto Sans Hebrew', system-ui, -apple-system, sans-serif; }
+        .card-face, .rummy-tile, .casino-chip-inner, .stack-capsule, .win-tag { font-family: 'Inter', sans-serif !important; }
+        h1, h2, h3, .logo-shine, .font-display, .cinzel { font-family: 'Cinzel', Georgia, serif !important; letter-spacing: 0.02em; }
+        [dir="ltr"] .tbl-stakes, .tbl-buyin-val, .stack-capsule, .card-face { font-variant-numeric: tabular-nums; }
+        /* Font Awesome keeps its own font despite the inherited family */
         .fa, .fas, .far, .fa-solid, .fa-regular, i[class^="fa-"], i[class*=" fa-"] { font-family: 'Font Awesome 6 Free' !important; }
         .fab, .fa-brands { font-family: 'Font Awesome 6 Brands' !important; }
-        .aurora-bg { background: var(--pn-bg) !important; }
-        .glass-panel, .grad-card-inner, .club-card, .tbl-row { background: var(--pn-card) !important; border: 1px solid var(--pn-line) !important; border-radius: var(--pn-radius) !important; box-shadow: 0 1px 3px rgba(32,30,29,.14) !important; color: var(--pn-text); }
-        .text-white { color: var(--pn-text) !important; }
-        .text-slate-300, .text-slate-400, .text-slate-200 { color: var(--pn-text-2) !important; }
-        .text-slate-500, .text-slate-600 { color: var(--pn-text-3) !important; }
-        .text-emerald-400, .text-emerald-300, .text-gold-400, .text-amber-300, .text-amber-400 { color: var(--pn-accent) !important; }
-        .btn-gold { background: var(--pn-accent) !important; color: #fff !important; border: 1px solid var(--pn-accent-deep) !important; border-radius: var(--pn-radius) !important; box-shadow: none !important; }
-        .btn-gold:hover { background: var(--pn-accent-deep) !important; filter: none; }
-        .btn-outline { border: 1px solid var(--pn-line) !important; color: var(--pn-text-2) !important; border-radius: var(--pn-radius) !important; }
-        .bg-slate-900, .bg-slate-800, .bg-slate-900\/95, .bg-slate-900\/70, .bg-slate-900\/60, .bg-slate-800\/80, .bg-slate-950\/60 { background: var(--pn-card) !important; color: var(--pn-text); }
-        input, select, textarea { background: #fff !important; color: var(--pn-text) !important; border: 1px solid var(--pn-line) !important; border-radius: var(--pn-radius) !important; }
-        .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-lg { border-radius: var(--pn-radius) !important; }
-        .rounded-full, .player-pod, .club-badge { border-radius: 50% !important; }
-        .logo-shine { background: none !important; -webkit-background-clip: unset !important; background-clip: unset !important; color: var(--pn-text) !important; animation: none !important; text-shadow: none; }
-        /* the felt */
-        .table-oval, [class*="table-felt"] { background: var(--pn-felt) !important; }
-        /* variant spines remapped */
-        .tbl-spine { border-right-color: var(--pn-accent); }
+        /* surfaces → bordeaux panels with a gold hairline */
+        .glass-panel, .grad-card-inner, .stat-tile {
+            background: linear-gradient(180deg, rgba(28,18,17,0.92), rgba(20,13,12,0.96)) !important;
+            border: 1px solid var(--ps-line) !important;
+            box-shadow: 0 18px 44px rgba(0,0,0,0.5), inset 0 1px 0 rgba(248,200,48,0.08) !important;
+        }
+        .grad-card { background: linear-gradient(165deg, rgba(248,200,48,0.5), rgba(248,200,48,0.05) 40%, rgba(216,152,48,0.28)) !important; box-shadow: 0 14px 34px rgba(0,0,0,0.45), 0 0 18px rgba(248,200,48,0.06) !important; }
+        .bg-slate-900, .bg-slate-800, .bg-slate-900\/95, .bg-slate-900\/70, .bg-slate-900\/60, .bg-slate-800\/80, .bg-slate-950\/60, .bg-slate-950\/70 { background: rgba(28,18,17,0.9) !important; }
+        /* accent text: cyan / emerald / amber → gold (green stays green for money) */
+        .text-emerald-400, .text-emerald-300, .text-emerald-500, .text-cyan-400, .text-cyan-300, .text-sky-400, .text-gold-400, .text-amber-300, .text-amber-400, .text-amber-500 { color: var(--ps-gold) !important; }
+        .border-emerald-400, .border-emerald-500, .border-cyan-400, .border-amber-400, .ring-emerald-400, .ring-amber-400 { border-color: rgba(248,200,48,0.5) !important; }
+        .bg-emerald-600, .bg-emerald-500, .bg-emerald-700 { background: linear-gradient(180deg,#F8D030,#D89830) !important; color:#1A0E04 !important; }
+        /* buttons */
+        .btn-outline { border: 1px solid rgba(248,200,48,0.35) !important; color: var(--ps-gold) !important; background: transparent; }
+        .btn-outline:hover { border-color: rgba(248,200,48,0.7) !important; color: var(--ps-gold-light) !important; }
+        .btn-call {
+            background: linear-gradient(180deg, rgba(46,92,143,0.22), rgba(12,9,8,0.9)) !important;
+            border: 1px solid rgba(46,92,143,0.6) !important; color: #cfe0f2 !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 18px rgba(0,0,0,0.4) !important;
+        }
+        .btn-call:not(:disabled):hover { border-color: rgba(120,170,220,0.9) !important; box-shadow: 0 0 18px rgba(46,92,143,0.35) !important; }
+        .btn-raise { background: linear-gradient(180deg, #F8D030, #D89830) !important; border: 1px solid rgba(255,240,190,0.65) !important; color: #1A0E04 !important; }
+        /* inputs → dark with gold focus */
+        input, select, textarea { background: rgba(12,9,8,0.6) !important; color: var(--ps-text) !important; border: 1px solid rgba(248,200,48,0.18) !important; }
+        input:focus, select:focus, textarea:focus { border-color: rgba(248,200,48,0.6) !important; outline: none; box-shadow: 0 0 0 2px rgba(248,200,48,0.15) !important; }
+        input::placeholder, textarea::placeholder { color: #7a6a5e !important; }
+        /* brand logo → gold Cinzel */
+        .logo-shine { background: linear-gradient(180deg, #F8D030, #F8C830 45%, #D89830) !important; -webkit-background-clip: text !important; background-clip: text !important; color: transparent !important; font-family: 'Cinzel', Georgia, serif !important; animation: none !important; }
+        /* felt → green */
+        .table-oval, [class*="table-felt"] { background: radial-gradient(ellipse at 50% 42%, var(--ps-felt-l), var(--ps-felt) 45%, var(--ps-felt-d) 78%) !important; }
+        .poker-table {
+            background:
+                radial-gradient(ellipse at 50% 40%, rgba(248,200,48,0.06), transparent 60%),
+                radial-gradient(ellipse at 50% 42%, #3C8A56 0%, #217D4E 42%, #14432c 74%) !important;
+            border: 7px solid #0a0806 !important;
+            box-shadow: inset 0 0 90px rgba(0,0,0,0.75), 0 24px 60px rgba(0,0,0,0.85), 0 0 0 2px rgba(248,200,48,0.35) !important;
+        }
+        .poker-table::before { background: linear-gradient(165deg, #6b5320, #2a2012 40%, #6b5320 72%, #1a1408) border-box !important; }
+        .poker-table::after { border: 2px solid rgba(248,200,48,0.55) !important; box-shadow: 0 0 16px rgba(248,200,48,0.4), 0 0 40px rgba(248,200,48,0.14), inset 0 0 26px rgba(248,200,48,0.12) !important; }
+        /* player turn glow + spotlight → gold */
+        .active-glow { border-color: #F8C830 !important; animation: pulseBorderPS 1.5s infinite !important; }
+        @keyframes pulseBorderPS { 0%,100% { box-shadow: 0 0 10px rgba(248,200,48,0.45); } 50% { box-shadow: 0 0 24px rgba(248,200,48,0.9); } }
+        .player-spotlight { background: radial-gradient(circle, rgba(248,200,48,0.4) 0%, rgba(248,200,48,0.1) 40%, transparent 65%) !important; }
+        /* pill tabs active → gold */
+        .pill-tab.active { background: rgba(248,200,48,0.14) !important; color: var(--ps-gold) !important; border-color: rgba(248,200,48,0.45) !important; }
+        /* game cubes → bordeaux + gold accent */
+        .game-cube { border-color: var(--ps-line) !important; background: linear-gradient(165deg, #1C1211, #140D0C) !important; }
+        .game-cube:hover { border-color: rgba(248,200,48,0.4) !important; box-shadow: 0 14px 30px rgba(0,0,0,0.5), 0 0 20px rgba(248,200,48,0.1) !important; }
+        .game-cube .cube-icon { background: rgba(248,200,48,0.08) !important; border-color: rgba(248,200,48,0.25) !important; color: var(--ps-gold) !important; }
+        .cube-active { border-color: rgba(248,200,48,0.6) !important; box-shadow: inset 0 0 0 1px rgba(248,200,48,0.35), 0 12px 30px rgba(0,0,0,0.5), 0 0 26px rgba(248,200,48,0.18) !important; }
+        .cube-active .cube-icon { background: linear-gradient(180deg, #F8D030, #D89830) !important; color: #1A0E04 !important; border-color: rgba(255,240,190,0.7) !important; }
+        .cube-active .cube-label { color: #fff !important; } .cube-active .cube-count { color: var(--ps-gold) !important; }
+        /* club cards / lobby rows → bordeaux with gold hairline */
+        .club-card, .tbl-row { background: linear-gradient(180deg, #1C1211, #140D0C) !important; border: 1px solid var(--ps-line) !important; }
+        .club-card:hover, .tbl-row:hover { border-color: rgba(248,200,48,0.4) !important; transform: translateY(-1px); }
+        .club-badge { background: var(--ps-panel2) !important; border: 1px solid rgba(248,200,48,0.35) !important; color: var(--ps-gold) !important; font-family: 'Cinzel', serif !important; }
+        .tbl-spine { border-right-color: var(--ps-gold) !important; }
+        *::-webkit-scrollbar-thumb { background: rgba(248,200,48,0.25) !important; }
+        *::-webkit-scrollbar-thumb:hover { background: rgba(248,200,48,0.5) !important; }
 
         .lobby-bonus-mini button { padding: 4px 10px !important; border-radius: 999px !important; font-size: 10px !important; }
         .lobby-bonus-mini button .text-lg, .lobby-bonus-mini button .text-xl { font-size: 13px !important; }
@@ -697,48 +744,34 @@
     </script>
 </head>
 <body class="bg-slate-950 h-full w-full">
-<!-- ═══ POCKETNINE INTRO · «printing the 9» — four plates registering on paper ═══ -->
-<div id="pn-intro">
+<!-- ═══ POCKET SEVEN INTRO — gold wordmark on a bordeaux-black stage ═══ -->
+<div id="ps-intro">
   <style>
-    #pn-intro { position: fixed; inset: 0; z-index: 999999; background: #f3f2f2; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.45s ease; font-family: 'Source Serif 4', Georgia, serif; }
-    #pn-intro.pn-out { opacity: 0; pointer-events: none; }
-    #pn-intro .pn-stage { position: relative; width: 170px; height: 200px; }
-    #pn-intro .pn-plate { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 150px; font-weight: 700; opacity: 0; }
-    #pn-intro .pn-c { color: #0088b0; transform: translate(-5px, 4px); animation: pnStamp .34s ease .15s forwards; }
-    #pn-intro .pn-m { color: #d6006c; transform: translate(5px, -4px); mix-blend-mode: multiply; animation: pnStamp .34s ease .5s forwards; }
-    #pn-intro .pn-y { color: #b08900; transform: translate(-3px, -3px); mix-blend-mode: multiply; animation: pnStamp .34s ease .85s forwards; }
-    #pn-intro .pn-k { color: #201e1d; transform: translate(0, 0); animation: pnStamp .34s ease 1.2s forwards; }
-    @keyframes pnStamp { 0% { opacity: 0; transform: scale(1.25); } 60% { opacity: .92; } 100% { opacity: .92; } }
-    #pn-intro .pn-word { margin-top: 18px; font-size: 24px; letter-spacing: .02em; color: #201e1d; opacity: 0; animation: pnFade .6s ease 1.6s forwards; }
-    #pn-intro .pn-word b { font-weight: 700; }
-    #pn-intro .pn-word .pn-nine { color: #d6006c; font-weight: 700; }
-    #pn-intro .pn-sub { margin-top: 6px; font-size: 11px; letter-spacing: .28em; color: #8f8a85; text-transform: uppercase; opacity: 0; animation: pnFade .6s ease 1.85s forwards; }
-    #pn-intro .pn-load { display: flex; align-items: center; gap: 8px; margin-top: 26px; color: #8f8a85; font-size: 11px; letter-spacing: .2em; opacity: 0; animation: pnFade .7s ease 2s forwards; }
-    #pn-intro .pn-spin { width: 13px; height: 13px; border: 2px solid rgba(0,136,176,.25); border-top-color: #0088b0; border-radius: 50%; animation: pnSpin .9s linear infinite; }
-    @keyframes pnSpin { to { transform: rotate(360deg); } }
-    @keyframes pnFade { to { opacity: 1; } }
-    #pn-intro .pn-reg { position: absolute; bottom: 22px; font-size: 10px; letter-spacing: .3em; color: #8f8a85; }
+    #ps-intro { position: fixed; inset: 0; z-index: 999999; background: radial-gradient(1000px 700px at 50% 30%, #1a0a0a, #0C0908 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.5s ease; font-family: 'Inter', sans-serif; overflow: hidden; }
+    #ps-intro.ps-out { opacity: 0; pointer-events: none; }
+    #ps-intro .ps-logo { width: min(66vw, 300px); opacity: 0; transform: scale(0.94); animation: psIn 0.9s cubic-bezier(0.2,0.7,0.2,1) 0.12s forwards; filter: drop-shadow(0 10px 34px rgba(248,200,48,0.18)); }
+    #ps-intro .ps-rule { width: 66px; height: 2px; margin-top: 18px; background: linear-gradient(90deg, transparent, #F8C830, transparent); opacity: 0; animation: psFade 0.7s ease 1s forwards; }
+    #ps-intro .ps-sub { margin-top: 14px; font-size: 11px; letter-spacing: 0.42em; color: #B29B8B; text-transform: uppercase; opacity: 0; animation: psFade 0.7s ease 1.15s forwards; }
+    #ps-intro .ps-load { display: flex; align-items: center; gap: 9px; margin-top: 26px; color: #8a7a6e; font-size: 11px; letter-spacing: 0.24em; opacity: 0; animation: psFade 0.8s ease 1.35s forwards; }
+    #ps-intro .ps-spin { width: 13px; height: 13px; border: 2px solid rgba(248,200,48,0.25); border-top-color: #F8C830; border-radius: 50%; animation: psSpin 0.9s linear infinite; }
+    @keyframes psIn { to { opacity: 1; transform: scale(1); } }
+    @keyframes psFade { to { opacity: 1; } }
+    @keyframes psSpin { to { transform: rotate(360deg); } }
   </style>
-  <div class="pn-stage">
-    <div class="pn-plate pn-c">9</div>
-    <div class="pn-plate pn-m">9</div>
-    <div class="pn-plate pn-y">9</div>
-    <div class="pn-plate pn-k">9</div>
-  </div>
-  <div class="pn-word"><b>Pocket</b> <span class="pn-nine">Nine</span></div>
-  <div class="pn-sub">The Private Card Room</div>
-  <div class="pn-load"><div class="pn-spin"></div>LOADING</div>
-  <div class="pn-reg">◉ PRINTED IN FOUR PLATES — C·M·Y·K ◉</div>
+  <img class="ps-logo" src="logo-wordmark.png" alt="Pocket Seven">
+  <div class="ps-rule"></div>
+  <div class="ps-sub">The Poker Club</div>
+  <div class="ps-load"><div class="ps-spin"></div>LOADING</div>
   <script>
     (function(){
-      var el = document.getElementById('pn-intro');
-      var hide = function(){ if (!el) return; el.classList.add('pn-out'); setTimeout(function(){ el && el.remove(); el = null; }, 500); };
+      var el = document.getElementById('ps-intro');
+      var hide = function(){ if (!el) return; el.classList.add('ps-out'); setTimeout(function(){ el && el.remove(); el = null; }, 520); };
       el.addEventListener('click', hide);
-      setTimeout(hide, 3400);
+      setTimeout(hide, 3200);
     })();
   </script>
 </div>
-<!-- ═══ /POCKETNINE INTRO ═══ -->
+<!-- ═══ /POCKET SEVEN INTRO ═══ -->
     <div id="root" class="h-full w-full"></div>
     <script>
         if ('serviceWorker' in navigator) {
@@ -1623,9 +1656,9 @@
                         const mainRef = window.fb.doc(window.fb.db, "clubs", "main");
                         const mainSnap = await window.fb.getDoc(mainRef);
                         if (!mainSnap.exists() && (dbUser.email || '').toLowerCase() === SUPER_ADMIN_EMAIL) {
-                            await window.fb.setDoc(mainRef, { name: 'PocketNine Club', ownerUid: dbUser.uid, ownerName: dbUser.username, createdAt: Date.now() });
+                            await window.fb.setDoc(mainRef, { name: 'PocketSeven Club', ownerUid: dbUser.uid, ownerName: dbUser.username, createdAt: Date.now() });
                         } else if (mainSnap.exists() && mainSnap.data().name === 'Main Club' && (dbUser.email || '').toLowerCase() === SUPER_ADMIN_EMAIL) {
-                            await window.fb.updateDoc(mainRef, { name: 'PocketNine Club' });
+                            await window.fb.updateDoc(mainRef, { name: 'PocketSeven Club' });
                         }
                         // חברות ראשי מהנתונים הישנים - טרנזקציה חסינת כפילות
                         await window.fb.runTransaction(window.fb.db, async (tr) => {
@@ -1832,8 +1865,8 @@
                                 </div>
                             </div>
                             <div className="flex flex-col items-end cursor-pointer" onClick={() => changeView('lobby')}>
-                                <h1 className="text-xl font-black tracking-wider"><span className="logo-shine text-transparent bg-clip-text bg-gradient-to-l from-gold-400 via-amber-100 to-gold-400">POKER</span><span className="text-emerald-400">TEN</span></h1>
-                                <p className="text-[10px] text-emerald-400/90 font-black tracking-widest leading-none flex items-center gap-1">{clubSettings?.logo ? <img src={clubSettings.logo} alt="" className="w-4 h-4 rounded object-cover inline-block" /> : '🏛️'} {clubSettings?.name || activeClub.name} <span className="text-slate-600">· V26</span></p>
+                                <img src="logo-wordmark.png" alt="Pocket Seven" className="h-7 w-auto" />
+                                <p className="text-[10px] text-gold-400/90 font-black tracking-widest leading-none flex items-center gap-1 mt-0.5">{clubSettings?.logo ? <img src={clubSettings.logo} alt="" className="w-4 h-4 rounded object-cover inline-block" /> : '🏛️'} {clubSettings?.name || activeClub.name} <span className="text-slate-600">· V26</span></p>
                             </div>
                         </nav>
                     )}
@@ -1856,7 +1889,7 @@
                         <div dir="ltr" className="fixed inset-0 z-[400] bg-slate-950/90 backdrop-blur-sm flex items-end sm:items-center justify-center p-4" onClick={() => setShowInstall(false)}>
                             <div onClick={e=>e.stopPropagation()} className="bg-gradient-to-b from-slate-900 to-slate-950 border border-white/10 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl animate-pop-in mb-4">
                                 <div className="text-3xl mb-1">📲</div>
-                                <h3 className="text-lg font-black text-white mb-1">Install PocketNine</h3>
+                                <h3 className="text-lg font-black text-white mb-1">Install PocketSeven</h3>
                                 <p className="text-slate-400 text-xs font-bold mb-4">Add it to your home screen — opens full-screen like a real app.</p>
                                 {isIOSDev ? (
                                     <div className="text-left space-y-2.5">
@@ -1953,7 +1986,7 @@
                         <div dir="ltr" className="fixed inset-0 z-[400] bg-slate-950/90 backdrop-blur-sm flex items-end sm:items-center justify-center p-4" onClick={() => setShowGuide(false)}>
                             <div onClick={e=>e.stopPropagation()} className="bg-gradient-to-b from-slate-900 to-slate-950 border border-white/10 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl animate-pop-in mb-4">
                                 <div className="text-3xl mb-1">📲</div>
-                                <h3 className="text-lg font-black text-white mb-1">Install PocketNine</h3>
+                                <h3 className="text-lg font-black text-white mb-1">Install PocketSeven</h3>
                                 <p className="text-slate-400 text-xs font-bold mb-4">Add it to your home screen — opens full-screen like a real app.</p>
                                 {isIOSDev ? (
                                     <div className="text-left space-y-2.5">
@@ -1966,11 +1999,11 @@
                                 ) : stillInstalled ? (
                                     <div className="text-left space-y-2.5">
                                         <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/40">
-                                            <p className="text-emerald-300 text-sm font-black mb-1">✅ PocketNine is already installed on this phone</p>
+                                            <p className="text-emerald-300 text-sm font-black mb-1">✅ PocketSeven is already installed on this phone</p>
                                             <p className="text-slate-300 text-[11px] font-bold leading-relaxed">That's why Chrome won't offer a one-tap install — the app is here. If the icon is gone from your home screen, you only removed the shortcut.</p>
                                         </div>
-                                        <div className="flex items-center gap-3"><span className="w-7 h-7 rounded-lg bg-slate-800 text-emerald-400 flex items-center justify-center font-black shrink-0">1</span><span className="text-slate-200 text-sm font-bold">To open it: Chrome menu <b>⋮</b> → <b>Open app</b>, or find PocketNine in your app drawer</span></div>
-                                        <div className="flex items-center gap-3"><span className="w-7 h-7 rounded-lg bg-slate-800 text-emerald-400 flex items-center justify-center font-black shrink-0">2</span><span className="text-slate-200 text-sm font-bold">To reinstall fresh: <b>Settings → Apps → PocketNine → Uninstall</b>, reopen Chrome — the one-tap install returns</span></div>
+                                        <div className="flex items-center gap-3"><span className="w-7 h-7 rounded-lg bg-slate-800 text-emerald-400 flex items-center justify-center font-black shrink-0">1</span><span className="text-slate-200 text-sm font-bold">To open it: Chrome menu <b>⋮</b> → <b>Open app</b>, or find PocketSeven in your app drawer</span></div>
+                                        <div className="flex items-center gap-3"><span className="w-7 h-7 rounded-lg bg-slate-800 text-emerald-400 flex items-center justify-center font-black shrink-0">2</span><span className="text-slate-200 text-sm font-bold">To reinstall fresh: <b>Settings → Apps → PocketSeven → Uninstall</b>, reopen Chrome — the one-tap install returns</span></div>
                                     </div>
                                 ) : (
                                     <div className="text-left space-y-2.5">
@@ -1978,7 +2011,7 @@
                                         <div className="flex items-center gap-3"><span className="w-7 h-7 rounded-lg bg-slate-800 text-emerald-400 flex items-center justify-center font-black shrink-0">2</span><span className="text-slate-200 text-sm font-bold">Tap <b>Install app</b> / <b>Add to Home screen</b></span></div>
                                         <div className="flex items-center gap-3"><span className="w-7 h-7 rounded-lg bg-slate-800 text-emerald-400 flex items-center justify-center font-black shrink-0">3</span><span className="text-slate-200 text-sm font-bold">Confirm <b>Install</b> 🎉</span></div>
                                         <div className="mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30">
-                                            <p className="text-amber-300 text-[11px] font-bold leading-relaxed">Menu says <b>"Open app"</b> instead of Install? The app is still installed on your phone (removing the icon isn't uninstalling). Go to <b>Settings → Apps → PocketNine → Uninstall</b>, reopen Chrome, and the one-tap Install button will come back.</p>
+                                            <p className="text-amber-300 text-[11px] font-bold leading-relaxed">Menu says <b>"Open app"</b> instead of Install? The app is still installed on your phone (removing the icon isn't uninstalling). Go to <b>Settings → Apps → PocketSeven → Uninstall</b>, reopen Chrome, and the one-tap Install button will come back.</p>
                                         </div>
                                     </div>
                                 )}
@@ -1993,11 +2026,8 @@
             return (
                 <div className="h-full w-full flex flex-col items-center justify-center p-4 relative" style={{ background: "repeating-linear-gradient(0deg, transparent 0 46px, rgba(32,30,29,0.05) 46px 47px), #f3f2f2" }}>
                     <div className="glass-panel p-10 sm:p-12 rounded-3xl text-center relative z-10 w-full max-w-md animate-fade-in">
-                        <div className="w-16 h-16 mx-auto mb-5 rounded-xl flex items-center justify-center" style={{ background: 'var(--pt-raised)', border: '1px solid rgba(213,179,107,0.35)', boxShadow: 'var(--pt-shadow)' }}>
-                            <SuitGlyph s={'♠'} color={'#D5B36B'} size="30px"/>
-                        </div>
-                        <h2 className="text-4xl mb-1 tracking-widest" style={{ fontWeight: 700 }}><span className="logo-shine text-transparent bg-clip-text bg-gradient-to-l from-gold-400 via-amber-100 to-gold-400">POCKETNINE</span></h2>
-                        <p className="mb-10 tracking-[0.35em] uppercase text-xs" style={{ color: 'var(--pt-text-2)', fontWeight: 500 }}>Poker with friends</p>
+                        <img src="logo-wordmark.png" alt="Pocket Seven" className="w-52 sm:w-60 mx-auto mb-5" style={{ filter: 'drop-shadow(0 8px 26px rgba(248,200,48,0.16))' }} />
+                        <p className="mb-10 tracking-[0.4em] uppercase text-xs" style={{ color: 'var(--ps-muted)', fontWeight: 500 }}>The Poker Club</p>
                         <button onClick={()=>window.fb.signIn()} className="w-full bg-white hover:bg-slate-100 transition-transform hover:scale-[1.02] text-slate-900 py-4 px-6 rounded-xl shadow-xl flex items-center justify-center gap-3" style={{ fontWeight: 600 }}>
                             <i className="fa-brands fa-google text-blue-500 text-xl"></i> Sign in with Google
                         </button>
@@ -2260,7 +2290,7 @@
             useEffect(() => {
                 try { navigator.getInstalledRelatedApps && navigator.getInstalledRelatedApps().then(apps => setStillInstalled((apps || []).length > 0)).catch(() => {}); } catch(e) {}
             }, []);
-            const copySiteLink = async () => { try { await navigator.clipboard.writeText('https://pocketnine.com'); showToast("Link copied - paste in Safari", "success"); } catch(e) { showToast("Copy manually: pocketnine.com", "info"); } };
+            const copySiteLink = async () => { try { await navigator.clipboard.writeText('https://pocketseven.com'); showToast("Link copied - paste in Safari", "success"); } catch(e) { showToast("Copy manually: pocketseven.com", "info"); } };
             useEffect(() => {
                 const h = () => setCanInstall(true);
                 window.addEventListener('pwa-installable', h);
@@ -2381,8 +2411,8 @@
                 <div style={{overflowX:"hidden"}} className="scrollable-content aurora-bg p-4 sm:p-8">
                     <div className="max-w-2xl mx-auto animate-fade-in relative z-10">
                         <div className="text-center mb-8 mt-6">
-                            <h1 className="logo-shine text-4xl sm:text-5xl tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-l from-gold-400 via-amber-100 to-gold-400" style={{ fontWeight: 700 }}>POCKETNINE</h1>
-                            <p className="text-[10px] sm:text-[11px] tracking-[0.3em] uppercase mt-2" style={{ color: 'var(--pt-text-2)', fontWeight: 500 }}>Private club games & tournaments</p>
+                            <img src="logo-wordmark.png" alt="Pocket Seven" className="w-48 sm:w-56 mx-auto" style={{ filter: 'drop-shadow(0 8px 26px rgba(248,200,48,0.16))' }} />
+                            <p className="text-[10px] sm:text-[11px] tracking-[0.3em] uppercase mt-2" style={{ color: 'var(--ps-muted)', fontWeight: 500 }}>Private club games & tournaments</p>
                             <p className="text-sm mt-5" style={{ color: 'var(--pt-text-2)', fontWeight: 500 }}>Hi {user.username} — pick a club, request to join, or create your own</p>
                             <button onClick={()=>window.fb.signOut(window.fb.auth)} className="text-xs text-slate-500 underline font-bold mt-2">Log out</button>
                             {!isStandalone && (canInstall || isIOS || isAndroidMob) && (
@@ -2400,11 +2430,11 @@
                                         {!isIOS && stillInstalled && (
                                             <div className="text-left space-y-2.5 mb-4">
                                                 <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/40">
-                                                    <p className="text-emerald-300 text-sm font-black mb-1">✅ PocketNine is already installed on this phone</p>
+                                                    <p className="text-emerald-300 text-sm font-black mb-1">✅ PocketSeven is already installed on this phone</p>
                                                     <p className="text-slate-300 text-[11px] font-bold leading-relaxed">That's why there's no one-tap install — the app is here. If the icon is gone from your home screen, you only removed the shortcut, not the app.</p>
                                                 </div>
-                                                <div className="flex items-center gap-3 bg-slate-950/60 border border-white/5 rounded-2xl p-3"><span className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white shrink-0"><i className="fa-solid fa-up-right-from-square"></i></span><span className="text-slate-200 font-bold text-sm">To open: Chrome menu <b>⋮</b> → <b>Open app</b>, or find PocketNine in your app drawer</span></div>
-                                                <div className="flex items-center gap-3 bg-slate-950/60 border border-white/5 rounded-2xl p-3"><span className="w-9 h-9 rounded-xl bg-slate-700 flex items-center justify-center text-white shrink-0"><i className="fa-solid fa-rotate"></i></span><span className="text-slate-200 font-bold text-sm">To reinstall fresh: <b>Settings → Apps → PocketNine → Uninstall</b>, reopen Chrome — the one-tap install returns</span></div>
+                                                <div className="flex items-center gap-3 bg-slate-950/60 border border-white/5 rounded-2xl p-3"><span className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white shrink-0"><i className="fa-solid fa-up-right-from-square"></i></span><span className="text-slate-200 font-bold text-sm">To open: Chrome menu <b>⋮</b> → <b>Open app</b>, or find PocketSeven in your app drawer</span></div>
+                                                <div className="flex items-center gap-3 bg-slate-950/60 border border-white/5 rounded-2xl p-3"><span className="w-9 h-9 rounded-xl bg-slate-700 flex items-center justify-center text-white shrink-0"><i className="fa-solid fa-rotate"></i></span><span className="text-slate-200 font-bold text-sm">To reinstall fresh: <b>Settings → Apps → PocketSeven → Uninstall</b>, reopen Chrome — the one-tap install returns</span></div>
                                             </div>
                                         )}
                                         {!isIOS && !stillInstalled && (
@@ -2413,14 +2443,14 @@
                                                 <div className="flex items-center gap-3 bg-slate-950/60 border border-white/5 rounded-2xl p-3"><span className="w-9 h-9 rounded-xl bg-slate-700 flex items-center justify-center text-white shrink-0 font-black">📲</span><span className="text-slate-200 font-bold text-sm">2. Tap <b>Install app</b> / <b>Add to Home screen</b></span></div>
                                                 <div className="flex items-center gap-3 bg-slate-950/60 border border-white/5 rounded-2xl p-3"><span className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white shrink-0"><i className="fa-solid fa-check"></i></span><span className="text-slate-200 font-bold text-sm">3. Confirm <b>Install</b> 🎉</span></div>
                                                 <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30">
-                                                    <p className="text-amber-300 text-[11px] font-bold leading-relaxed">Menu says <b>"Open app"</b> instead? The app is still installed — removing the icon isn't uninstalling. Go to <b>Settings → Apps → PocketNine → Uninstall</b>, reopen Chrome, and the one-tap install returns.</p>
+                                                    <p className="text-amber-300 text-[11px] font-bold leading-relaxed">Menu says <b>"Open app"</b> instead? The app is still installed — removing the icon isn't uninstalling. Go to <b>Settings → Apps → PocketSeven → Uninstall</b>, reopen Chrome, and the one-tap install returns.</p>
                                                 </div>
                                             </div>
                                         )}
                                         {isIOS && !isIOSSafari && (
                                             <div className="bg-amber-500/10 border border-amber-500/40 rounded-2xl p-4 mb-4">
                                                 <div className="text-amber-300 font-black text-sm mb-2">First switch to Safari:</div>
-                                                <a href="x-safari-https://pocketnine.com" className="block bg-gradient-to-b from-sky-500 to-sky-700 text-white py-3 rounded-xl font-black shadow-lg mb-2">🧭 Open in Safari</a>
+                                                <a href="x-safari-https://pocketseven.com" className="block bg-gradient-to-b from-sky-500 to-sky-700 text-white py-3 rounded-xl font-black shadow-lg mb-2">🧭 Open in Safari</a>
                                                 <button onClick={copySiteLink} className="text-[11px] text-slate-400 underline font-bold">Didn't open? Copy the link and paste it in Safari</button>
                                             </div>
                                         )}
@@ -2972,7 +3002,7 @@
                                 <div onClick={e=>e.stopPropagation()} className="rounded-3xl p-[3px] max-w-sm w-full shadow-2xl" style={{ background: 'linear-gradient(135deg, #f5e7b8, #b8912f 30%, #f7edc9 50%, #a07d24 70%, #eadaa4)' }}>
                                     <div className="bg-gradient-to-b from-slate-900 to-slate-950 rounded-[21px] p-5 text-center">
                                         <div className="flex items-center justify-between mb-1">
-                                            <span className="text-[9px] font-black text-amber-300/80 tracking-[0.25em] uppercase">POCKETNINE</span>
+                                            <span className="text-[9px] font-black text-amber-300/80 tracking-[0.25em] uppercase">POCKET SEVEN</span>
                                             <span className="text-[9px] font-black text-amber-300/80 tracking-[0.25em] uppercase">Lucky 3</span>
                                         </div>
                                         <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 via-amber-300 to-yellow-500 mb-0.5">🎫 Weekly scratch</h3>
@@ -3664,7 +3694,7 @@
                     for (let i = 0; i < 20; i++) {
                         const botName = BOT_NAMES[i % BOT_NAMES.length] + Math.floor(Math.random() * 100);
                         await window.fb.addDoc(window.fb.collection(window.fb.db, "users"), {
-                            username: botName, email: `bot${i}@pocketnine.com`, role: ROLES.PLAYER,
+                            username: botName, email: `bot${i}@pocketseven.com`, role: ROLES.PLAYER,
                             status: 'approved', balance: 50000, isBot: true, managedGames: [],
                             stats: { gamesPlayed: 0, gamesWon: 0, totalProfit: 0 }
                         });
@@ -3908,7 +3938,7 @@
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {(isAgentOnly ? agents.filter(a => a.uid === user.uid) : agents).map(a => {
                                         const linked = usersList.filter(x => x.agentUid === a.uid && x.status === 'approved');
-                                        const inviteLink = `https://pocketnine.com/?agent=${a.agentCode || ''}&club=${CLUB_ID}`;
+                                        const inviteLink = `https://pocketseven.com/?agent=${a.agentCode || ''}&club=${CLUB_ID}`;
                                         return (
                                             <div key={a.id} className="bg-slate-900/70 border border-purple-500/20 rounded-2xl p-4">
                                                 <div className="flex items-center gap-3 mb-2.5">
@@ -5434,7 +5464,7 @@
                                     <div className="text-slate-300/40 font-bold text-[11px] leading-relaxed" dir="ltr">
                                         <div>{(gs.currentGameType || setts.baseGameType || 'NLH') + ' ' + formatShort(setts.blinds) + '/' + formatShort(BB)}</div>
                                         <div>{'Blinds ' + formatShort(setts.blinds) + '/' + formatShort(BB) + (Number(setts.ante) > 0 ? ' · Ante ' + formatShort(setts.ante) : '')}</div>
-                                        <div className="tracking-[0.15em] text-[9px] text-slate-400/30 uppercase mt-0.5">POCKETNINE</div>
+                                        <div className="tracking-[0.15em] text-[9px] text-slate-400/30 uppercase mt-0.5">POCKET SEVEN</div>
                                     </div>
                                 )}
                                 {gs.phase === 'discard' && <div className="text-amber-300 font-black text-xs animate-pulse">🍍 Pineapple - discard one card...</div>}
@@ -6460,7 +6490,7 @@
                                             {x.d && <div className="absolute left-3 top-3 rotate-[12deg] drop-shadow-xl"><PCard card={x.d} size="md" /></div>}
                                         </div>
                                     ))}
-                                    {pairs.length === 0 && <span className="text-emerald-200/20 font-black text-xs tracking-[0.25em] uppercase pointer-events-none">POCKETNINE</span>}
+                                    {pairs.length === 0 && <span className="text-emerald-200/20 font-black text-xs tracking-[0.25em] uppercase pointer-events-none">POCKET SEVEN</span>}
                                 </div>
                             )}
 
@@ -7925,7 +7955,7 @@
                 for (let j = avail.length; j < need; j++) {
                     const name = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)] + Math.floor(Math.random() * 100000);
                     const ref = await window.fb.addDoc(window.fb.collection(window.fb.db, "users"), {
-                        username: name, email: `bot_${Date.now()}_${j}@pocketnine.com`, role: ROLES.PLAYER,
+                        username: name, email: `bot_${Date.now()}_${j}@pocketseven.com`, role: ROLES.PLAYER,
                         status: 'approved', balance: 50000, isBot: true, managedGames: [],
                         stats: { gamesPlayed: 0, gamesWon: 0, totalProfit: 0 }
                     });
@@ -8073,7 +8103,7 @@
                             for (let j = i; j < Math.min(i + 25, shortfall); j++) {
                                 const name = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)] + Math.floor(Math.random() * 100000);
                                 batch.push(window.fb.addDoc(window.fb.collection(window.fb.db, "users"), {
-                                    username: name, email: `bot_${Date.now()}_${j}@pocketnine.com`, role: ROLES.PLAYER,
+                                    username: name, email: `bot_${Date.now()}_${j}@pocketseven.com`, role: ROLES.PLAYER,
                                     status: 'approved', balance: 50000, isBot: true, managedGames: [],
                                     stats: { gamesPlayed: 0, gamesWon: 0, totalProfit: 0 }
                                 }).then(ref => ({ uid: ref.id, username: name, avatarSeed: ref.id, photo: '' })));
@@ -8136,7 +8166,7 @@
             const shareChamps = () => {
                 const med = ['🥇','🥈','🥉'];
                 const lines = top3.map(r => med[r.rank - 1] + ' ' + r.name + (r.prize > 0 ? ' — ' + formatMoney(r.prize) : ''));
-                const txt = '🏆 FINAL TABLE · ' + champTor.name + '\n' + lines.join('\n') + '\nPOCKETNINE';
+                const txt = '🏆 FINAL TABLE · ' + champTor.name + '\n' + lines.join('\n') + '\nPOCKET SEVEN';
                 if (navigator.share) navigator.share({ text: txt }).catch(() => {});
                 else { if (navigator.clipboard) navigator.clipboard.writeText(txt); showToast('Copied — paste & send 📋', 'success'); }
             };
@@ -8177,7 +8207,7 @@
             const soloTitle = soloChamp ? (soloChamp.rank === 1 ? 'Champion' : soloChamp.rank === 2 ? 'Runner-up' : '3rd Place') : '';
             const shareSolo = () => {
                 const med = ['🥇','🥈','🥉'][soloChamp.rank - 1];
-                const txt = med + ' ' + soloChamp.name + ' — ' + soloTitle + ' in tournament "' + champTor.name + '"' + (soloChamp.prize > 0 ? ' · win ' + formatMoney(soloChamp.prize) : '') + '\nPOCKETNINE 🏆';
+                const txt = med + ' ' + soloChamp.name + ' — ' + soloTitle + ' in tournament "' + champTor.name + '"' + (soloChamp.prize > 0 ? ' · win ' + formatMoney(soloChamp.prize) : '') + '\nPOCKET SEVEN 🏆';
                 if (navigator.share) navigator.share({ text: txt }).catch(() => {});
                 else { if (navigator.clipboard) navigator.clipboard.writeText(txt); showToast('Copied — paste & send 📋', 'success'); }
             };
@@ -8185,7 +8215,7 @@
                 <div dir="ltr" className="fixed inset-0 z-[340] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4" onClick={() => setSoloChamp(null)}>
                     <div onClick={e => e.stopPropagation()} className={'ft-champ solo-' + sm + ' w-full max-w-sm rounded-3xl px-6 py-9 text-center animate-pop-in relative overflow-hidden'}>
                         <div className="ft-rays"></div>
-                        <p className="text-[10px] font-black tracking-[0.45em] relative text-slate-400" dir="ltr">POCKETNINE</p>
+                        <p className="text-[10px] font-black tracking-[0.45em] relative text-slate-400" dir="ltr">POCKET SEVEN</p>
                         <div className="text-6xl mt-4 relative trophy-pop">{soloChamp.rank === 1 ? '🏆' : soloChamp.rank === 2 ? '🥈' : '🥉'}</div>
                         <div className={'w-28 h-28 mx-auto mt-4 rounded-full overflow-hidden relative ring-4 ' + (sm === 'gold' ? 'ring-gold-400 shadow-[0_0_40px_rgba(245,200,96,0.45)]' : sm === 'silver' ? 'ring-slate-300 shadow-[0_0_40px_rgba(203,213,225,0.30)]' : 'ring-amber-700 shadow-[0_0_40px_rgba(180,83,9,0.35)]')}>
                             <img src={champAv(soloChamp)} className="w-full h-full object-cover bg-slate-800" />

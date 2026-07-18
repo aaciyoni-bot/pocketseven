@@ -1,5 +1,5 @@
 /**
- * PocketNine — server-authoritative poker engine (Phase A: cash tables).
+ * Pocket Seven — server-authoritative poker engine (Phase A: cash tables).
  *
  * Tables with settings.serverEngine === true are dealt and driven HERE.
  * Hole cards and the deck never appear in the public table doc:

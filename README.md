@@ -1,14 +1,17 @@
-# PocketNine — The Private Card Room
+# Pocket Seven — The Poker Club
 
-Private-label club poker app (pocketnine.com). "The Press Room" design
-language: paper, ink and four registration plates. Same engine family as its
-sibling product, fully separate brand, Firebase project and player base.
+Private-label club poker app (pocketseven.com). Premium dark-casino design:
+bordeaux-black grounds, metallic gold accent (#F8C830), green felt, Cinzel
+display + Inter UI — reskinned from the extracted Pocket Seven brand assets.
 
-## Launch checklist
-1. Create Firebase project `pocketnine` (Google sign-in only, Firestore,
-   Blaze plan) and paste its config into index.html (search: TODO(pocketnine)).
-2. Add repo secret FIREBASE_TOKEN; the workflows deploy functions + rules.
-3. GitHub Pages: deploy from `main`, custom domain pocketnine.com
-   (Cloudflare-fronted like the sibling site).
-4. Replace placeholder icons/hero with the Cloud Design "Press Room" asset
-   package as it lands.
+## Structure
+1. Single-file React app (`index.html`), Firebase (Auth/Firestore/Functions).
+2. Firebase project id: `pocketnine-51af8` (internal — not user-facing).
+3. GitHub Pages: deploy from `main`, custom domain pocketseven.com
+   (Cloudflare-fronted).
+
+## Brand
+- Logo: `logo-wordmark.png` (POCKET / SE7EN — white with a gold 7).
+- Icons: gold "7" on black (`icon-*.png`).
+- Intro: gold wordmark on a bordeaux-black stage (no ORIZIS — private label).
+- Design tokens: `--ps-*` in `index.html` (gold / bordeaux / felt / victory blue).

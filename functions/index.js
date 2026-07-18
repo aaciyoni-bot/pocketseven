@@ -1,5 +1,5 @@
 /**
- * PocketNine — Cloud Functions (money authority)
+ * Pocket Seven — Cloud Functions (money authority)
  *
  * Phase 2, function #1: spinDailyBonus
  * The SERVER decides the prize and moves the chips. The client only triggers
