@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8D030"></stop><stop offset="1" stop-color="#D89830"></stop></linearGradient></defs>
+<circle cx="60" cy="60" r="54" fill="#1C1211" stroke="url(#g)" stroke-width="4"></circle>
+<circle cx="60" cy="60" r="45" fill="none" stroke="rgba(248,200,48,0.35)" stroke-width="1.5"></circle>
+<text x="60" y="66" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="64" fill="url(#g)" text-anchor="middle" dominant-baseline="middle">7</text>
+</svg>

@@ -1465,21 +1465,17 @@
         };
 
         /* ===== קלף Poker מקצועי - חפיסה תקנית ===== */
+        // Pocket Seven: real card artwork (assets/cards + card-back), 5:7 aspect.
+        const SUIT_FILE = { '♠': 's', '♥': 'h', '♦': 'd', '♣': 'c' };
         const PCard = ({ card, hidden, size }) => {
-            const D = size === 'xl' ? { w: 'w-14', h: '5.1rem', rank: '1.85rem', big: '2.65rem' }
-                    : size === 'lg' ? { w: 'w-11 sm:w-12', h: '4.4rem', rank: '1.6rem', big: '2.3rem' }
-                    : size === 'sm' ? { w: 'w-7', h: '2.6rem', rank: '0.95rem', big: '1.35rem' }
-                    : { w: 'w-9 sm:w-10', h: '3.4rem', rank: '1.25rem', big: '1.75rem' };
-            if (!card || hidden) return <div className={`${D.w} card-back shadow-md`} style={{ height: D.h }}></div>;
-            const col = SUIT_COLORS[card.suit] || '#111827';
-            return (
-                <div className={`${D.w} card-face relative overflow-hidden`} style={{ height: D.h }} dir="ltr">
-                    <div className="absolute leading-none font-bold" style={{ top: '4%', left: '8%', fontSize: D.rank, color: col, letterSpacing: '-0.05em', fontFamily: "'Rubik', sans-serif", fontWeight: 700 }}>{card.val}</div>
-                    <div className="absolute inset-x-0 bottom-[3%] flex justify-center pointer-events-none">
-                        <SuitGlyph s={card.suit} color={col} size={D.big}/>
-                    </div>
-                </div>
-            );
+            const D = size === 'xl' ? { w: 'w-14' }
+                    : size === 'lg' ? { w: 'w-11 sm:w-12' }
+                    : size === 'sm' ? { w: 'w-7' }
+                    : { w: 'w-9 sm:w-10' };
+            const common = `${D.w} object-contain select-none`;
+            if (!card || hidden) return <img src="assets/card-back.png" alt="" draggable="false" className={`${common} rounded-md`} style={{ aspectRatio: '5 / 7' }} />;
+            const file = `assets/cards/${card.val}${SUIT_FILE[card.suit] || 's'}.png`;
+            return <img src={file} alt={`${card.val}${card.suit}`} draggable="false" className={`${common} rounded-md shadow-md`} style={{ aspectRatio: '5 / 7' }} />;
         };
 
         const CasinoChipStack = ({ amount, scale = 1, showLabel = true }) => {
