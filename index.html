@@ -502,7 +502,10 @@
             --pt-shadow: 0 4px 12px rgba(32,30,29,0.16);
         }
         html, body, .bg-slate-950 { background: var(--pn-bg) !important; color: var(--pn-text); }
-        body, .font-black, .font-bold, button, input, select, textarea, h1, h2, h3, p, span, div { font-family: 'Source Serif 4', Georgia, serif !important; }
+        /* Serif chrome — inherited, so Font Awesome's own font-family still wins on icons */
+        html, body, #root, button, input, select, textarea { font-family: 'Source Serif 4', Georgia, serif; }
+        .fa, .fas, .far, .fa-solid, .fa-regular, i[class^="fa-"], i[class*=" fa-"] { font-family: 'Font Awesome 6 Free' !important; }
+        .fab, .fa-brands { font-family: 'Font Awesome 6 Brands' !important; }
         .aurora-bg { background: var(--pn-bg) !important; }
         .glass-panel, .grad-card-inner, .club-card, .tbl-row { background: var(--pn-card) !important; border: 1px solid var(--pn-line) !important; border-radius: var(--pn-radius) !important; box-shadow: 0 1px 3px rgba(32,30,29,.14) !important; color: var(--pn-text); }
         .text-white { color: var(--pn-text) !important; }
