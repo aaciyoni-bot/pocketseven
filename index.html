@@ -1902,40 +1902,27 @@
             return (
                 <div className="h-full w-full flex flex-col relative overflow-hidden">
                     {effUser && activeClub && effUser.status === 'approved' && !inTable && currentView !== 'clubs' && (
-                        <nav className="bg-slate-900/80 backdrop-blur-xl px-4 py-3 z-40 shrink-0 border-b border-white/5 shadow-xl flex justify-between items-center">
-                            <div className="flex items-center gap-2 sm:gap-3">
-                                <button onClick={leaveToClubs} title="Switch club" className="w-10 h-10 rounded-xl bg-slate-800/80 text-emerald-400 border border-emerald-500/30 hover:text-white hover:bg-emerald-700 transition-colors flex items-center justify-center">
-                                    <i className="fa-solid fa-building-columns"></i>
-                                </button>
-                                {([ROLES.SUPER_ADMIN, ROLES.CLUB_OWNER, ROLES.MANAGER, ROLES.AGENT].includes(effUser.role)) && (
-                                    <button onClick={() => changeView(currentView === 'backoffice' ? 'lobby' : 'backoffice')} className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-colors ${currentView === 'backoffice' ? 'bg-blue-600 text-white border-blue-500' : 'bg-slate-800/80 text-blue-400 border-white/5 hover:text-white'}`} title="Club Management">
-                                        <i className="fa-solid fa-chart-line"></i>
-                                    </button>
-                                )}
-                                <button onClick={() => changeView(currentView === 'leaders' ? 'lobby' : 'leaders')} className={`w-10 h-10 rounded-xl border transition-colors flex items-center justify-center ${currentView === 'leaders' ? 'bg-amber-600 text-white border-amber-400' : 'bg-slate-800/80 text-amber-400 border-white/5 hover:bg-amber-700 hover:text-white'}`} title="Leaderboard">
-                                    <i className="fa-solid fa-ranking-star"></i>
-                                </button>
-                                {!isStandaloneApp && (
-                                    <button onClick={triggerInstall} className="w-10 h-10 rounded-xl border border-emerald-500/40 bg-emerald-600/15 text-emerald-300 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors animate-pulse" title="Install app">
-                                        <i className="fa-solid fa-circle-down"></i>
-                                    </button>
-                                )}
-                                <button onClick={() => changeView(currentView === 'profile' ? 'lobby' : 'profile')} className="w-10 h-10 rounded-full overflow-hidden border border-cyan-400/40 hover:border-emerald-400 transition-colors" title="My profile">
-                                    <img src={avatarUrl(dbUser)} className="w-full h-full object-cover bg-slate-800" />
-                                </button>
-                                <div className="flex-col items-start mr-1 hidden sm:flex">
-                                    <span className="text-sm font-bold text-white flex items-center gap-1">
-                                        {effUser.username}
-                                        {effUser.role === ROLES.SUPER_ADMIN && <i className="fa-solid fa-crown text-amber-400 text-[10px]"></i>}
-                                        {effUser.role === ROLES.CLUB_OWNER && <i className="fa-solid fa-chess-king text-emerald-400 text-[10px]"></i>}
-                                        {isGodUser(dbUser) && <i className="fa-solid fa-eye text-purple-400 text-[10px]"></i>}
-                                    </span>
-                                    <Coin amount={effUser.balance} className="text-xs" />
-                                </div>
+                        <nav className="backdrop-blur-xl px-4 py-2.5 z-40 shrink-0 flex justify-between items-center" style={{ background: 'linear-gradient(180deg, rgba(20,13,12,0.92), rgba(12,9,8,0.82))', borderBottom: '1px solid rgba(248,200,48,0.22)' }}>
+                            {/* LEFT: the brand leads (POKERTEN leads with icon buttons — deliberately opposite) */}
+                            <div className="flex items-center gap-2.5 cursor-pointer min-w-0" onClick={() => changeView('lobby')}>
+                                <img src="logo-wordmark.png" alt="Pocket Seven" className="h-7 w-auto shrink-0" style={{ filter: 'drop-shadow(0 4px 14px rgba(248,200,48,0.18))' }} />
+                                <span className="text-[10px] font-black tracking-[0.18em] uppercase truncate hidden sm:flex items-center gap-1" style={{ color: '#B29B8B', fontFamily: "'Cinzel',serif" }}>{clubSettings?.logo && <img src={clubSettings.logo} alt="" className="w-4 h-4 rounded object-cover inline-block" />}{clubSettings?.name || activeClub.name}</span>
                             </div>
-                            <div className="flex flex-col items-end cursor-pointer" onClick={() => changeView('lobby')}>
-                                <img src="logo-wordmark.png" alt="Pocket Seven" className="h-7 w-auto" />
-                                <p className="text-[10px] text-gold-400/90 font-black tracking-widest leading-none flex items-center gap-1 mt-0.5">{clubSettings?.logo ? <img src={clubSettings.logo} alt="" className="w-4 h-4 rounded object-cover inline-block" /> : '🏛️'} {clubSettings?.name || activeClub.name} <span className="text-slate-600">· V26</span></p>
+                            {/* RIGHT: gold circular nav icons + a gold identity capsule */}
+                            <div className="flex items-center gap-1.5 sm:gap-2">
+                                <button onClick={leaveToClubs} title="Switch club" className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: '#1C1211', border: '1px solid rgba(248,200,48,0.22)', color: '#F8C830' }}><i className="fa-solid fa-building-columns text-xs"></i></button>
+                                {([ROLES.SUPER_ADMIN, ROLES.CLUB_OWNER, ROLES.MANAGER, ROLES.AGENT].includes(effUser.role)) && (
+                                    <button onClick={() => changeView(currentView === 'backoffice' ? 'lobby' : 'backoffice')} title="Club Management" className="w-9 h-9 rounded-full flex items-center justify-center" style={currentView === 'backoffice' ? { background: '#F8C830', color: '#1A0E04' } : { background: '#1C1211', border: '1px solid rgba(248,200,48,0.22)', color: '#F8C830' }}><i className="fa-solid fa-chart-line text-xs"></i></button>
+                                )}
+                                <button onClick={() => changeView(currentView === 'leaders' ? 'lobby' : 'leaders')} title="Leaderboard" className="w-9 h-9 rounded-full flex items-center justify-center" style={currentView === 'leaders' ? { background: '#F8C830', color: '#1A0E04' } : { background: '#1C1211', border: '1px solid rgba(248,200,48,0.22)', color: '#F8C830' }}><i className="fa-solid fa-ranking-star text-xs"></i></button>
+                                {!isStandaloneApp && (
+                                    <button onClick={triggerInstall} title="Install app" className="w-9 h-9 rounded-full flex items-center justify-center animate-pulse" style={{ background: 'rgba(248,200,48,0.15)', border: '1px solid rgba(248,200,48,0.4)', color: '#F8C830' }}><i className="fa-solid fa-circle-down text-xs"></i></button>
+                                )}
+                                <div onClick={() => changeView(currentView === 'profile' ? 'lobby' : 'profile')} className="flex items-center gap-1.5 cursor-pointer" style={{ background: '#1C1211', border: '1px solid rgba(248,200,48,0.32)', borderRadius: '100px', padding: '3px 4px 3px 10px' }} title="My profile">
+                                    <img src="assets/black-gold-chip.png" alt="" style={{ width: 15, height: 15 }} className="hidden sm:inline" />
+                                    <span className="text-xs font-extrabold hidden sm:inline" style={{ color: '#F8C830', fontVariantNumeric: 'tabular-nums' }}>{Math.round(Number(effUser.balance) || 0).toLocaleString()}</span>
+                                    <img src={avatarUrl(dbUser)} className="w-8 h-8 rounded-full object-cover" style={{ border: '2px solid #F8C830', background: '#241512' }} />
+                                </div>
                             </div>
                         </nav>
                     )}
@@ -2456,22 +2443,20 @@
                 const m = memOf(c.id);
                 const isOwner = c.ownerUid === user.uid;
                 return (
-                    <div className="club-card p-4 flex flex-col items-center text-center gap-2 relative">
+                    <div className="club-card relative flex items-center gap-3.5 p-3 pr-2" style={{ borderLeft: '3px solid #F8C830', borderRadius: '14px' }}>
+                        {c.logo
+                            ? <img src={c.logo} alt="" className="rounded-xl object-cover shrink-0" style={{ width: 54, height: 54, border: '2px solid rgba(248,200,48,0.45)' }} />
+                            : <div className="club-badge shrink-0" style={{ width: 54, height: 54, fontSize: 24, borderRadius: 14, fontFamily: "'Cinzel',serif", background: 'linear-gradient(140deg,#6B1414,#3A0A0A)', border: '2px solid #F8C830', color: '#F8C830', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{(c.name || '?').trim().charAt(0)}</div>}
+                        <div className="flex-1 min-w-0">
+                            <div className="truncate flex items-center gap-2" style={{ fontFamily: "'Cinzel',serif", color: '#F3EBDE', fontSize: '16px', fontWeight: 700 }}>{c.name}{isOwner && <span className="text-[8px] px-1.5 py-0.5 rounded-full shrink-0" style={{ color: '#F8C830', border: '1px solid rgba(248,200,48,0.4)', fontWeight: 700 }}>YOURS</span>}</div>
+                            <div className="text-[10px] mt-0.5 truncate" style={{ color: '#B29B8B', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }} dir="ltr">ID {clubCode(c.id)} · {c.ownerName || ''}{m && m.status === 'approved' && (m.balance || 0) > 0 ? <span style={{ color: '#F8C830', fontWeight: 700 }}> · <i className="fa-solid fa-coins opacity-70"></i> {formatMoney(m.balance || 0)}</span> : ''}</div>
+                        </div>
+                        <div className="shrink-0">{action}</div>
                         {(isOwner || god) && c.id !== 'main' && (
-                            <button onClick={(e) => { e.stopPropagation(); deleteClub(c); }} title="Delete club" className="absolute top-2 right-2 w-7 h-7 rounded-lg text-slate-600 hover:text-rose-400 transition-colors flex items-center justify-center">
-                                <i className="fa-solid fa-trash text-[10px]"></i>
+                            <button onClick={(e) => { e.stopPropagation(); deleteClub(c); }} title="Delete club" className="absolute top-1 right-1 w-6 h-6 rounded-lg text-slate-600 hover:text-rose-400 transition-colors flex items-center justify-center">
+                                <i className="fa-solid fa-trash text-[9px]"></i>
                             </button>
                         )}
-                        {isOwner && <span className="absolute top-2 left-2 text-[9px] px-2 py-0.5 rounded-full border" style={{ color: '#F8C830', borderColor: 'rgba(248,200,48,0.4)', fontWeight: 700 }}>Yours</span>}
-                        {c.logo
-                            ? <img src={c.logo} alt="" className="rounded-2xl object-cover mt-3" style={{ width: 76, height: 76, border: '2px solid rgba(248,200,48,0.45)' }} />
-                            : <div className="club-badge mt-3" style={{ width: 76, height: 76, fontSize: 30, borderRadius: 18, fontFamily: "'Cinzel',serif", background: 'linear-gradient(140deg,#6B1414,#3A0A0A)', border: '2px solid #F8C830', color: '#F8C830' }}>{(c.name || '?').trim().charAt(0)}</div>}
-                        <div className="w-full min-w-0">
-                            <div className="truncate" style={{ fontFamily: "'Cinzel',serif", color: '#F3EBDE', fontSize: '16px', fontWeight: 700 }}>{c.name}</div>
-                            <div className="text-[10px] mt-0.5 truncate" style={{ color: '#B29B8B', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }} dir="ltr">ID {clubCode(c.id)} · {c.ownerName || ''}</div>
-                            {m && m.status === 'approved' && (m.balance || 0) > 0 && <div className="text-[11px] mt-1" style={{ color: '#F8C830', fontWeight: 700 }} dir="ltr"><i className="fa-solid fa-coins mr-1 opacity-70"></i>{formatMoney(m.balance || 0)}</div>}
-                        </div>
-                        <div className="w-full mt-auto pt-1">{action}</div>
                     </div>
                 );
             };
@@ -2551,7 +2536,7 @@
                         {myClubs.length > 0 && (
                             <div className="mb-8">
                                 <h3 className="text-[11px] uppercase tracking-[0.18em] mb-3" style={{ color: 'var(--pt-text-3)', fontWeight: 600 }}>My Clubs</h3>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                <div className="flex flex-col gap-2.5">
                                     {myClubs.map(c => <ClubCard key={c.id} c={c} action={
                                         <button onClick={() => onEnter(c)} className="btn-gold w-full py-2.5 text-sm">Enter</button>
                                     } />)}
@@ -2562,7 +2547,7 @@
                         {pendingClubs.length > 0 && (
                             <div className="mb-8">
                                 <h3 className="text-[11px] uppercase tracking-[0.18em] mb-3" style={{ color: 'var(--pt-text-3)', fontWeight: 600 }}>Pending approval</h3>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                <div className="flex flex-col gap-2.5">
                                     {pendingClubs.map(c => <ClubCard key={c.id} c={c} action={
                                         <span className="text-xs px-4 py-2 rounded-lg shrink-0 border" style={{ color: 'var(--pt-text-2)', borderColor: 'var(--pt-line)', fontWeight: 600 }}><i className="fa-solid fa-hourglass-half mr-1.5" style={{ color: 'var(--pt-gold)' }}></i>Pending</span>
                                     } />)}
