@@ -498,10 +498,16 @@
         html, body, .bg-slate-950 { background: var(--ps-ground) !important; color: var(--ps-text); }
         #root {
             background:
-                radial-gradient(1200px 760px at 50% -12%, rgba(107,20,20,0.55), transparent 60%),
-                radial-gradient(900px 620px at 92% 112%, rgba(248,200,48,0.06), transparent 55%),
-                radial-gradient(760px 520px at 6% 108%, rgba(46,92,143,0.06), transparent 55%),
-                linear-gradient(180deg, #11050C 0%, #0C0908 60%) !important;
+                radial-gradient(1100px 700px at 50% -12%, rgba(107,20,20,0.35), transparent 60%),
+                url('assets/dashboardbg-burgundy-gradient.png') center top / cover no-repeat,
+                linear-gradient(180deg, #11050C 0%, #0C0908 62%) !important;
+            background-attachment: fixed, fixed, fixed;
+        }
+        /* the poker play surface uses the dedicated gameplay ground */
+        .ps-game-bg {
+            background:
+                url('assets/gameplaybg.png') center top / cover no-repeat,
+                linear-gradient(180deg, #11050C 0%, #0C0908 62%) !important;
         }
         .aurora-bg { background: transparent !important; animation: none !important; }
         /* type: Inter for chrome/numbers, Cinzel for brand & headings */
@@ -5386,7 +5392,7 @@
 
             return (
                 <div className="h-full w-full flex flex-col bg-slate-950 font-sans overflow-hidden select-none" dir="ltr"
-                     style={{ background: 'radial-gradient(ellipse at 50% 0%, #1a2436 0%, #05070f 60%)' }}>
+                     style={{ background: "url('assets/gameplaybg.png') center top / cover no-repeat, linear-gradient(180deg,#11050C 0%,#0C0908 62%)" }}>
 
                     {/* Header */}
                     <div className="min-h-[3.5rem] bg-slate-900/80 backdrop-blur-md border-b border-white/5 flex justify-between items-center gap-1.5 px-2 sm:px-3 py-1.5 shrink-0 z-40 relative">
@@ -6431,7 +6437,7 @@
 
             return (
                 <div className="h-full w-full flex flex-col bg-slate-950 font-sans overflow-hidden select-none" dir="ltr"
-                     style={{ background: 'radial-gradient(ellipse at 50% 0%, #1a2436 0%, #05070f 60%)' }}>
+                     style={{ background: "url('assets/gameplaybg.png') center top / cover no-repeat, linear-gradient(180deg,#11050C 0%,#0C0908 62%)" }}>
 
                     {/* Header */}
                     <div className="h-14 bg-slate-900/80 backdrop-blur-md border-b border-white/5 flex justify-between items-center px-3 shrink-0 z-40">
