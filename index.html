@@ -733,6 +733,19 @@
         .tbl-live { color: #3C8A56 !important; }
         .tbl-buyin-val { color: #F8C830 !important; }
         .tbl-buyin-label { color: #8A776B !important; }
+
+        /* Primary CTAs → gold pill with dark ink (handoff button spec) */
+        button[class*="from-amber-500"], button[class*="from-amber-400"], button[class*="from-emerald-500"], button[class*="from-emerald-600"], button[class*="from-teal-400"], button[class*="from-teal-500"] {
+            background: linear-gradient(180deg,#F8D030,#D89830) !important; color: #1A0E04 !important;
+            border-radius: 100px !important; border: none !important; box-shadow: 0 8px 22px rgba(216,152,48,0.28) !important; }
+        button[class*="from-amber-500"] *, button[class*="from-emerald-500"] *, button[class*="from-teal-500"] * { color: #1A0E04 !important; }
+        /* Text inputs / selects → burgundy field, gold focus */
+        input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+            background: #140D0C !important; border: 1px solid rgba(248,200,48,0.18) !important; color: #F3EBDE !important; }
+        input:focus, select:focus, textarea:focus { border-color: rgba(248,200,48,0.55) !important; outline: none !important; }
+        input::placeholder, textarea::placeholder { color: #8A776B !important; }
+        /* Modals / dialogs → burgundy panel with gold hairline */
+        .glass-panel { background: linear-gradient(180deg, rgba(39,16,16,0.96), rgba(20,13,12,0.97)) !important; border: 1px solid rgba(248,200,48,0.25) !important; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
     </style>
 
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
