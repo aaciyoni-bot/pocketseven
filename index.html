@@ -2462,14 +2462,14 @@
                                 <i className="fa-solid fa-trash text-[10px]"></i>
                             </button>
                         )}
-                        {isOwner && <span className="absolute top-2 left-2 text-[9px] px-2 py-0.5 rounded-full border" style={{ color: 'var(--pt-gold)', borderColor: 'rgba(213,179,107,0.35)', fontWeight: 600 }}>Yours</span>}
+                        {isOwner && <span className="absolute top-2 left-2 text-[9px] px-2 py-0.5 rounded-full border" style={{ color: '#F8C830', borderColor: 'rgba(248,200,48,0.4)', fontWeight: 700 }}>Yours</span>}
                         {c.logo
-                            ? <img src={c.logo} alt="" className="rounded-2xl object-cover mt-3" style={{ width: 72, height: 72, border: '1px solid rgba(213,179,107,0.35)' }} />
-                            : <div className="club-badge mt-3" style={{ width: 72, height: 72, fontSize: 28, borderRadius: 16 }}>{(c.name || '?').trim().charAt(0)}</div>}
+                            ? <img src={c.logo} alt="" className="rounded-2xl object-cover mt-3" style={{ width: 76, height: 76, border: '2px solid rgba(248,200,48,0.45)' }} />
+                            : <div className="club-badge mt-3" style={{ width: 76, height: 76, fontSize: 30, borderRadius: 18, fontFamily: "'Cinzel',serif", background: 'linear-gradient(140deg,#6B1414,#3A0A0A)', border: '2px solid #F8C830', color: '#F8C830' }}>{(c.name || '?').trim().charAt(0)}</div>}
                         <div className="w-full min-w-0">
-                            <div className="text-white text-base truncate" style={{ fontWeight: 600 }}>{c.name}</div>
-                            <div className="text-[10px] mt-0.5 truncate" style={{ color: 'var(--pt-text-2)', fontWeight: 500 }} dir="ltr">ID {clubCode(c.id)} · {c.ownerName || ''}</div>
-                            {m && m.status === 'approved' && (m.balance || 0) > 0 && <div className="text-[11px] mt-1" style={{ color: 'var(--pt-green)', fontWeight: 600 }} dir="ltr"><i className="fa-solid fa-coins mr-1 opacity-70"></i>{formatMoney(m.balance || 0)}</div>}
+                            <div className="truncate" style={{ fontFamily: "'Cinzel',serif", color: '#F3EBDE', fontSize: '16px', fontWeight: 700 }}>{c.name}</div>
+                            <div className="text-[10px] mt-0.5 truncate" style={{ color: '#B29B8B', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }} dir="ltr">ID {clubCode(c.id)} · {c.ownerName || ''}</div>
+                            {m && m.status === 'approved' && (m.balance || 0) > 0 && <div className="text-[11px] mt-1" style={{ color: '#F8C830', fontWeight: 700 }} dir="ltr"><i className="fa-solid fa-coins mr-1 opacity-70"></i>{formatMoney(m.balance || 0)}</div>}
                         </div>
                         <div className="w-full mt-auto pt-1">{action}</div>
                     </div>
