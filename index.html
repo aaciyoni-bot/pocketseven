@@ -746,6 +746,21 @@
         input::placeholder, textarea::placeholder { color: #8A776B !important; }
         /* Modals / dialogs → burgundy panel with gold hairline */
         .glass-panel { background: linear-gradient(180deg, rgba(39,16,16,0.96), rgba(20,13,12,0.97)) !important; border: 1px solid rgba(248,200,48,0.25) !important; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+
+        /* Global structural polish — lifts profile, tournament, owner-console, all screens to the handoff */
+        .stat-tile, .grad-card-inner { background: rgba(28,18,17,0.85) !important; border: 1px solid rgba(248,200,48,0.18) !important; border-radius: 14px !important; }
+        .grad-card { border-radius: 16px !important; }
+        /* stat figures gold-tabular; eyebrow labels muted uppercase */
+        .stat-tile .num, .stat-num { font-variant-numeric: tabular-nums; }
+        /* round back / icon nav buttons → burgundy with gold hairline */
+        button[class*="rounded-xl"][class*="bg-slate-800"], button[class*="rounded-full"][class*="bg-slate-800"] {
+            background: #1C1211 !important; border: 1px solid rgba(248,200,48,0.2) !important; color: #F3EBDE !important; }
+        /* avatars framed in gold across screens */
+        .avatar-ring, [class*="ring-cyan"], [class*="ring-emerald"] { }
+        /* section eyebrow labels (uppercase small caps) */
+        .eyebrow, .uppercase.tracking-widest { color: #B29B8B !important; }
+        /* generic list rows on dark panels → burgundy card */
+        .list-row, .row-card { background: linear-gradient(160deg,#271010,#1C1211) !important; border: 1px solid rgba(248,200,48,0.18) !important; border-radius: 14px !important; }
     </style>
 
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
