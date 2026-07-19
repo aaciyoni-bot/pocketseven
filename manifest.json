@@ -20,6 +20,10 @@
     {
       "platform": "webapp",
       "url": "https://pocketseven.com/manifest.json"
+    },
+    {
+      "platform": "webapp",
+      "url": "https://aaciyoni-bot.github.io/pocketseven/manifest.json"
     }
   ],
   "icons": [

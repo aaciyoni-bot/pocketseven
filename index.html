@@ -1917,7 +1917,7 @@
                                     <button onClick={() => changeView(currentView === 'backoffice' ? 'lobby' : 'backoffice')} title="Club Management" className="w-9 h-9 rounded-full flex items-center justify-center" style={currentView === 'backoffice' ? { background: '#F8C830', color: '#1A0E04' } : { background: '#1C1211', border: '1px solid rgba(248,200,48,0.22)', color: '#F8C830' }}><i className="fa-solid fa-chart-line text-xs"></i></button>
                                 )}
                                 <button onClick={() => changeView(currentView === 'leaders' ? 'lobby' : 'leaders')} title="Leaderboard" className="w-9 h-9 rounded-full flex items-center justify-center" style={currentView === 'leaders' ? { background: '#F8C830', color: '#1A0E04' } : { background: '#1C1211', border: '1px solid rgba(248,200,48,0.22)', color: '#F8C830' }}><i className="fa-solid fa-ranking-star text-xs"></i></button>
-                                {!isStandaloneApp && (
+                                {!isStandaloneApp && (() => { try { return localStorage.getItem('psInstalled') !== '1'; } catch(e) { return true; } })() && (
                                     <button onClick={triggerInstall} title="Install app" className="w-9 h-9 rounded-full flex items-center justify-center animate-pulse" style={{ background: 'rgba(248,200,48,0.15)', border: '1px solid rgba(248,200,48,0.4)', color: '#F8C830' }}><i className="fa-solid fa-circle-down text-xs"></i></button>
                                 )}
                                 <div onClick={() => changeView(currentView === 'profile' ? 'lobby' : 'profile')} className="flex items-center gap-1.5 cursor-pointer" style={{ background: '#1C1211', border: '1px solid rgba(248,200,48,0.32)', borderRadius: '100px', padding: '3px 4px 3px 10px' }} title="My profile">
@@ -2015,17 +2015,19 @@
             const [installable, setInstallable] = useState(!!window.__installEvt);
             const [showGuide, setShowGuide] = useState(false);
             const [stillInstalled, setStillInstalled] = useState(false); // Android: WebAPK still on the phone → Chrome won't offer install
+            // Once installed (or dismissed) we never nag again — persisted so it survives browser-tab visits.
+            const [gone, setGone] = useState(() => { try { return localStorage.getItem('psInstalled') === '1' || localStorage.getItem('psInstallDismiss') === '1'; } catch(e) { return false; } });
             useEffect(() => {
                 const on = () => setInstallable(true);
-                const off = () => setInstallable(false);
+                const off = () => { setInstallable(false); try { localStorage.setItem('psInstalled', '1'); } catch(e) {} setGone(true); };
                 window.addEventListener('pwa-installable', on);
                 window.addEventListener('beforeinstallprompt', on);
                 window.addEventListener('appinstalled', off);
-                try { navigator.getInstalledRelatedApps && navigator.getInstalledRelatedApps().then(apps => setStillInstalled((apps || []).length > 0)).catch(() => {}); } catch(e) {}
+                try { navigator.getInstalledRelatedApps && navigator.getInstalledRelatedApps().then(apps => { if ((apps || []).length > 0) { setStillInstalled(true); try { localStorage.setItem('psInstalled', '1'); } catch(e) {} setGone(true); } }).catch(() => {}); } catch(e) {}
                 return () => { window.removeEventListener('pwa-installable', on); window.removeEventListener('beforeinstallprompt', on); window.removeEventListener('appinstalled', off); };
             }, []);
             const isMobileDev = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
-            if (isStandaloneApp) return null;                 // already running as the installed app
+            if (isStandaloneApp || gone) return null;         // already the installed app, or already installed/dismissed
             if (!installable && !isIOSDev && !isMobileDev) return null; // desktop browser with no install option → nothing to offer; mobile always gets at least the guide
             const doInstall = async () => {
                 const evt = window.__installEvt;
@@ -2034,12 +2036,15 @@
             };
             return (
                 <>
-                    <button onClick={doInstall} className={variant === 'auth'
-                        ? "w-full mt-3 btn-outline py-2.5 px-6 text-xs flex items-center justify-center gap-2"
-                        : "w-full mb-4 bg-gradient-to-b from-emerald-500/90 to-emerald-700 hover:from-emerald-400 text-white font-black py-3 px-4 rounded-2xl shadow-lg flex items-center justify-center gap-2"}>
-                        <i className="fa-solid fa-mobile-screen-button" style={variant === 'auth' ? { color: 'var(--pt-gold)' } : {}}></i>
-                        <span>{stillInstalled ? 'App already installed — details' : 'Install the app'}</span>
-                    </button>
+                    <div className={variant === 'auth' ? "relative" : "relative mb-4"}>
+                        <button onClick={doInstall} className={variant === 'auth'
+                            ? "w-full mt-3 btn-outline py-2.5 px-6 text-xs flex items-center justify-center gap-2"
+                            : "w-full bg-gradient-to-b from-emerald-500/90 to-emerald-700 hover:from-emerald-400 text-white font-black py-3 px-9 rounded-2xl shadow-lg flex items-center justify-center gap-2"}>
+                            <i className="fa-solid fa-mobile-screen-button" style={variant === 'auth' ? { color: 'var(--pt-gold)' } : {}}></i>
+                            <span>{stillInstalled ? 'App already installed — details' : 'Install the app'}</span>
+                        </button>
+                        {variant !== 'auth' && <button onClick={() => { try { localStorage.setItem('psInstallDismiss', '1'); } catch(e) {} setGone(true); }} title="Don't show again" className="absolute top-1/2 right-2.5 -translate-y-1/2 w-6 h-6 rounded-full text-white/70 hover:text-white flex items-center justify-center text-sm">✕</button>}
+                    </div>
                     {showGuide && ReactDOM.createPortal(
                         <div dir="ltr" className="fixed inset-0 z-[400] bg-slate-950/90 backdrop-blur-sm flex items-end sm:items-center justify-center p-4" onClick={() => setShowGuide(false)}>
                             <div onClick={e=>e.stopPropagation()} className="bg-gradient-to-b from-slate-900 to-slate-950 border border-white/10 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl animate-pop-in mb-4">
