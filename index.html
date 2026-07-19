@@ -1530,7 +1530,7 @@
         // Pocket Seven: real card artwork (assets/cards + card-back), 5:7 aspect.
         // Simple, clean white playing cards — nothing fancy, always readable.
         const PCard = ({ card, hidden, size }) => {
-            const W = size === 'xl' ? 68 : size === 'lg' ? 60 : size === 'sm' ? 42 : 52;
+            const W = size === 'xl' ? 70 : size === 'lg' ? 66 : size === 'sm' ? 48 : 54;
             const H = Math.round(W * 7 / 5);
             const rad = Math.max(5, Math.round(W * 0.15));
             if (!card || hidden) return <div className="card-back select-none shrink-0" style={{ width: W, height: H, borderRadius: rad }} />;
@@ -1538,10 +1538,11 @@
             const rankF = Math.round(W * (String(card.val).length > 1 ? 0.34 : 0.42));
             const pipF = Math.round(W * 0.5);
             const ink = red ? '#C41E3A' : '#141414';
+            // In a fanned hand only the left edge shows, so keep the rank + a clear suit in the top-left corner.
             return (
                 <div className="select-none shrink-0 relative" style={{ width: W, height: H, borderRadius: rad, background: 'linear-gradient(158deg,#FFFFFF 0%,#F4F4F2 100%)', border: '1px solid rgba(0,0,0,0.14)', boxShadow: '0 3px 8px rgba(0,0,0,0.45)', color: ink, fontFamily: "'Inter',system-ui,sans-serif", overflow: 'hidden' }}>
-                    <span style={{ position: 'absolute', top: Math.round(W*0.06), left: Math.round(W*0.11), lineHeight: 1, fontWeight: 800, fontSize: rankF }}>{card.val}</span>
-                    <span style={{ position: 'absolute', top: Math.round(W*0.06)+rankF, left: Math.round(W*0.12), lineHeight: 1, fontSize: Math.round(W*0.24) }}>{card.suit}</span>
+                    <span style={{ position: 'absolute', top: Math.round(W*0.05), left: Math.round(W*0.1), lineHeight: 1, fontWeight: 800, fontSize: rankF }}>{card.val}</span>
+                    <span style={{ position: 'absolute', top: Math.round(W*0.05)+rankF, left: Math.round(W*0.1), lineHeight: 1, fontWeight: 700, fontSize: Math.round(W*0.32) }}>{card.suit}</span>
                     <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: pipF, opacity: 0.92 }}>{card.suit}</span>
                 </div>
             );
