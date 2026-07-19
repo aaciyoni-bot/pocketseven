@@ -707,6 +707,32 @@
             opacity: 0.012;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
         }
+
+        /* ═══════════ POCKET SEVEN — design-handoff redesign layer (1e lobby language) ═══════════
+           Restyles the shared components to the handoff redline: gold pill filters,
+           casino-table cards with a gold variant badge, gold seated/buy-in accents. */
+        .vtab { border: 1px solid rgba(248,200,48,0.3) !important; border-radius: 100px !important; padding: 7px 14px !important; margin: 0 !important; color: #F3EBDE !important; font-size: 12px !important; font-weight: 600 !important; border-bottom-width: 1px !important; }
+        .vtab:hover { color: #F8D030 !important; border-color: rgba(248,200,48,0.5) !important; }
+        .vtab-active, .vtab.vtab-active { background: linear-gradient(180deg,#F8D030,#D89830) !important; color: #1A0E04 !important; border-color: transparent !important; font-weight: 700 !important; }
+        .vtab-count { background: rgba(0,0,0,0.18) !important; color: inherit !important; }
+
+        .tbl-row { border-radius: 16px !important; padding: 12px 14px !important; gap: 12px !important;
+            background: linear-gradient(160deg,#271010,#1C1211) !important; border: 1px solid rgba(248,200,48,0.22) !important; }
+        .tbl-row:hover { border-color: rgba(248,200,48,0.5) !important; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.45); }
+        /* variant spine → gold rounded badge (horizontal) */
+        .tbl-spine { writing-mode: horizontal-tb !important; transform: none !important; align-self: center !important;
+            width: 46px !important; height: 46px !important; flex: none !important; border-right: none !important;
+            border-radius: 12px !important; background: linear-gradient(160deg,#F8D030,#D89830) !important;
+            color: #1A0E04 !important; font-family: 'Cinzel', serif !important; font-weight: 800 !important;
+            font-size: 12px !important; letter-spacing: 0 !important; text-transform: none !important; box-shadow: 0 4px 12px rgba(216,152,48,0.3); }
+        .tbl-seats { width: 42px !important; height: 42px !important; }
+        .tbl-seats span { color: #F3EBDE !important; }
+        .tbl-name { color: #F3EBDE !important; font-weight: 700 !important; }
+        .tbl-stakes { color: #F3EBDE !important; }
+        .tbl-me { color: #1A0E04 !important; background: #F8C830 !important; border: none !important; font-weight: 800 !important; }
+        .tbl-live { color: #3C8A56 !important; }
+        .tbl-buyin-val { color: #F8C830 !important; }
+        .tbl-buyin-label { color: #8A776B !important; }
     </style>
 
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -2974,36 +3000,46 @@
                 <div style={{overflowX:"hidden"}} className="scrollable-content aurora-bg p-4 sm:p-6">
                     <div className="max-w-6xl mx-auto animate-fade-in relative z-10">
 
-                        <div className="flex items-center justify-between gap-3 mb-5">
-                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/8 bg-slate-950/50" dir="ltr">
-                                <span className="text-gold-400 text-xs">🪙</span>
-                                <span className="text-sm font-black text-white"><Coin amount={user.balance} /></span>
-                            </div>
-                            <div className="flex items-center gap-1.5 lobby-bonus-mini">
-                                {bonusEnabled && (
-                                    <BonusButton emoji="🎫" label="" readyText="Scratch ✨" lastAt={user.lastScratchAt} hours={SCR_HOURS} onClick={() => { setScrOpen(true); setScr(null); }} />
-                                )}
-                                {bonusEnabled && (
-                                    <BonusButton emoji="🎁" label="" readyText="Spin 🎰" lastAt={user.lastBonusAt} hours={22} onClick={() => { setBonusOpen(true); setBonusSpin(null); }} />
-                                )}
-                            </div>
-                        </div>
-
                         {/* Install prompt on the home screen — visible only when the app isn't installed yet (see InstallBanner). */}
                         <InstallBanner variant="lobby" />
 
-                        {/* Pocket Seven is poker-only — no other games are offered. */}
-                        <div className="flex items-center gap-1.5 mb-7">
-                            {[
-                                { id: 'poker', label: 'Poker', suit: '♠', n: pokerTables.length },
-                            ].map(g => (
-                                <button key={g.id} onClick={() => setTab(g.id)} className={`flex-1 justify-center px-2.5 py-2 rounded-xl font-black text-sm border transition-all flex items-center gap-1.5 whitespace-nowrap ${tab === g.id ? 'bg-emerald-500/20 border-emerald-400/60 text-emerald-200 shadow-[0_4px_16px_rgba(6,182,212,0.2)]' : 'bg-slate-900/60 border-white/10 text-slate-400 hover:text-white'}`}>
-                                    {g.suit ? <SuitGlyph s={g.suit} color="currentColor" size="0.9em"/> : <i className={`fa-solid ${g.icon} text-xs`}></i>}
-                                    <span>{g.label}</span>
-                                    {g.n > 0 && <span className="text-[10px] bg-white/10 rounded-full px-1.5 font-bold">{g.n}</span>}
-                                </button>
-                            ))}
+                        {/* Profile row — avatar, name & club, gold-chip balance (design handoff §5 / 1e) */}
+                        <div className="flex items-center gap-3 mb-3" dir="ltr">
+                            <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'linear-gradient(140deg,#6B1414,#3A0A0A)', border: '2px solid #F8C830', color: '#F8C830', fontFamily: "'Cinzel',serif", fontWeight: 700, fontSize: '17px' }}>
+                                {user.photo ? <img src={user.photo} alt="" className="w-full h-full object-cover" /> : (user.username || '?').charAt(0).toUpperCase()}
+                            </div>
+                            <div className="flex flex-col min-w-0 flex-1">
+                                <span className="text-[15px] font-bold truncate" style={{ color: '#F3EBDE' }}>{user.username}</span>
+                                <span className="text-[11.5px] truncate" style={{ color: '#B29B8B', fontVariantNumeric: 'tabular-nums' }}>{(user.playerId || user.uid || '').toString().slice(0, 8)} · {clubSettings?.name || 'The Poker Club'}</span>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0" style={{ background: '#1C1211', border: '1px solid rgba(248,200,48,0.3)', borderRadius: '100px', padding: '7px 12px' }}>
+                                <img src="assets/black-gold-chip.png" alt="" style={{ width: 20, height: 20 }} />
+                                <span className="text-[14px] font-extrabold" style={{ color: '#F3EBDE', fontVariantNumeric: 'tabular-nums' }}>{Math.round(Number(user.balance) || 0).toLocaleString()}</span>
+                            </div>
                         </div>
+
+                        {/* Rewards row — daily spin + scratch (design handoff §12 / 1e) */}
+                        {bonusEnabled && (
+                            <div className="flex gap-3 mb-4" dir="ltr">
+                                <button onClick={() => { setBonusOpen(true); setBonusSpin(null); }} className="flex-1 flex items-center gap-2.5 text-left" style={{ borderRadius: '14px', border: '1px solid rgba(248,200,48,0.25)', background: 'linear-gradient(160deg,#271010,#1C1211)', padding: '12px 14px' }}>
+                                    <div className="shrink-0" style={{ width: 34, height: 34, borderRadius: '50%', background: 'conic-gradient(#F8C830 0 25%,#6B1414 0 50%,#D89830 0 75%,#3A0A0A 0)', border: '2px solid #F8C830', boxSizing: 'border-box' }}></div>
+                                    <div className="flex flex-col min-w-0">
+                                        <span className="text-[13px] font-bold" style={{ color: '#F8C830' }}>Daily spin</span>
+                                        <span className="text-[11px] truncate" style={{ color: '#B29B8B', fontVariantNumeric: 'tabular-nums' }}>{bonusReady ? 'Ready now' : <React.Fragment>Next · <BonusCountdown lastAt={user.lastBonusAt} hours={22} /></React.Fragment>}</span>
+                                    </div>
+                                </button>
+                                <button onClick={() => { setScrOpen(true); setScr(null); }} className="flex-1 flex items-center gap-2.5 text-left" style={{ borderRadius: '14px', border: '1px solid rgba(248,200,48,0.15)', background: '#1C1211', padding: '12px 14px' }}>
+                                    <div className="shrink-0" style={{ width: 34, height: 34, borderRadius: '8px', background: 'repeating-linear-gradient(45deg,#D89830 0 6px,#8A5A10 6px 12px)', opacity: 0.85 }}></div>
+                                    <div className="flex flex-col min-w-0">
+                                        <span className="text-[13px] font-bold" style={{ color: '#F3EBDE' }}>Scratch card</span>
+                                        <span className="text-[11px] truncate" style={{ color: '#B29B8B', fontVariantNumeric: 'tabular-nums' }}>{scratchReady ? 'Ready now' : <React.Fragment>Next · <BonusCountdown lastAt={user.lastScratchAt} hours={SCR_HOURS} /></React.Fragment>}</span>
+                                    </div>
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Pocket Seven is poker-only — no other games are offered. */}
+                        {/* poker-only: no game switcher; the variant filter lives inside the poker section */}
 
                         {scrOpen && bonusEnabled && ReactDOM.createPortal(
                             <div dir="ltr" className="fixed inset-0 z-[250] bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => (!scr || scr.revealed) && setScrOpen(false)}>
