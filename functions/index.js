@@ -174,3 +174,4 @@ exports.godPeek = poker.godPeek;
 exports.pkDiscard = poker.pkDiscard;
 exports.pkPickGame = poker.pkPickGame;
 exports.pkLeave = poker.pkLeave;
+exports.admFixGameLog = poker.admFixGameLog;
