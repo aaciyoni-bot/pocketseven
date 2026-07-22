@@ -5884,7 +5884,7 @@
             const seatPos = (i) => { const [x, y] = seatXY(i); return { left: `${x}%`, top: `${y}%` }; };
             const betPos = (i) => {
                 // Hero seat: the big bottom fan owns the center — the bet sits beside it.
-                if (isSeated && i === 0) return { left: '29%', top: '64%' };
+                if (isSeated && i === 0) return { left: '67%', top: '69%' }; // right of MY fan — clearly mine, far from the left-seat player
                 const [sx, sy] = seatXY(i);
                 const dx = sx - 50, dy = sy - 50;
                 // Like a live table: the bet stays right in front of the player's seat all
