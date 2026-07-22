@@ -956,7 +956,7 @@
         // רשימת המשחקים בקלאב - מוכן גם למשחקים העתידיים
         const GAMES = [
             { id: 'poker', label: 'Poker', live: true },
-            { id: 'durak', label: 'Durak', live: true },
+            { id: 'durak', label: 'Durak', live: false },   // Durak is POKERTEN-exclusive
             { id: 'ofc', label: 'Chinese Poker (OFC)', live: true },
         ];
 
@@ -2326,7 +2326,7 @@
                             ))}
                         </div>
                         <div className="flex justify-center gap-1.5 mb-7 flex-wrap">
-                            {[['all', 'All 🏆'], ['poker', 'Poker'], ['durak', 'Durak'], ['ofc', 'Chinese']].map(([k, l]) => (
+                            {[['all', 'All 🏆'], ['poker', 'Poker'], ['ofc', 'Chinese']].map(([k, l]) => (
                                 <button key={k} onClick={() => setGtab(k)} className={`px-3 py-1.5 rounded-full font-bold text-xs border transition-colors ${gtab === k ? 'bg-amber-500/20 border-amber-400/60 text-amber-300' : 'bg-slate-900/60 border-white/10 text-slate-400 hover:text-white'}`}>{l}</button>
                             ))}
                         </div>
