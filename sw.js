@@ -1,7 +1,7 @@
 /* Pocket Seven - Service Worker
    אסטרטגיה: רשת-קודם. תמיד מנסים להביא את הגרסה הטרייה מהשרת,
    והמטמון משמש רק כגיבוי לחוסר-חיבור. כך פריסות חדשות מגיעות מיידית. */
-const CACHE = 'pocketseven-shell-v29';
+const CACHE = 'pocketseven-shell-v30';
 
 self.addEventListener('install', (e) => { self.skipWaiting(); });
 self.addEventListener('activate', (e) => {
