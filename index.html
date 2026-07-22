@@ -214,32 +214,28 @@
         .action-btn:hover { border-color: rgba(103,232,249,0.4); }
         .action-btn:active { transform: translateY(2px); box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 
-        /* ===== Poker: שולחן קפסולה עתידני ===== */
+        /* ===== Poker: GG-match table — thick glossy rim, felt color per game (blue
+           Omaha / green NLH), soft top light, inner racetrack line ===== */
         .poker-table {
             background:
-                url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Ctext%20x%3D'30'%20y%3D'43'%20font-family%3D'Arial%2Csans-serif'%20font-weight%3D'900'%20font-size%3D'36'%20text-anchor%3D'middle'%20fill%3D'rgba(103%2C232%2C249%2C0.09)'%3ER%3C%2Ftext%3E%3Ccircle%20cx%3D'46'%20cy%3D'40'%20r%3D'4'%20fill%3D'rgba(34%2C211%2C238%2C0.11)'%2F%3E%3C%2Fsvg%3E") 50% 74% / 88px no-repeat,
-                radial-gradient(ellipse at 50% 40%, rgba(34,211,238,0.13), rgba(34,211,238,0.03) 45%, transparent 68%),
-                repeating-linear-gradient(115deg, rgba(255,255,255,0.014) 0 2px, transparent 2px 7px),
-                radial-gradient(ellipse at 50% 38%, #14213a 0%, #0b1424 55%, #060b14 100%);
+                radial-gradient(ellipse at 50% 26%, rgba(255,255,255,0.06), transparent 55%),
+                radial-gradient(ellipse at 50% 44%, var(--feltA, #2e6089) 0%, var(--feltB, #1f4a6e) 52%, var(--feltC, #132f47) 100%);
             border-radius: 999px;
-            border: 7px solid #0a0f19;
-            box-shadow: inset 0 0 80px rgba(0,0,0,0.8), 0 24px 60px rgba(0,0,0,0.85), 0 0 45px rgba(34,211,238,0.10);
+            border: 12px solid #0f1216;
+            box-shadow: inset 0 10px 34px rgba(0,0,0,0.45), inset 0 0 80px rgba(0,0,0,0.28), 0 20px 55px rgba(0,0,0,0.8);
             position: relative;
         }
         .poker-table::before {
-            content: ''; position: absolute; inset: -7px; border-radius: inherit; pointer-events: none;
-            border: 2px solid transparent;
-            background: linear-gradient(165deg, #46536e, #161c2a 40%, #34405c 72%, #10151f) border-box;
+            content: ''; position: absolute; inset: -12px; border-radius: inherit; pointer-events: none;
+            border: 3px solid transparent;
+            background: linear-gradient(175deg, #34393f, #0a0c0f 42%, #232830 78%, #060708) border-box;
             -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor; mask-composite: exclude;
         }
         .poker-table::after {
-            content: ''; position: absolute; inset: 10px; border-radius: inherit; pointer-events: none;
-            border: 2px solid rgba(34,211,238,0.50);
-            box-shadow: 0 0 16px rgba(34,211,238,0.38), 0 0 40px rgba(34,211,238,0.12), inset 0 0 26px rgba(34,211,238,0.15);
-            animation: ledBreathe 4.5s ease-in-out infinite;
+            content: ''; position: absolute; inset: 30px; border-radius: inherit; pointer-events: none;
+            border: 1.5px solid rgba(255,255,255,0.055);
         }
-        @keyframes ledBreathe { 0%, 100% { opacity: 0.72; } 50% { opacity: 1; } }
 
         /* דסקטופ: שולחן קפסולה רחב במקום עיגול */
         @media (min-width: 1024px) {
@@ -261,21 +257,29 @@
             box-shadow: 0 3px 10px rgba(2,6,23,0.45);
             font-family: 'Rubik', sans-serif;
         }
+        @keyframes cardReveal {
+            0%   { opacity: 0; transform: translateY(-15px) scale(0.66) rotateY(38deg); }
+            55%  { opacity: 1; }
+            100% { opacity: 1; transform: none; }
+        }
+        .card-reveal { display: inline-block; animation: cardReveal 0.32s cubic-bezier(0.2,0.85,0.25,1) both; transform-origin: 50% 50%; }
+        @media (prefers-reduced-motion: reduce) { .card-reveal { animation-duration: 0.01s; } }
+        /* GG-style silver lattice card back */
         .card-back {
             border-radius: 9px;
             background:
-                url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Ctext%20x%3D'30'%20y%3D'44'%20font-family%3D'Georgia%2Cserif'%20font-weight%3D'900'%20font-size%3D'36'%20text-anchor%3D'middle'%20fill%3D'rgba(248%2C200%2C48%2C0.32)'%3E7%3C%2Ftext%3E%3Ccircle%20cx%3D'44'%20cy%3D'41'%20r%3D'4'%20fill%3D'rgba(248%2C200%2C48%2C0.42)'%2F%3E%3C%2Fsvg%3E") center / 62% no-repeat,
-                repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(248,200,48,0.05) 5px, rgba(248,200,48,0.05) 10px),
-                linear-gradient(160deg, #241512 0%, #140b0a 100%);
-            border: 1px solid rgba(248,200,48,0.4);
-            box-shadow: 0 6px 14px rgba(2,6,23,0.55), inset 0 0 0 3px rgba(255,255,255,0.05);
+                repeating-linear-gradient(45deg, rgba(120,133,151,0.30) 0 1.5px, transparent 1.5px 6px),
+                repeating-linear-gradient(-45deg, rgba(120,133,151,0.30) 0 1.5px, transparent 1.5px 6px),
+                linear-gradient(160deg, #f0f3f7 0%, #d3d9e2 55%, #bcc3cf 100%);
+            border: 2px solid #f8fafc;
+            box-shadow: 0 5px 12px rgba(2,6,23,0.5), inset 0 0 0 1px rgba(100,116,139,0.35);
         }
 
         .casino-chip { border-radius: 50%; border-style: dashed; box-shadow: 0 3px 6px rgba(0,0,0,0.55), inset 0 -2px 4px rgba(0,0,0,0.40), inset 0 2px 3px rgba(255,255,255,0.28); display: flex; align-items: center; justify-content: center; position: absolute; }
         .casino-chip-inner { border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); display: flex; align-items: center; justify-content: center; font-weight: 900; font-family: 'Rubik', sans-serif; background: rgba(2,6,15,0.32); color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,0.6); }
         .chip-1000 { background-color: #7c3aed; border-color: #ede9fe; } .chip-100 { background-color: #111827; border-color: #94a3b8; } .chip-25 { background-color: #0f766e; border-color: #ccfbf1; } .chip-5 { background-color: #b91c1c; border-color: #fecaca; } .chip-1 { background-color: #64748b; border-color: #f1f5f9; }
 
-        .player-pod { width: 74px; height: 74px; border-radius: 50%; background-color: #241512; border: 2px solid rgba(248,200,48,0.55); overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.6); background-size: cover; background-position: center; position: relative; }
+        .player-pod { width: 48px; height: 48px; border-radius: 50%; background-color: #241512; border: 2px solid rgba(248,200,48,0.55); overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.6); background-size: cover; background-position: center; position: relative; }
         .active-glow { border-color: #f5c860 !important; animation: pulseBorder 1.5s infinite; }
         @keyframes pulseBorder { 0%,100% { box-shadow: 0 0 10px rgba(245,200,96,0.4); } 50% { box-shadow: 0 0 24px rgba(245,200,96,0.85); } }
 
@@ -325,14 +329,26 @@
         }
         .btn-raise:not(:disabled):hover { filter: brightness(1.06); }
         .timer-ring { transform: rotate(-90deg); transition: stroke-dashoffset 1s linear; }
+        /* Vertical raise slider — opens on demand from the RAISE button; top = ALL IN */
+        .vslider {
+            -webkit-appearance: slider-vertical; appearance: slider-vertical;
+            writing-mode: vertical-lr; direction: rtl;
+            width: 48px; height: 250px; accent-color: #f59e0b; touch-action: none; cursor: pointer;
+        }
+        /* Winner marker: sits OVER the name pill (below the avatar) so the revealed
+           winning cards stay fully visible; on top seats (cards below the pod) it
+           flips above the pod instead. */
         .win-tag {
-            position: absolute; top: -26px; left: 50%; transform: translateX(-50%); z-index: 70;
-            font-family: 'Rubik', sans-serif; font-weight: 900; font-size: 14px; letter-spacing: 0.06em; white-space: nowrap; pointer-events: none;
-            background: linear-gradient(180deg, #fbe7ae, #e3ae4e 60%, #a9761f);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)) drop-shadow(0 0 10px rgba(245,200,96,0.5));
+            position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); z-index: 80;
+            display: flex; flex-direction: column; align-items: center; gap: 1px;
+            background: rgba(2,6,23,0.94); border: 1px solid rgba(245,200,96,0.55);
+            border-radius: 12px; padding: 3px 12px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.6), 0 0 18px rgba(245,200,96,0.22);
+            font-family: 'Rubik', sans-serif; font-weight: 900; white-space: nowrap; pointer-events: none;
             animation: popIn 0.3s ease-out;
         }
+        .win-tag.win-top { bottom: auto; top: -30px; }
+
 
         /* ===== שש-בש: לוח גרפיט עתידני ===== */
         .shesh-frame {
@@ -952,7 +968,24 @@
         const TURN_SECONDS = 60;
         const FIRST_MELD_MIN = 30;
 
-        const BOT_NAMES = ['Alex_Pro', 'TileMaster99', 'RummyKing', 'Sara_Play', 'PokerFace_Dan', 'Lucky_Jim', 'AceOfSpades', 'JokerQueen', 'Max_Bet', 'Fast_Hand'];
+        // Bot display names — NEVER contain the word "bot": full Israeli names (Hebrew or
+        // English, first + family), poker slang, or a plain random number.
+        const BOT_FIRST_HE = ['יוסי', 'דודו', 'אבי', 'איציק', 'שלומי', 'רמי', 'קובי', 'ששון', 'אלי', 'מאיר', 'אורן', 'גולן', 'שגיא', 'נדב', 'חיים', 'מוטי', 'בני', 'צחי', 'עמוס', 'דורון', 'יעקב', 'שמעון'];
+        const BOT_LAST_HE = ['כהן', 'לוי', 'מזרחי', 'פרץ', 'ביטון', 'אוחיון', 'דהן', 'חדד', 'גבאי', 'אזולאי', 'מלכה', 'עמר', 'בן דוד', 'שרעבי', 'אברהם', 'דיין'];
+        const BOT_FIRST_EN = ['Eli', 'Yossi', 'Avi', 'Kobi', 'Rami', 'Moti', 'Dudu', 'Itzik', 'Shlomi', 'Oren', 'Nadav', 'Sagi', 'Doron', 'Meir', 'Benny', 'Haim'];
+        const BOT_LAST_EN = ['Cohen', 'Levi', 'Mizrahi', 'Peretz', 'Biton', 'Ohayon', 'Dahan', 'Hadad', 'Gabay', 'Azulay', 'Malka', 'Amar', 'Ben-David', 'Sharabi'];
+        const BOT_NAMES_PK = ['RiverKing', 'FlopMaster', 'AllInArtist', 'CheckRaise', 'GutShot', 'NutFlush', 'SlowRoll', 'PocketRockets', 'BigBlind', 'TiltProof', 'DryAce', 'TripleBarrel', 'LooseCannon', 'Cooler', 'HeaterRun', 'SuitedAce'];
+        const BOT_NAME_NUM = ['David', 'Marina', 'Alex', 'Maya', 'Daniel', 'Nicole', 'Roman', 'Diana', 'Leon', 'Sofia', 'Tanya', 'Igor', 'Lena', 'Mark', 'Julia', 'Max'];
+        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        const botDisplayName = () => {
+            const r = Math.random();
+            if (r < 0.4) return pick(BOT_FIRST_HE) + ' ' + pick(BOT_LAST_HE);          // אלי כהן
+            if (r < 0.65) return pick(BOT_FIRST_EN) + ' ' + pick(BOT_LAST_EN);          // Eli Cohen
+            if (r < 0.82) return pick(BOT_NAMES_PK) + Math.floor(Math.random() * 99);   // RiverKing42
+            // name + number, like David 1984 / Marina 19
+            return pick(BOT_NAME_NUM) + ' ' + (Math.random() < 0.55 ? (1965 + Math.floor(Math.random() * 40)) : (1 + Math.floor(Math.random() * 98)));
+        };
+        const BOT_NAMES = BOT_NAMES_PK; // legacy alias
 
         const isGodUser = (u) => u && GOD_EMAILS.includes((u.email || '').toLowerCase().trim());
         // מי רשאי לנהל משחק מסוים: אדמין/בעלים - הכל; מנהל - רק משחקים שסומנו לו
@@ -962,6 +995,8 @@
             if (u.role === ROLES.MANAGER) return (u.managedGames || []).includes(gameId);
             return false;
         };
+        const buyInMin = (s) => { s = s || {}; return s.minBuyIn != null ? round2(Number(s.minBuyIn) || 0) : round2((Number(s.minBuyInBB) || 40) * (Number(s.blinds) || 0.5) * 2); };
+        const buyInMax = (s) => { s = s || {}; return s.maxBuyIn != null ? round2(Number(s.maxBuyIn) || 0) : round2((Number(s.maxBuyInBB) || 200) * (Number(s.blinds) || 0.5) * 2); };
         const round2 = (n) => Math.round(n * 100) / 100;
 
         const formatMoney = (amount) => {
@@ -1157,7 +1192,11 @@
             'Pineapple': { chip: 'bg-amber-500/15 text-amber-300 border-amber-500/50',       ico: 'text-amber-400',   icoBg: 'bg-amber-900/30 border-amber-700/40',     bar: 'from-amber-500 to-amber-700', spine: 'linear-gradient(180deg,#d97706,#92400e)', hue: '#fbbf24' },
         };
         const variantStyle = (gt) => VARIANT_STYLE[gt] || VARIANT_STYLE['NLH'];
-        const variantLabel = (gt) => ({ 'NLH': 'NLH', 'Omaha 4': 'PLO', 'Omaha 5': 'PLO5', 'Omaha 6': 'PLO6', 'Pineapple': 'Pineapple' }[gt] || gt);
+        // Omaha defaults to Pot-Limit (PLO); a table opened with omahaPotLimit=false plays No-Limit (NLO).
+        const variantLabel = (gt, s) => {
+            const nlo = s && s.omahaPotLimit === false;
+            return ({ 'NLH': 'NLH', 'Omaha 4': nlo ? 'NLO' : 'PLO', 'Omaha 5': nlo ? 'NLO5' : 'PLO5', 'Omaha 6': nlo ? 'NLO6' : 'PLO6', 'Pineapple': 'PINE' }[gt] || gt);
+        };
 
         // חלוקת רייק: חלקו של כל שחקן משויך-Agent הולך לAgent לפי האחוז, היתרה לבית
         const computeAgentCuts = async (rake, uids) => {
@@ -1459,6 +1498,10 @@
         const SUITS = ['♠', '♥', '♦', '♣'];
         const CARD_VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
         const GAME_CARDS = { 'NLH': 2, 'Pineapple': 3, 'Omaha 4': 4, 'Omaha 5': 5, 'Omaha 6': 6 };
+        // Hole cards are dealt sorted high→low so the hand always reads tidily;
+        // stored sorted (not display-sorted) so discard-by-index stays consistent.
+        const HOLE_ORD = { '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14 };
+        const sortHoleCards = (h) => [...h].sort((a, b) => ((HOLE_ORD[b.val] || 0) - (HOLE_ORD[a.val] || 0)) || String(a.suit).localeCompare(String(b.suit)));
         const getCardColor = (suit) => (suit === '♥' || suit === '♦' ? 'text-rose-600' : 'text-slate-900');
 
         function pokerDeck() {
@@ -3867,7 +3910,7 @@
                 try {
                     showToast("Generating Bots...", "info");
                     for (let i = 0; i < 20; i++) {
-                        const botName = BOT_NAMES[i % BOT_NAMES.length] + Math.floor(Math.random() * 100);
+                        const botName = botDisplayName();
                         await window.fb.addDoc(window.fb.collection(window.fb.db, "users"), {
                             username: botName, email: `bot${i}@pocketseven.com`, role: ROLES.PLAYER,
                             status: 'approved', balance: 50000, isBot: true, managedGames: [],
@@ -4267,32 +4310,39 @@
         /* ================================================================
            פתיחת Poker table - כל הSettings ניתנות לבחירה
            ================================================================ */
-        function PokerCreateView({ user, clubSettings, onBack, onCreated }) {
+        function PokerCreateView({ user, clubSettings, onBack, onCreated, showToast }) {
             const [s, setS] = useState({
                 baseGameType: 'NLH', isDealerChoice: false, maxPlayers: 6,
-                blinds: 0.5, actionTime: 30, minBuyInBB: 40, maxBuyInBB: 200,
+                blinds: 0.5, actionTime: 30, minBuyInBB: 40, maxBuyInBB: 200, minBuyIn: 40, maxBuyIn: 200,
                 leaveNoticeMins: 0, leaveNoticeBB: 0, serverEngine: true,
                 rakePercent: clubSettings?.rakePct ?? DEFAULT_RAKE_PCT, autoStart: 2,
-                straddle: false, ante: 0
+                straddle: false, ante: 0, omahaPotLimit: true
             });
             const upd = (k, v) => setS(prev => ({ ...prev, [k]: v }));
 
             const handleCreate = async () => {
                 await window.fb.addDoc(window.fb.collection(window.fb.db, "tables"), {
                     type: 'poker', clubId: CLUB_ID, createdAt: Date.now(),
-                    settings: { ...s, blinds: Number(s.blinds), rakePercent: Number(s.rakePercent) },
+                    settings: { ...s, blinds: Math.max(0.01, Number(s.blinds) || 0.5), rakePercent: Number(s.rakePercent), minBuyIn: Math.max(0.01, Number(s.minBuyIn) || 1), maxBuyIn: Math.max(Number(s.minBuyIn) || 1, Number(s.maxBuyIn) || 1) },
                     players: {}, chat: [], leftStacks: {},
                     gameState: { phase: 'waiting', deck: [], board: [], pots: [], highestBet: 0, minRaise: Number(s.blinds) * 2, dealerUid: null, dcUid: null, dcAnchor: null, currentGameType: s.baseGameType, activeTurnUid: null, turnStartedAt: null, lastWinners: null, lastWinAmount: 0, allInReveal: false }
                 });
                 onCreated();
             };
 
-            const Field = ({ label, children }) => (
-                <div>
-                    <label className="text-slate-400 text-xs font-bold mb-1 block uppercase tracking-widest">{label}</label>
-                    {children}
-                </div>
-            );
+            // ── Saved table templates (per club, on this device) ──
+            const TPL_KEY = 'pokerTpl_' + CLUB_ID;
+            const [tpls, setTpls] = useState(() => { try { return JSON.parse(localStorage.getItem(TPL_KEY) || '[]'); } catch(e) { return []; } });
+            const [tplName, setTplName] = useState('');
+            const persistTpls = (arr) => { setTpls(arr); try { localStorage.setItem(TPL_KEY, JSON.stringify(arr)); } catch(e) {} };
+            const saveTpl = () => {
+                const nm = (tplName.trim()) || (s.baseGameType + ' · ' + formatShort(s.blinds) + '/' + formatShort(s.blinds * 2));
+                persistTpls([...tpls.filter(x => x.name !== nm), { name: nm, settings: { ...s } }]);
+                setTplName(''); showToast && showToast('Template saved: ' + nm, 'success');
+            };
+            const loadTpl = (tp) => { setS(prev => ({ ...prev, ...tp.settings })); showToast && showToast('Loaded template: ' + tp.name, 'info'); };
+            const delTpl = (nm) => persistTpls(tpls.filter(x => x.name !== nm));
+
             const sel = "w-full bg-slate-900 text-white border border-white/10 rounded-xl p-3 outline-none focus:border-amber-500/60 font-bold";
 
             return (
@@ -4304,33 +4354,31 @@
                         </div>
 
                         <div className="glass-panel p-6 rounded-3xl flex flex-col gap-5">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="sm:col-span-2">
-                                    <label className="text-slate-400 text-xs font-bold mb-2 block uppercase" style={{ letterSpacing: '.14em' }}>Variant</label>
-                                    <div className="grid grid-cols-3 gap-2.5">
-                                        {[
-                                            { gt: 'NLH', dc: false, label: 'NLH', sub: '2 cards', hue: '#F8C830' },
-                                            { gt: 'Omaha 4', dc: false, label: 'PLO 4', sub: '4 cards', hue: '#3C8A56' },
-                                            { gt: 'Omaha 5', dc: false, label: 'PLO 5', sub: '5 cards', hue: '#5B8FC8' },
-                                            { gt: 'Omaha 6', dc: false, label: 'PLO 6', sub: '6 cards', hue: '#7EA8D8' },
-                                            { gt: 'Pineapple', dc: false, label: 'PINE', sub: 'discard 1', hue: '#C86E3E' },
-                                            { gt: null, dc: true, label: "DEALER'S", sub: 'picks each hand', hue: '#F3EBDE' },
-                                        ].map((v, i) => {
-                                            const active = v.dc ? s.isDealerChoice : (!s.isDealerChoice && s.baseGameType === v.gt);
-                                            return (
-                                                <button key={i} type="button" onClick={() => v.dc ? upd('isDealerChoice', true) : setS(p => ({ ...p, isDealerChoice: false, baseGameType: v.gt }))}
-                                                    style={{ borderRadius: '12px', border: active ? '2px solid #F8C830' : '1px solid rgba(248,200,48,0.2)', background: active ? 'rgba(248,200,48,0.08)' : 'transparent', padding: '12px 6px', boxSizing: 'border-box' }}>
-                                                    <div style={{ fontFamily: "'Cinzel',serif", fontWeight: 800, fontSize: v.label.length > 4 ? '13px' : '14px', color: v.hue }}>{v.label}</div>
-                                                    <div style={{ fontSize: '10.5px', color: '#B29B8B' }}>{v.sub}</div>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
+                            {tpls.length > 0 && (
+                                <div className="flex flex-wrap gap-2 items-center pb-4 border-b border-white/8">
+                                    <span className="text-[11px] font-black text-amber-300 uppercase tracking-widest shrink-0"><i className="fa-solid fa-bookmark ml-1"></i>Templates</span>
+                                    {tpls.map(tp => (
+                                        <span key={tp.name} className="inline-flex items-center gap-1 bg-slate-800 border border-amber-500/30 rounded-full pr-1 pl-3 py-1">
+                                            <button onClick={() => loadTpl(tp)} className="text-xs font-black text-amber-200 hover:text-white">{tp.name}</button>
+                                            <button onClick={() => delTpl(tp.name)} className="w-5 h-5 rounded-full text-slate-500 hover:text-rose-400 text-[10px] flex items-center justify-center"><i className="fa-solid fa-xmark"></i></button>
+                                        </span>
+                                    ))}
                                 </div>
-                                <Field label="Blinds (SB)">
-                                    <select value={s.blinds} onChange={e=>upd('blinds', parseFloat(e.target.value))} className={sel}>
-                                        {[0.25,0.5,1,2,5,10,25].map(b => <option key={b} value={b}>{formatMoney(b)} / {formatMoney(b*2)}</option>)}
+                            )}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <Field label="Base game type">
+                                    <select value={s.baseGameType} onChange={e=>upd('baseGameType', e.target.value)} className={sel}>
+                                        {Object.keys(GAME_CARDS).map(g => <option key={g} value={g}>{g} ({GAME_CARDS[g]} cards)</option>)}
                                     </select>
+                                </Field>
+                                <Field label="Dealer's Choice">
+                                    <label className={`flex items-center justify-between rounded-xl px-4 py-3 border cursor-pointer ${s.isDealerChoice ? 'bg-rose-500/10 border-rose-500/60' : 'bg-slate-900 border-white/10'}`}>
+                                        <span className="font-bold text-sm text-white">The dealer picks the game when the buttons meet</span>
+                                        <input type="checkbox" checked={s.isDealerChoice} onChange={e=>upd('isDealerChoice', e.target.checked)} className="w-5 h-5 accent-rose-500" />
+                                    </label>
+                                </Field>
+                                <Field label="Blinds — SB (BB = ×2)">
+                                    <input type="number" min="0" step="any" value={s.blinds} onChange={e=>upd('blinds', e.target.value)} className={sel} dir="ltr" placeholder="e.g. 0.5" />
                                 </Field>
                                 <Field label="Max players">
                                     <select value={s.maxPlayers} onChange={e=>upd('maxPlayers', parseInt(e.target.value))} className={sel}>
@@ -4365,15 +4413,11 @@
                                         <option value={1}>On — cards dealt on the server</option>
                                     </select>
                                 </Field>
-                                <Field label="Min buy-in (BB)">
-                                    <select value={s.minBuyInBB} onChange={e=>upd('minBuyInBB', parseInt(e.target.value))} className={sel}>
-                                        {[20,40,50,100].map(n => <option key={n} value={n}>{n} BB ({formatMoney(n*s.blinds*2)})</option>)}
-                                    </select>
+                                <Field label="Min buy-in (₪) — type any amount">
+                                    <input type="number" min="0" step="any" value={s.minBuyIn} onChange={e=>upd('minBuyIn', e.target.value)} className={sel} dir="ltr" placeholder="e.g. 100" />
                                 </Field>
-                                <Field label="Max buy-in (BB)">
-                                    <select value={s.maxBuyInBB} onChange={e=>upd('maxBuyInBB', parseInt(e.target.value))} className={sel}>
-                                        {[100,150,200,300,500,750,1000,1500,2000,3000].map(n => <option key={n} value={n}>{n} BB ({formatMoney(n*s.blinds*2)})</option>)}
-                                    </select>
+                                <Field label="Max buy-in (₪) — type any amount">
+                                    <input type="number" min="0" step="any" value={s.maxBuyIn} onChange={e=>upd('maxBuyIn', e.target.value)} className={sel} dir="ltr" placeholder="e.g. 1000" />
                                 </Field>
                                 <Field label="Auto-start from ">
                                     <select value={s.autoStart} onChange={e=>upd('autoStart', parseInt(e.target.value))} className={sel}>
@@ -4392,7 +4436,15 @@
                                         <input type="checkbox" checked={!!s.straddle} onChange={e=>upd('straddle', e.target.checked)} className="accent-amber-500 w-4 h-4" />
                                         <span className="text-white text-sm font-bold">Allow straddle (2xBB blind from UTG)</span>
                                     </label>
+                                    <label className="flex items-center gap-3 bg-slate-900/60 border border-white/10 rounded-xl p-3 cursor-pointer mt-2">
+                                        <input type="checkbox" checked={s.omahaPotLimit !== false} onChange={e=>upd('omahaPotLimit', e.target.checked)} className="accent-amber-500 w-4 h-4" />
+                                        <span className="text-white text-sm font-bold">Omaha plays <b className="text-amber-400">POT LIMIT</b> (PLO) — uncheck for No-Limit (NLO)</span>
+                                    </label>
                                 </Field>
+                            </div>
+                            <div className="flex gap-2 items-center pt-1">
+                                <input value={tplName} onChange={e=>setTplName(e.target.value)} placeholder="Template name (optional)" className="flex-1 bg-slate-900 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm outline-none focus:border-amber-500/60" />
+                                <button onClick={saveTpl} className="bg-slate-800 hover:bg-slate-700 border border-amber-500/40 text-amber-300 px-4 py-2.5 rounded-xl font-black text-sm whitespace-nowrap"><i className="fa-solid fa-bookmark ml-1"></i>Save as template</button>
                             </div>
                             <button onClick={handleCreate} className="w-full bg-gradient-to-b from-amber-500 to-amber-700 hover:from-amber-400 text-white py-4 rounded-2xl font-black text-lg shadow-[0_8px_25px_rgba(245,158,11,0.35)]">
                                 <i className="fa-solid fa-diamond ml-2"></i>Open table
@@ -4449,8 +4501,20 @@
             const [buyAmt, setBuyAmt] = useState(0);
             const [raiseAmt, setRaiseAmt] = useState(0);
             const [timeLeft, setTimeLeft] = useState(30);
+            const [acting, setActing] = useState(false); // optimistic: disable action buttons the instant you tap
+            const [raiseOpen, setRaiseOpen] = useState(false); // vertical raise slider, opened from the RAISE button
+            const [buyinEdit, setBuyinEdit] = useState(null); // manager: live-adjust the table's min/max buy-in
+            // In-app confirm — native window.confirm is suppressed inside iOS standalone PWAs,
+            // which silently trapped players at the table ("exit button does nothing").
+            const [confirmBox, setConfirmBox] = useState(null); // { msg, resolve }
+            const askConfirm = (msg) => new Promise((resolve) => setConfirmBox({ msg, resolve }));
+            const [topUpBox, setTopUpBox] = useState(null); // add-chips sheet: { room, inHand, val }
 
             const tableRef = useRef(null);
+            const actedTurnRef = useRef(null); // turnStartedAt of the turn I already acted on — hides buttons until a genuinely new turn
+            const leaveArmedRef = useRef(false); // I marked "leave at end of hand" — auto-exit when the seat clears
+            const leavingNowRef = useRef(false);
+            const dealAnimRef = useRef(null); // visible dealing round: {t0, order:{uid:i}, n, iv, cache}
             const advanceRef = useRef(null);
             const nextHandRef = useRef(null);
             const startingRef = useRef(false);
@@ -4468,7 +4532,10 @@
             const BB = (Number(setts.blinds) || 0.5) * 2;
             const BETTING = ['preflop','flop','turn','river'];
             const inBetting = BETTING.includes(gs.phase);
-            const isMyTurn = gs.activeTurnUid === user.uid && inBetting;
+            // Only "my turn" when the server says so AND I haven't already acted on THIS turn.
+            // The second clause stops a lagging snapshot from re-showing the action buttons after
+            // I've acted (the classic "buttons opened but it says not my turn" race).
+            const isMyTurn = gs.activeTurnUid === user.uid && inBetting && actedTurnRef.current !== gs.turnStartedAt;
 
             const clonePlayers = (pl) => { const o = {}; Object.entries(pl || {}).forEach(([k,v]) => o[k] = { ...v, cards: [...(v.cards||[])] }); return o; };
             const saveGame = async (g, pl, extra = {}) => { try { await window.fb.updateDoc(tblRef(), { gameState: g, players: pl, ...extra }); } catch(e) {} };
@@ -4487,13 +4554,28 @@
                 if (!tableState) return;
                 const left = (tableState.leftStacks || {})[user.uid];
                 const lock = left && Date.now() - left.at < 12 * 60 * 60 * 1000 ? left.amount : 0;
-                const minB = Math.max((setts.minBuyInBB || 40) * BB, lock);
+                const minB = Math.max(buyInMin(setts), lock);
                 if (buyAmt < minB) setBuyAmt(round2(minB));
             }, [tableState]);
 
             useEffect(() => {
+                setActing(false); // every new turn (or turn hand-off) re-enables the buttons
+                setRaiseOpen(false); // the raise slider never survives a turn change
                 if (isMyTurn) setRaiseAmt(round2(Math.min((gs.highestBet || 0) + (gs.minRaise || BB), (myPlayer?.bet || 0) + (myPlayer?.stack || 0))));
             }, [gs.activeTurnUid, gs.turnStartedAt]);
+
+            // Guarded action: instant visual feedback, prevents double-submits and stale "not your turn" clicks.
+            const myAct = (type, amt) => {
+                if (acting || !isMyTurn) return;
+                setActing(true);
+                actedTurnRef.current = gs.turnStartedAt; // remember which turn I acted on → buttons hide until a new turn arrives
+                setTimeout(() => {
+                    setActing(false);
+                    // If the turn genuinely never advanced (error / slow net), release the guard so I can retry.
+                    if (tableRef.current?.gameState?.turnStartedAt === actedTurnRef.current) actedTurnRef.current = null;
+                }, 3500);
+                performAction(user.uid, type, amt);
+            };
 
             /* ---------- מנוע ---------- */
             const firstAfterDealer = (g, pl) => {
@@ -4615,8 +4697,9 @@
                     // Server-authoritative table: only MY OWN action goes up (as a request);
                     // bots/timeouts/other actors are the server's job via pkTick.
                     if (actorUid === user.uid) {
-                        try { await window.fb.fx('pkAct', { tableId: tableDocId, action: type === 'raise' ? 'raise' : type, amount: targetBet }); }
-                        catch(e) { showToast((e && e.message) || 'Action failed', 'error'); }
+                        try { await window.fb.fx('pkAct', { tableId: tableDocId, action: type === 'raise' ? 'raise' : type, amount: targetBet, auto: !!autoTimeout }); }
+                        catch(e) { const m = (e && e.message) || ''; if (!/turn|not your|in the hand|no betting|betting now/i.test(m)) showToast(m || 'Action failed', 'error'); }
+                        finally { setActing(false); }
                     }
                     return;
                 }
@@ -4627,7 +4710,7 @@
                 const p = pl[actorUid]; if (!p || p.status !== 'active') return;
                 // Sit out אוטומטי: שתי החמצות טיימר רצופות
                 p.missed = autoTimeout ? (p.missed || 0) + 1 : 0;
-                if (autoTimeout && p.missed >= 2 && !p.sitOut) { p.sitOut = true; p.sitOutAt = Date.now(); p.sitAuto = true; }
+                if (autoTimeout && p.missed >= 2 && !p.sitOut && !p.sitOutNext) { p.sitOutNext = true; p.sitAuto = true; } // takes effect between hands
 
                 if (type === 'fold') { p.status = 'folded'; p.actionText = 'Fold'; p.hasActed = true; }
                 else if (type === 'call') {
@@ -4639,6 +4722,12 @@
                 } else if (type === 'raise') {
                     const maxT = round2((p.bet || 0) + p.stack);
                     let target = Math.min(round2(targetBet), maxT);
+                    // Pot-Limit (Omaha default; omahaPotLimit=false → NLO): cap raise-to at highestBet + toCall + pot-after-call
+                    if (String(g.currentGameType || '').startsWith('Omaha') && setts.omahaPotLimit !== false) {
+                        const toCallP = round2(Math.max(0, (g.highestBet || 0) - (p.bet || 0)));
+                        const potNow = round2((g.pots || []).reduce((s2, x) => s2 + x.amount, 0) + Object.values(pl).reduce((s2, q) => s2 + (q.bet || 0), 0));
+                        target = Math.min(target, round2((g.highestBet || 0) + potNow + toCallP));
+                    }
                     const minT = round2(g.highestBet + g.minRaise);
                     if (target < minT) target = Math.min(minT, maxT);
                     const add = round2(target - (p.bet || 0));
@@ -4678,9 +4767,19 @@
                 const tour = (tableRef.current || {}).tournament || null;
                 const deck = pokerDeck();
                 const pl = clonePlayers(plBase);
+                // Fold in any chips a player queued mid-hand (top-up), capped to the table max buy-in.
+                const capBuy = buyInMax(setts);
+                Object.values(pl).forEach(p => {
+                    if (p.pendingTopUp && p.pendingTopUp > 0 && !['busted','out'].includes(p.status)) {
+                        const room2 = capBuy ? Math.max(0, round2(capBuy - (p.stack || 0))) : (p.pendingTopUp || 0);
+                        const add2 = Math.min(round2(p.pendingTopUp), room2);
+                        if (add2 > 0) p.stack = round2((p.stack || 0) + add2);
+                        p.pendingTopUp = 0;
+                    }
+                });
                 const actives = Object.values(pl).filter(p => p.status === 'active').sort((a,b) => a.seatIndex - b.seatIndex);
                 const n = GAME_CARDS[gameType] || 2;
-                actives.forEach(p => { p.cards = deck.splice(0, n); p.bet = 0; p.hasActed = false; p.actionText = ''; });
+                actives.forEach(p => { p.cards = sortHoleCards(deck.splice(0, n)); p.bet = 0; p.hasActed = false; p.actionText = ''; });
                 // Blinds ואנטה: רגיל מהSettings, טורניר לפי הרמה
                 let sbAmt = Number(setts.blinds), bbAmt = BB, anteAmt = round2(Number(setts.ante) || 0), lvl = 0;
                 if (tour) {
@@ -4709,7 +4808,7 @@
             };
 
             const startHand = async () => {
-                if (setts.serverEngine) { try { await window.fb.fx('pkDeal', { tableId: tableDocId }); } catch(e) {} return; }
+                if (setts.serverEngine) { try { await window.fb.fx('pkDeal', { tableId: tableDocId }); } catch(e) { console.error('pkDeal failed', e); showToast('Deal: ' + ((e && e.message) || e), 'error'); } return; }
                 if (startingRef.current) return;
                 startingRef.current = true;
                 try {
@@ -4719,7 +4818,7 @@
                     const g0 = t.gameState;
                     if (!['waiting','showdown'].includes(g0.phase)) return;
                     const pl = clonePlayers(t.players);
-                    Object.values(pl).forEach(p => { p.cards = []; p.bet = 0; p.actionText = ''; p.hasActed = false; p.reveal = false; p.status = p.stack > 0 ? ((p.sitOut && !t.tournamentId) ? 'sitout' : 'active') : (['busted','out'].includes(p.status) ? p.status : 'sitout'); });
+                    Object.values(pl).forEach(p => { if (p.sitOutNext) { p.sitOut = true; p.sitOutAt = Date.now(); p.sitAuto = false; p.sitOutNext = false; } if (p.leaveReq && !t.tournamentId) p.sitOut = true; p.cards = []; p.bet = 0; p.actionText = ''; p.hasActed = false; p.reveal = false; p.status = p.stack > 0 ? ((p.sitOut && !t.tournamentId) ? 'sitout' : 'active') : (['busted','out'].includes(p.status) ? p.status : 'sitout'); });
                     const actives = Object.values(pl).filter(p => p.status === 'active').sort((a,b) => a.seatIndex - b.seatIndex);
                     if (actives.length < 2) {
                         await saveGame({ ...g0, phase: 'waiting', activeTurnUid: null, board: [], pots: [] }, pl);
@@ -4748,12 +4847,15 @@
                     } else {
                         await executeDeal(g, pl, setts.isDealerChoice ? (g.currentGameType || setts.baseGameType) : setts.baseGameType);
                     }
-                } finally { startingRef.current = false; }
+                } catch(e) { console.error('client deal failed', e); showToast('Deal: ' + ((e && e.message) || e), 'error'); } finally { startingRef.current = false; }
             };
 
             const selectDCGame = async (gameType, byUid = user.uid) => {
                 if (setts.serverEngine) {
-                    if (byUid === user.uid) { try { await window.fb.fx('pkPickGame', { tableId: tableDocId, gameType }); } catch(e) {} }
+                    if (byUid === user.uid) {
+                        try { await window.fb.fx('pkPickGame', { tableId: tableDocId, gameType }); }
+                        catch(e) { const m = (e && e.message) || ''; if (!/your pick|dc_selection/i.test(m)) showToast(m || 'Could not start that game — try again', 'error'); }
+                    }
                     return;
                 }
                 const t = tableRef.current; if (!t) return;
@@ -4906,7 +5008,7 @@
                         if (!tSnap.exists()) throw "err";
                         const t = tSnap.data();
                         if (!t.players[user.uid]) throw "You're not seated at the table";
-                        const capMax = (Number(t.settings.maxBuyInBB) || 200) * (Number(t.settings.blinds) || 0.5) * 2;
+                        const capMax = buyInMax(t.settings);
                         const room = round2(capMax - (t.players[user.uid].stack || 0));
                         if (room <= 0) throw `You're already at the max table buy-in (${formatMoney(capMax)})`;
                         const addAmt = Math.min(round2(buyAmt), room);
@@ -4953,29 +5055,46 @@
             };
 
             const toggleSitOut = async () => {
-                const meP = tableRef.current?.players?.[user.uid]; if (!meP) return;
+                const t = tableRef.current; const meP = t?.players?.[user.uid]; if (!meP) return;
                 try {
                     if (meP.sitOut) {
-                        await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.sitOut`]: false, [`players.${user.uid}.missed`]: 0, [`players.${user.uid}.sitAuto`]: false });
+                        await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.sitOut`]: false, [`players.${user.uid}.missed`]: 0, [`players.${user.uid}.sitAuto`]: false, [`players.${user.uid}.sitOutNext`]: false });
                         showToast("You're back at the table! Dealt in next hand 💪", "success");
+                    } else if (meP.sitOutNext) {
+                        await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.sitOutNext`]: false });
+                        showToast("Sit-out canceled — you stay in 💪", "success");
                     } else {
-                        await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.sitOut`]: true, [`players.${user.uid}.sitOutAt`]: Date.now(), [`players.${user.uid}.sitAuto`]: false });
-                        showToast(tableRef.current?.tournamentId ? "Sit out ☕ blinds keep going down in the tournament!" : "Sit out ☕ you have 10 minutes to return", "info");
+                        // Rule: state changes apply BETWEEN hands. Mid-hand ☕ queues the sit-out
+                        // for the end of the hand; you keep playing this one out.
+                        const inHand = !['waiting', 'showdown', 'dc_selection'].includes((t.gameState || {}).phase) && meP.status === 'active';
+                        if (inHand) {
+                            await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.sitOutNext`]: true });
+                            showToast("Sit out at the END of this hand ☕ (tap again to cancel)", "info");
+                        } else {
+                            await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.sitOut`]: true, [`players.${user.uid}.sitOutAt`]: Date.now(), [`players.${user.uid}.sitAuto`]: false });
+                            showToast(t?.tournamentId ? "Sit out ☕ blinds keep going down in the tournament!" : "Sit out ☕ you have 10 minutes to return", "info");
+                        }
                     }
                 } catch(e) {}
             };
-            const topUpChips = async () => {
+            // Opens the in-app add-chips sheet (native window.prompt is suppressed in iOS PWAs).
+            const topUpChips = () => {
                 const t = tableRef.current; if (!t || t.tournamentId) return;
                 const BBv = round2((Number(setts.blinds) || 1) * 2);
-                const maxBuy2 = round2(BBv * (Number(setts.maxBuyInBB) || 100));
+                const maxBuy2 = buyInMax(setts);
                 const meP = t.players[user.uid]; if (!meP) return;
-                const room = round2(maxBuy2 - (meP.stack || 0) - (meP.bet || 0));
+                const pend = round2(meP.pendingTopUp || 0);
+                // Room left up to the table cap, accounting for chips in play + anything already queued.
+                const room = round2(maxBuy2 - (meP.stack || 0) - (meP.bet || 0) - pend);
                 if (room <= 0) return showToast(`You're at the table cap (${formatMoney(maxBuy2)})`, "info");
-                const inHand = !['waiting', 'showdown'].includes((t.gameState || {}).phase) && meP.status === 'active';
-                if (inHand) return showToast("Chips can only be added between hands", "info");
-                const amt = Number(window.prompt(`How much to add? (max ${formatMoney(room)})`, String(Math.min(room, BBv * 50))));
-                if (!amt || amt <= 0) return;
-                const add = Math.min(round2(amt), room);
+                // Mid-hand you don't touch chips that are in play — the add is QUEUED and lands
+                // on your stack automatically at the end of the hand, so you never miss the window.
+                const inHand = !['waiting', 'showdown', 'dc_selection'].includes((t.gameState || {}).phase) && meP.status === 'active';
+                setTopUpBox({ room, inHand, val: String(Math.min(room, BBv * 50)) });
+            };
+            const doTopUp = async (amount, inHand, room) => {
+                const add = Math.min(round2(Number(amount) || 0), room);
+                if (!add || add <= 0) return;
                 try {
                     await window.fb.runTransaction(window.fb.db, async (tr) => {
                         const ms = await tr.get(memDoc(user.uid));
@@ -4983,27 +5102,41 @@
                         if (!ms.exists() || !ts2.exists()) throw "err";
                         if ((ms.data().balance || 0) < add) throw "Not enough in wallet";
                         const cur = ts2.data().players[user.uid]; if (!cur) throw "err";
+                        // Debit the wallet immediately either way; mid-hand we park it in pendingTopUp
+                        // and the engine folds it into the stack when the next hand is dealt.
                         tr.update(ms.ref, { balance: round2((ms.data().balance || 0) - add) });
-                        tr.update(tblRef(), { [`players.${user.uid}.stack`]: round2((cur.stack || 0) + add) });
+                        if (inHand) tr.update(tblRef(), { [`players.${user.uid}.pendingTopUp`]: round2((cur.pendingTopUp || 0) + add) });
+                        else tr.update(tblRef(), { [`players.${user.uid}.stack`]: round2((cur.stack || 0) + add) });
                     });
                     playSnd('chip');
-                    showToast(`${formatMoney(add)} added to your stack 💰`, "success");
+                    showToast(inHand
+                        ? `${formatMoney(add)} queued — added to your stack at the end of the hand 💰`
+                        : `${formatMoney(add)} added to your stack 💰`, "success");
                 } catch(e) { showToast(typeof e === 'string' ? e : "Error", "error"); }
             };
             // בעיטת 10 דקות (קאש בלבד) - כל לקוח צופה בודק; מנהל יכול לבעוט ידנית
             const kickSeat = async (uid, byAdmin) => {
+                // Manager kick on a server table: pkLeave folds the seat out of the live hand
+                // correctly (turn advance, pot, refund) instead of yanking an active player.
+                if (byAdmin && setts.serverEngine && !tableState?.tournamentId) {
+                    try { await window.fb.updateDoc(tblRef(), { [`players.${uid}.leaveReq`]: Date.now() }); } catch(e) {}
+                    try { await window.fb.fx('pkLeave', { tableId: tableDocId, targetUid: uid }); }
+                    catch(e) { showToast('Removal queued — the seat clears within a few seconds', 'info'); }
+                    return;
+                }
                 try {
                     await window.fb.runTransaction(window.fb.db, async (tr) => {
                         const ts2 = await tr.get(tblRef());
                         if (!ts2.exists()) return;
                         const t = ts2.data();
                         const p = t.players[uid]; if (!p) return;
-                        if (!byAdmin && !(p.sitOut && !t.tournamentId && Date.now() - (p.sitOutAt || 0) > 600000)) return;
+                        if (!byAdmin && !t.tournamentId && !(p.leaveReq || (p.sitOut && Date.now() - (p.sitOutAt || 0) > 600000))) return;
+                        if (!byAdmin && t.tournamentId) return;
                         const inHand = !['waiting', 'showdown'].includes((t.gameState || {}).phase) && p.status === 'active';
                         if (inHand && !byAdmin) return; // לא בועטים באמצע יד
                         const ms = p.isBot ? null : await tr.get(memDoc(uid));
                         const pl = { ...t.players }; delete pl[uid];
-                        if (ms && ms.exists()) tr.update(ms.ref, { balance: round2((ms.data().balance || 0) + (p.stack || 0) + (inHand ? 0 : (p.bet || 0))) });
+                        if (ms && ms.exists()) tr.update(ms.ref, { balance: round2((ms.data().balance || 0) + (p.stack || 0) + (p.pendingTopUp || 0) + (inHand ? 0 : (p.bet || 0))) });
                         tr.update(tblRef(), { players: pl });
                     });
                 } catch(e) {}
@@ -5013,11 +5146,27 @@
                 const iv = setInterval(() => {
                     const t = tableRef.current; if (!t) return;
                     Object.values(t.players || {}).forEach(p => {
-                        if (p.sitOut && !p.isBot && Date.now() - (p.sitOutAt || 0) > 600000) kickSeat(p.uid, false);
+                        // 10-min sit-out kick + leave-at-end-of-hand cleanup for a leaver who disconnected
+                        if (!p.isBot && (p.leaveReq || (p.sitOut && Date.now() - (p.sitOutAt || 0) > 600000))) kickSeat(p.uid, false);
                     });
                 }, 12000);
                 return () => clearInterval(iv);
             }, [tableState && tableState.id]);
+
+            // "Leave at end of hand": once the hand settles, my own client completes the
+            // exit; if the seat was already cleared (tick backstop / kick), just go home.
+            useEffect(() => {
+                if (!tableState) return;
+                const me = (tableState.players || {})[user.uid];
+                if (me?.leaveReq) leaveArmedRef.current = true;
+                if (!leaveArmedRef.current) return;
+                if (!me) { leaveArmedRef.current = false; onLeave(); return; }
+                const ph = (tableState.gameState || {}).phase;
+                if (me.leaveReq && ['waiting', 'showdown'].includes(ph) && !leavingNowRef.current) {
+                    leavingNowRef.current = true; leaveArmedRef.current = false;
+                    Promise.resolve(handleStandUp(true)).finally(() => { leavingNowRef.current = false; });
+                }
+            }, [tableState]);
 
             const rebuyAfterBust = async () => {
                 try {
@@ -5062,7 +5211,7 @@
                         return;
                     }
                     if (meN.leavingAt && Date.now() < meN.leavingAt) {
-                        if (window.confirm("Cancel leaving and stay at the table?")) {
+                        if (await askConfirm("Cancel leaving and stay at the table?")) {
                             try { await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.leavingAt`]: null }); } catch(e) {}
                             showToast("Staying! 💪", "success");
                         } else {
@@ -5076,7 +5225,7 @@
                 if (t.tournament) {
                     const meT = t.players[user.uid];
                     if (meT.status !== 'out') {
-                        if (!window.confirm("⚠️ Leaving a tournament table = knocking out of the tournament (no refund). Sure?")) return;
+                        if (!(await askConfirm("⚠️ Leaving a tournament table = knocking out of the tournament (no refund). Sure?"))) return;
                         try { await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.status`]: 'out' }); } catch(e) {}
                         tourReportBust(t.tournamentId, [user.uid], [], 0, false);
                     }
@@ -5084,32 +5233,38 @@
                 }
                 const g = t.gameState;
                 const inHand = !['waiting','showdown'].includes(g.phase) && t.players[user.uid].status === 'active';
+                // Server-authoritative table: the whole fold-out + seat removal + refund runs
+                // atomically in pkLeave, so blinds/turn logic never waits on a ghost player.
+                // The rule: leaving takes effect at the END of the hand, never inside one.
+                // Mid-hand the door marks the exit; you finish the hand, and when it settles the
+                // seat is removed (pkTick backstop) and you're returned to the lobby automatically.
                 if (inHand) {
-                    if (!window.confirm("Standing up mid hand = Fold the hand. Continue?")) return;
-                    // פיינאפל: אם טרם זרקתי קלף - זורקים אחד לפני היציאה, אחרת שלב הזריקה נתקע לנצח
-                    if (g.phase === 'discard' && (t.players[user.uid].cards || []).length === 3) {
-                        await handleDiscardCard(user.uid, 0);
-                        await new Promise(r => setTimeout(r, 400));
-                    }
-                    // Dealer's Choice: אם אני זה שאמור לבחור משחק - בוחרים ברירת מחדל לפני היציאה
-                    if (g.phase === 'dc_selection' && g.dcUid === user.uid) {
-                        await selectDCGame(setts.baseGameType || 'NLH', user.uid);
-                        await new Promise(r => setTimeout(r, 400));
-                    }
-                    const tNow = tableRef.current || t;
-                    const gNow = tNow.gameState || g;
-                    if (BETTING.includes(gNow.phase) && tNow.players[user.uid] && tNow.players[user.uid].status === 'active') {
-                        if (gNow.activeTurnUid === user.uid) {
-                            await performAction(user.uid, 'fold');
-                        } else {
-                            const g2 = { ...gNow }; const pl = clonePlayers(tNow.players);
-                            pl[user.uid].status = 'folded'; pl[user.uid].actionText = 'Fold'; pl[user.uid].hasActed = true;
-                            const actives = Object.values(pl).filter(q => q.status === 'active');
-                            if (actives.length === 1) await finishEarlyWin(g2, pl, actives[0].uid);
-                            else await saveGame(g2, pl);
+                    const meF = t.players[user.uid] || {};
+                    if (meF.leaveReq) {
+                        if (await askConfirm("Cancel leaving and stay at the table?")) {
+                            try { await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.leaveReq`]: null }); } catch(e) {}
+                            leaveArmedRef.current = false;
+                            showToast("Staying! 💪", "success");
                         }
+                        return;
                     }
-                    await new Promise(r => setTimeout(r, 500));
+                    if (!(await askConfirm("You're mid-hand — you'll leave when the hand ends. Play it out. Mark the exit?"))) return;
+                    try { await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.leaveReq`]: Date.now() }); leaveArmedRef.current = true; } catch(e) {}
+                    showToast("🚪 Leaving at the end of this hand (tap again to cancel)", "info");
+                    return;
+                }
+                if (setts.serverEngine) {
+                    const meS = t.players[user.uid] || {};
+                    // Flag first: even if the pkLeave call below fails (network hiccup, stale
+                    // client), any viewer's next pkTick finishes the removal server-side.
+                    try { await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.leaveReq`]: Date.now() }); } catch(e) {}
+                    let left = false;
+                    for (let i = 0; i < 2 && !left; i++) {
+                        try { await window.fb.fx('pkLeave', { tableId: tableDocId }); left = true; }
+                        catch(e) { await new Promise(r => setTimeout(r, 700)); }
+                    }
+                    logGameResult([{ uid: user.uid, username: user.username, game: 'poker', profit: round2((meS.stack || 0) - (meS.buyTotal || meS.stack || 0)) }], tableDocId);
+                    onLeave(); return;
                 }
                 try {
                     let session = null;
@@ -5138,20 +5293,34 @@
             };
 
             const handleAddBot = async () => {
-                const t = tableRef.current; if (!t) return;
-                const pl = t.players || {};
-                if (Object.keys(pl).length >= (setts.maxPlayers || 6)) return showToast("The table is full", "error");
-                let seatIndex = 0;
-                const taken = new Set(Object.values(pl).map(p => p.seatIndex));
-                while (taken.has(seatIndex)) seatIndex++;
-                const botUid = `bot_${Date.now()}`;
-                const midHand = !['waiting','showdown'].includes(t.gameState.phase);
-                await window.fb.updateDoc(tblRef(), { [`players.${botUid}`]: {
-                    uid: botUid, name: BOT_NAMES[Math.floor(Math.random()*BOT_NAMES.length)] + Math.floor(Math.random()*99), seatIndex,
-                    stack: round2(100 * BB), bet: 0, status: midHand ? 'waiting' : 'active', cards: [], hasActed: false, actionText: '', isBot: true
-                }});
+                // Atomic add: read fresh state inside a transaction so rapid/successive adds each
+                // land on a distinct free seat with a unique id — otherwise stale reads + a
+                // millisecond-resolution id collide and most bots get silently overwritten/lost.
+                const ref = tblRef();
+                let full = false;
+                try {
+                    await window.fb.runTransaction(window.fb.db, async (tx) => {
+                        const snap = await tx.get(ref);
+                        if (!snap.exists()) return;
+                        const t = snap.data();
+                        const pl = t.players || {};
+                        const max = (t.settings || {}).maxPlayers || 6;
+                        if (Object.keys(pl).length >= max) { full = true; return; }
+                        const taken = new Set(Object.values(pl).map(p => p.seatIndex));
+                        let seatIndex = 0; while (taken.has(seatIndex)) seatIndex++;
+                        const botUid = `bot_${Date.now()}_${Math.floor(Math.random()*1e9).toString(36)}`;
+                        const midHand = !['waiting','showdown'].includes((t.gameState || {}).phase);
+                        const bb = (Number((t.settings || {}).blinds) || 0.5) * 2;
+                        tx.update(ref, { [`players.${botUid}`]: {
+                            uid: botUid, name: botDisplayName(), seatIndex,
+                            stack: round2(100 * bb), bet: 0, status: midHand ? 'waiting' : 'active', cards: [], hasActed: false, actionText: '', isBot: true
+                        }});
+                    });
+                } catch(e) {}
+                if (full) return showToast("The table is full", "error");
                 // The agreed rule: a table that fills up spawns a fresh twin with the same settings
-                if (Object.keys(pl).length + 1 >= (setts.maxPlayers || 6)) spawnTwinTable(t, true);
+                const cur = tableRef.current;
+                if (cur && Object.keys(cur.players || {}).length >= ((cur.settings || {}).maxPlayers || 6)) spawnTwinTable(cur, true);
             };
 
             /* ---------- מוח הBots (רץ רק אצל הסופר-אדמין) ---------- */
@@ -5203,8 +5372,10 @@
                 const humans = eligible.filter(p => !p.isBot).sort((a,b) => a.seatIndex - b.seatIndex);
                 // מי מתחיל את היד: האדם הראשון בשולחן. אם אין בני-אדם (שולחן בוטים בלבד)
                 // והצופה הוא סופר-אדמין — הוא מתחיל, כדי שאפשר יהיה לצפות בבוטים משחקים.
-                const iStart = humans[0]?.uid === user.uid || (humans.length === 0 && isSuperAdmin);
-                if (eligible.length >= (setts.autoStart || 2) && iStart) {
+                const iStart = humans[0]?.uid === user.uid || isSuperAdmin;
+                // Seat count is a CAP, not a requirement: a poker hand starts as soon as 2 players
+                // have chips — never wait for the table to fill (that's what left it stuck at "2/6").
+                if (eligible.length >= 2 && iStart) {
                     const tm = setTimeout(() => startHand(), 1600);
                     return () => clearTimeout(tm);
                 }
@@ -5214,7 +5385,7 @@
                מצטרפים כשיש לפחות אדם אחד בשולחן, בהפסקות בין ידיים, עד שהשולחן מתמלא. */
             useEffect(() => {
                 if (!isSuperAdmin || !tableState) return;
-                if (clubSettings?.botsAuto !== true) return; // בוטים אוטומטית רק אם הופעל במפורש; אחרת ידני בלבד
+                if (clubSettings?.botsAuto !== true) return; // בוטים נכנסים אוטומטית רק אם הופעל במפורש; אחרת - רק ידנית
                 if (!['waiting','showdown'].includes(gs.phase)) return;
                 const iv = setInterval(async () => {
                     try {
@@ -5255,14 +5426,7 @@
                         const remaining = Math.max(0, (setts.actionTime || 30) - elapsed);
                         setTimeLeft(remaining);
                         if (remaining <= 5 && remaining > 0 && gs.activeTurnUid === user.uid) {
-                            try {
-                                if (window.Tone && window.Tone.context.state !== 'running') window.Tone.context.resume();
-                                if (!synthRef.current && window.Tone) {
-                                    synthRef.current = new window.Tone.Synth({ oscillator: { type: 'square' } }).toDestination();
-                                    synthRef.current.volume.value = -14;
-                                }
-                                synthRef.current?.triggerAttackRelease("E6", "0.05");
-                            } catch(e) {}
+                            try { playSnd('tick'); } catch(e) {}
                         }
                         if (remaining === 0 && gs.activeTurnUid === user.uid) {
                             clearInterval(interval);
@@ -5420,7 +5584,7 @@
                             if (isSitSkip || stuckFor > limit) {
                                 // שחקן מנותק/בסיט-אאוט שלא הגיב - Fold/צ'ק אוטומטי מהאדמין
                                 const toCall = round2(Math.max(0, (g.highestBet || 0) - (actor.bet || 0)));
-                                await performAction(g.activeTurnUid, toCall > 0 ? 'fold' : 'call');
+                                await performAction(g.activeTurnUid, toCall > 0 ? 'fold' : 'call', undefined, !isSitSkip);
                             }
                         }
                     } catch(e) {}
@@ -5451,16 +5615,19 @@
 
             /* ---------- עוצמת יד + אחוזי זכייה ---------- */
             const activesOppCount = Object.values(players).filter(p => p.status === 'active' && p.uid !== user.uid).length;
+            // Server tables keep hole cards in the private doc (myPrivCards), not on the player —
+            // hand strength + equity must read the effective cards or they never show.
+            const myCards = srvEngine ? (((myPlayer?.cardCount) || 0) > 0 ? myPrivCards : []) : (myPlayer?.cards || []);
             const myHand = useMemo(() => {
-                if (!myPlayer || !(myPlayer.cards || []).length) return null;
-                return handName(bestScoreNow(myPlayer.cards, gs.board || [], gs.currentGameType));
-            }, [(myPlayer?.cards || []).length, (gs.board || []).length, gs.phase]);
+                if (!myPlayer || !myCards.length) return null;
+                return handName(bestScoreNow(myCards, gs.board || [], gs.currentGameType));
+            }, [myCards.length, (gs.board || []).length, gs.phase]);
             const myEquity = useMemo(() => {
-                if (!myPlayer || myPlayer.status !== 'active' || !(myPlayer.cards || []).length) return null;
+                if (!myPlayer || myPlayer.status !== 'active' || !myCards.length) return null;
                 if (gs.allInReveal || !['preflop','discard','flop','turn','river'].includes(gs.phase)) return null;
                 if (activesOppCount < 1) return null;
-                return simMyEquity(myPlayer.cards, gs.board || [], activesOppCount, gs.currentGameType);
-            }, [(myPlayer?.cards || []).length, (gs.board || []).length, gs.phase, activesOppCount, gs.allInReveal]);
+                return simMyEquity(myCards, gs.board || [], activesOppCount, gs.currentGameType);
+            }, [myCards.length, (gs.board || []).length, gs.phase, activesOppCount, gs.allInReveal]);
             const realEq = useMemo(() => {
                 if (!gs.allInReveal) return null;
                 const hands = Object.values(players).filter(p => p.status === 'active' && (p.cards || []).length > 0).map(p => ({ uid: p.uid, cards: p.cards }));
@@ -5474,8 +5641,22 @@
                 if (!tableState) return;
                 const ps = prevSnd.current;
                 const bl = (gs.board || []).length;
-                if (bl > ps.board) playSnd('deal');
-                if (gs.phase === 'showdown' && ps.phase !== 'showdown') playSnd('win');
+                if (bl > ps.board) playSnd('flip', bl - ps.board); // one flip per new board card (flop=3)
+                // New hand dealt → visible dealing round: cards revealed one by one around the
+                // table (round-robin from the dealer's left, like a real dealer) with one
+                // card-slide sound per card, tempo-matched to the animation.
+                if (gs.phase === 'preflop' && ['waiting', 'showdown', 'dc_selection'].includes(ps.phase)) {
+                    const acts = Object.values(players).filter(p => p.status === 'active').sort((x, y) => x.seatIndex - y.seatIndex);
+                    const dIdx = Math.max(0, acts.findIndex(p => p.uid === gs.dealerUid));
+                    const ordered = [...acts.slice(dIdx + 1), ...acts.slice(0, dIdx + 1)];
+                    const order = {}; ordered.forEach((p, i) => { order[p.uid] = i; });
+                    const perHand = GAME_CARDS[gs.currentGameType] || 2;
+                    const total = ordered.length * perHand;
+                    const iv = Math.max(0.07, Math.min(0.16, 1.8 / Math.max(1, total))); // whole deal ≤ ~1.8s
+                    dealAnimRef.current = { t0: Date.now(), order, n: ordered.length, iv, cache: {} };
+                    playSnd('deal', total, iv);
+                }
+                if (gs.phase === 'showdown' && ps.phase !== 'showdown') playSnd((gs.lastWinAmount || 0) >= (Number(setts.blinds) || 0.5) * 2 * 40 ? 'bigwin' : 'win');
                 const mine = gs.activeTurnUid === user.uid && BETTING.includes(gs.phase);
                 if (mine && !ps.turnMine) playSnd('turn');
                 const cl = (tableState.chat || []).length;
@@ -5485,7 +5666,8 @@
                     if (p.actionText && p.actionText !== prev) {
                         if (p.actionText === 'Fold') playSnd('fold');
                         else if (p.actionText === 'Check') playSnd('check');
-                        else if (['Call','Raise','All-in','SB','BB'].includes(p.actionText)) playSnd('chip');
+                        else if (p.actionText === 'All-in') playSnd('allin');
+                        else if (['Call','Raise','SB','BB'].includes(p.actionText)) playSnd('chip');
                     }
                     ps.acts[p.uid] = p.actionText;
                 });
@@ -5493,6 +5675,16 @@
             }, [tableState]);
 
             if (loading || !tableState) return <div className="h-full flex items-center justify-center text-amber-500"><i className="fa-solid fa-spinner fa-spin text-3xl"></i></div>;
+
+            // Reveal delay for hole card ci of seat uid during the dealing round.
+            // Cached per hand so re-renders don't restart a finished animation.
+            const dealDelay = (uid, ci) => {
+                const dd = dealAnimRef.current;
+                if (!dd || dd.order[uid] == null) return ci * 45;
+                const k = uid + ':' + ci;
+                if (dd.cache[k] == null) dd.cache[k] = Math.max(0, Math.round((ci * dd.n + dd.order[uid]) * dd.iv * 1000 - (Date.now() - dd.t0)));
+                return dd.cache[k];
+            };
 
             /* ---------- חישובי תצוגה ---------- */
             const list = Object.values(players).sort((a,b) => (a.seatIndex - b.seatIndex) || String(a.uid).localeCompare(String(b.uid)));
@@ -5504,11 +5696,17 @@
             const N = Math.max(displayList.length, 2);
             const seatPos = (i) => {
                 const ang = Math.PI / 2 + (i * 2 * Math.PI) / N;
-                return { left: `${50 + 41 * Math.cos(ang)}%`, top: `${50 + 42 * Math.sin(ang)}%` };
+                // Elliptical "lying" table: wider horizontally (43), shorter vertically (34) so seats
+                // spread along the long sides instead of stacking — less crowded, and the bottom seat
+                // (You) + its stack stay well on-screen.
+                return { left: `${50 + 43 * Math.cos(ang)}%`, top: `${50 + 34 * Math.sin(ang)}%` };
             };
             const betPos = (i) => {
                 const ang = Math.PI / 2 + (i * 2 * Math.PI) / N;
-                return { left: `${50 + 21 * Math.cos(ang)}%`, top: `${50 + 24 * Math.sin(ang)}%` };
+                // Radial spot between seat and board, plus a tangential side-step (like the
+                // dealer button) so the chips never sit on the SB/BB/action badge line.
+                const tx = -Math.sin(ang), ty = Math.cos(ang);
+                return { left: `${50 + 29 * Math.cos(ang) + 7 * tx}%`, top: `${50 + 25 * Math.sin(ang) + 6 * ty}%` };
             };
             const totalPot = round2((gs.pots || []).reduce((s, p) => s + p.amount, 0) + Object.values(players).reduce((s, p) => s + (p.bet || 0), 0));
             const toCallMe = round2(Math.max(0, (gs.highestBet || 0) - (myPlayer?.bet || 0)));
@@ -5552,15 +5750,18 @@
                 });
                 return tie ? null : uid; // exact chop — no single best to mark
             })();
-            const myMaxBet = round2((myPlayer?.bet || 0) + (myPlayer?.stack || 0));
+            // Pot-Limit (Omaha default): the raise ceiling is the pot-limit cap, not all-in.
+            const potLimited = String(gs.currentGameType || '').startsWith('Omaha') && setts.omahaPotLimit !== false;
+            const potCapTo = round2((gs.highestBet || 0) + totalPot + toCallMe);
+            const myMaxBet = round2(Math.min((myPlayer?.bet || 0) + (myPlayer?.stack || 0), potLimited ? potCapTo : Infinity));
             const canShowBuyIn = !isSeated && !spectate;
             const tblCap = setts.maxPlayers || 6;
             const isFull = Object.keys(players).length >= tblCap;
             const waitlist = tableState.waitlist || [];
             const myWaitPos = waitlist.findIndex(w => w.uid === user.uid);
             const onWaitlist = myWaitPos >= 0;
-            const baseMinBuy = (setts.minBuyInBB || 40) * BB;
-            const baseMaxBuy = (setts.maxBuyInBB || 200) * BB;
+            const baseMinBuy = buyInMin(setts);
+            const baseMaxBuy = buyInMax(setts);
             const leftLock = (tableState.leftStacks || {})[user.uid];
             const lockActive = leftLock && (Date.now() - leftLock.at < 12 * 60 * 60 * 1000) && leftLock.amount > baseMinBuy;
             const minBuy = lockActive ? round2(Math.max(baseMinBuy, leftLock.amount)) : baseMinBuy;
@@ -5570,7 +5771,58 @@
 
             return (
                 <div className="h-full w-full flex flex-col bg-slate-950 font-sans overflow-hidden select-none" dir="ltr"
-                     style={{ background: "url('assets/gameplaybg.png') center top / cover no-repeat, linear-gradient(180deg,#11050C 0%,#0C0908 62%)" }}>
+                     style={{ background: 'radial-gradient(ellipse at 50% 0%, #1a2436 0%, #05070f 60%)' }}>
+
+                    {buyinEdit && ReactDOM.createPortal(
+                        <div dir="ltr" className="fixed inset-0 z-[400] bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setBuyinEdit(null)}>
+                            <div onClick={e => e.stopPropagation()} className="glass-panel rounded-3xl p-6 w-full max-w-sm border border-white/10 animate-pop-in">
+                                <h3 className="text-lg font-black text-white mb-1 flex items-center gap-2"><i className="fa-solid fa-coins text-amber-400"></i>Table buy-in limits</h3>
+                                <p className="text-slate-400 text-xs font-bold mb-4">Raise the stakes when the game heats up — applies to new sit-downs and top-ups.</p>
+                                <label className="text-slate-400 text-[11px] font-black uppercase tracking-widest mb-1 block">Min buy-in (₪)</label>
+                                <input type="number" min="0" step="any" value={buyinEdit.min} onChange={e => setBuyinEdit({ ...buyinEdit, min: e.target.value })} className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white font-black text-center outline-none focus:border-amber-500/60 mb-3" dir="ltr" />
+                                <label className="text-slate-400 text-[11px] font-black uppercase tracking-widest mb-1 block">Max buy-in (₪)</label>
+                                <input type="number" min="0" step="any" value={buyinEdit.max} onChange={e => setBuyinEdit({ ...buyinEdit, max: e.target.value })} className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white font-black text-center outline-none focus:border-amber-500/60 mb-5" dir="ltr" />
+                                <div className="flex gap-2">
+                                    <button onClick={async () => {
+                                        const mn = Math.max(0.01, Number(buyinEdit.min) || 0);
+                                        const mx = Math.max(mn, Number(buyinEdit.max) || 0);
+                                        try { await window.fb.updateDoc(tblRef(), { 'settings.minBuyIn': round2(mn), 'settings.maxBuyIn': round2(mx) }); showToast(`Buy-in updated: ${formatMoney(mn)}–${formatMoney(mx)}`, 'success'); setBuyinEdit(null); }
+                                        catch(e) { showToast('Could not update buy-in', 'error'); }
+                                    }} className="flex-1 bg-gradient-to-b from-amber-500 to-amber-700 hover:from-amber-400 text-slate-900 py-3 rounded-2xl font-black shadow-lg">Save</button>
+                                    <button onClick={() => setBuyinEdit(null)} className="px-5 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-2xl font-black border border-white/10">Cancel</button>
+                                </div>
+                            </div>
+                        </div>, document.body)}
+
+                    {/* In-app confirm (replaces native window.confirm, which iOS PWAs suppress) */}
+                    {confirmBox && ReactDOM.createPortal(
+                        <div className="fixed inset-0 z-[2000] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => { confirmBox.resolve(false); setConfirmBox(null); }}>
+                            <div className="glass-panel rounded-3xl p-6 w-full max-w-xs text-center border border-white/10 animate-pop-in" onClick={e => e.stopPropagation()}>
+                                <p className="text-white font-bold text-sm mb-5 whitespace-pre-line">{confirmBox.msg}</p>
+                                <div className="flex gap-2.5">
+                                    <button onClick={() => { confirmBox.resolve(false); setConfirmBox(null); }} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-2xl font-black border border-white/10">Cancel</button>
+                                    <button onClick={() => { confirmBox.resolve(true); setConfirmBox(null); }} className="flex-1 bg-gradient-to-b from-rose-600 to-rose-800 hover:from-rose-500 text-white py-3 rounded-2xl font-black shadow-lg">Yes</button>
+                                </div>
+                            </div>
+                        </div>, document.body)}
+
+                    {/* In-app add-chips sheet (replaces native window.prompt) */}
+                    {topUpBox && ReactDOM.createPortal(
+                        <div className="fixed inset-0 z-[2000] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setTopUpBox(null)}>
+                            <div className="glass-panel rounded-3xl p-6 w-full max-w-xs text-center border border-emerald-500/30 animate-pop-in" onClick={e => e.stopPropagation()}>
+                                <div className="text-2xl mb-1">💰</div>
+                                <h3 className="text-white font-black text-lg mb-1">Add chips</h3>
+                                <p className="text-slate-400 text-xs font-bold mb-4">{topUpBox.inHand ? 'Applied to your stack at the end of this hand' : 'Added to your stack now'} · max {formatMoney(topUpBox.room)}</p>
+                                <input type="number" inputMode="decimal" autoFocus value={topUpBox.val} min={0} max={topUpBox.room} onChange={e => setTopUpBox({ ...topUpBox, val: e.target.value })} className="w-full bg-slate-900 text-white text-center text-xl font-black border border-emerald-600/40 rounded-2xl p-3 outline-none focus:border-emerald-400 mb-2" dir="ltr" />
+                                <div className="flex gap-1.5 mb-4 justify-center">
+                                    {[0.25, 0.5, 1].map(fr => <button key={fr} onClick={() => setTopUpBox({ ...topUpBox, val: String(round2(topUpBox.room * fr)) })} className="flex-1 text-[10px] bg-slate-800 border border-white/10 px-2 py-1.5 rounded-lg font-black text-slate-300">{fr === 1 ? 'MAX' : `${fr * 100}%`}</button>)}
+                                </div>
+                                <div className="flex gap-2.5">
+                                    <button onClick={() => setTopUpBox(null)} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-2xl font-black border border-white/10">Cancel</button>
+                                    <button onClick={() => { const b = topUpBox; setTopUpBox(null); doTopUp(b.val, b.inHand, b.room); }} className="flex-1 bg-gradient-to-b from-emerald-500 to-emerald-700 hover:from-emerald-400 text-slate-900 py-3 rounded-2xl font-black shadow-lg">Add</button>
+                                </div>
+                            </div>
+                        </div>, document.body)}
 
                     {/* Header */}
                     <div className="min-h-[3.5rem] bg-slate-900/80 backdrop-blur-md border-b border-white/5 flex justify-between items-center gap-1.5 px-2 sm:px-3 py-1.5 shrink-0 z-40 relative">
@@ -5600,9 +5852,12 @@
                                     )}
                                 </React.Fragment>
                             )}
+                            {(isSuperAdmin || canManageGame(user, 'poker')) && !tableState?.tournamentId && (
+                                <button onClick={() => setBuyinEdit({ min: String(buyInMin(setts)), max: String(buyInMax(setts)) })} className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-amber-300 text-[10px] font-black border border-white/10" title="Adjust table buy-in (min/max)"><i className="fa-solid fa-coins"></i></button>
+                            )}
                         </div>
                         <div className="flex-1 min-w-0 flex flex-col items-center px-1">
-                            <span className="text-amber-400 font-black text-xs sm:text-sm tracking-wider truncate max-w-full">{gs.currentGameType || setts.baseGameType} {setts.isDealerChoice && <span className="text-rose-400 text-[9px] align-middle">DC</span>}</span>
+                            <span className="text-amber-400 font-black text-xs sm:text-sm tracking-wider truncate max-w-full">{variantLabel(gs.currentGameType || setts.baseGameType, setts)} {setts.isDealerChoice && <span className="text-rose-400 text-[9px] align-middle">DC</span>}</span>
                             <span className="text-[8px] font-black tracking-[0.12em] text-emerald-400/90 whitespace-nowrap" dir="ltr"><i className="fa-solid fa-satellite-dish text-[7px] mr-0.5"></i>GPS ON · IP ON</span>
                             <span className="text-slate-400 text-[9px] sm:text-[10px] font-bold truncate max-w-full" dir="ltr">{formatShort(setts.blinds)}/{formatShort(BB)}</span>
                         </div>
@@ -5615,7 +5870,9 @@
                     {/* השולחן */}
                     <div className="flex-1 relative flex items-center justify-center p-3 sm:p-5 min-h-0">
 
-                        {/* GOD: מה יבוא בשולחן */}
+                        {/* GOD: מה יבוא בשולחן. במנוע-שרת (ברירת המחדל, כולל Dealer's Choice)
+                            הקופה מוחזקת בשרת ו-gs.deck ריק בצד הלקוח, לכן נגזור את הבורד העתידי
+                            מ-godFinal שמגיע מ-godPeek. במנוע הקלאסי - מסוף החפיסה כרגיל. */}
                         {godView && ['preflop','discard','flop','turn','river'].includes(gs.phase) && (() => {
                             const board = gs.board || []; const bl = board.length;
                             let fin = null; // הבורד הסופי (5 קלפים)
@@ -5646,51 +5903,68 @@
                             );
                         })()}
 
-                        <div className={"poker-table w-full max-w-[440px] h-full max-h-[calc(100dvh-190px)] relative" + (tableState.tournament && tableState.tournament.final ? " final-table" : "")}>
+                        <div className={"poker-table w-full max-w-[470px] h-full max-h-[calc(100dvh-185px)] relative" + (tableState.tournament && tableState.tournament.final ? " final-table" : "")}
+                             style={(() => {
+                                 // GG-match felt per game: blue for Omaha, green for NLH, teal for Pineapple
+                                 const F = { 'NLH': ['#2f7d4d', '#215c37', '#123a20'], 'Pineapple': ['#a08326', '#7d661d', '#4e4012'] };
+                                 const c = F[gs.currentGameType || setts.baseGameType] || ['#2e6089', '#1f4a6e', '#132f47'];
+                                 return { '--feltA': c[0], '--feltB': c[1], '--feltC': c[2] };
+                             })()}>
                             {tableState.tournament && tableState.tournament.final && <div className="ft-banner" dir="ltr">FINAL TABLE</div>}
 
-                            {/* Pocket Seven brand watermark on the felt (behind everything) */}
-                            <img src="logo-wordmark.png" alt="" aria-hidden="true" className="absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none select-none" style={{ width: '52%', maxWidth: 220, opacity: 0.12, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.4))' }} />
-
-                            {/* מרכז: קופות, קלפים, מנצח — z-30 כדי שהבורד תמיד יהיה מעל קלפי הגב של המושבים (z-20) */}
-                            <div className="absolute left-1/2 top-[33%] -translate-x-1/2 flex gap-5 items-end z-30">
-                                {(gs.pots || []).map((pot, i) => <CasinoChipStack key={i} amount={pot.amount} scale={1.1} />)}
+                            {/* מרכז: קופות, קלפים, מנצח — z-30 כדי שתמיד יהיו מעל קלפי הגב של המושבים (z-20) */}
+                            {/* GG layout: "Total Pot" pill above the board, collected chips below it */}
+                            {totalPot > 0 && gs.phase !== 'waiting' && (
+                                <div className="absolute left-1/2 top-[38%] -translate-x-1/2 z-30 bg-black/30 rounded-2xl px-5 py-1 text-center pointer-events-none" dir="ltr">
+                                    <div className="text-[10px] font-bold text-slate-200/90 leading-tight">Total Pot</div>
+                                    <div className="text-[14px] font-black text-amber-300 leading-tight">{formatShort(totalPot)}</div>
+                                </div>
+                            )}
+                            <div className="absolute left-1/2 top-[58%] -translate-x-1/2 flex gap-5 items-start z-30">
+                                {(gs.pots || []).map((pot, i) => <CasinoChipStack key={i} amount={pot.amount} scale={0.9} />)}
                             </div>
 
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-1.5 z-30" dir="ltr">
-                                {(gs.board || []).map((c, i) => <PCard key={i} card={c} size="lg" />)}
+                                {(gs.board || []).map((c, i) => <span key={i} className="card-reveal" style={{ animationDelay: `${(i % 3) * 220}ms` }}><PCard card={c} size="lg" /></span>)}
                                 {rabbit.length > 0 && rabbit.map((c, i) => (
                                     <div key={'rb'+i} className="relative opacity-75"><PCard card={c} size="lg" /><span className="absolute -top-2 -right-1 text-xs">🐰</span></div>
                                 ))}
                                 {gs.phase !== 'waiting' && [...Array(Math.max(0, 5 - (gs.board || []).length - rabbit.length))].map((_, i) => (
-                                    <div key={'ph'+i} className="w-11 sm:w-12 rounded-lg border border-dashed border-white/15 bg-white/[0.02]" style={{ height: '4.4rem' }}></div>
+                                    <div key={'ph'+i} className="w-11 sm:w-12 rounded-lg border border-dashed border-white/12 bg-white/[0.02]" style={{ height: '4.4rem' }}></div>
                                 ))}
                                 {gs.phase === 'showdown' && gs.earlyWin && !srvEngine && rabbit.length === 0 && (gs.board || []).length < 5 && (gs.deck || []).length >= (5 - (gs.board || []).length) && (
                                     <button onClick={() => setRabbit((gs.deck || []).slice(0, 5 - (gs.board || []).length))} title="Rabbit hunt — see what would have come" className="self-center w-9 h-9 rounded-full bg-slate-900/90 border border-white/15 text-lg hover:scale-110 transition-transform">🐰</button>
                                 )}
                             </div>
 
-                            <div className="absolute left-1/2 top-[64%] -translate-x-1/2 text-center z-10 pointer-events-none w-[80%]">
-                                {gs.phase === 'waiting' && (
-                                    <div className="text-slate-300/40 font-bold text-[11px] leading-relaxed" dir="ltr">
-                                        <div>{(gs.currentGameType || setts.baseGameType || 'NLH') + ' ' + formatShort(setts.blinds) + '/' + formatShort(BB)}</div>
-                                        <div>{'Blinds ' + formatShort(setts.blinds) + '/' + formatShort(BB) + (Number(setts.ante) > 0 ? ' · Ante ' + formatShort(setts.ante) : '')}</div>
-                                        <div className="tracking-[0.15em] text-[9px] text-slate-400/30 uppercase mt-0.5">POCKET SEVEN</div>
-                                    </div>
-                                )}
+                            {/* GG-style always-on table info on the felt */}
+                            <div className="absolute left-1/2 top-[65%] -translate-x-1/2 text-center z-10 pointer-events-none w-[80%]">
+                                <div className="text-slate-100/30 font-bold text-[13px] leading-relaxed" dir="ltr">
+                                    <div className="text-[14px]">{setts.tableName || variantLabel(gs.currentGameType || setts.baseGameType || 'NLH', setts)}</div>
+                                    <div>{'Blinds ' + formatShort(setts.blinds) + '/' + formatShort(BB) + (Number(setts.ante) > 0 ? ' · Ante ' + formatShort(setts.ante) : '')}</div>
+                                    {setts.isDealerChoice && <div>Dealer's Choice</div>}
+                                    {setts.straddle && <div>Straddle</div>}
+                                </div>
                                 {gs.phase === 'discard' && <div className="text-amber-300 font-black text-xs animate-pulse">🍍 Pineapple - discard one card...</div>}
                             </div>
 
-                            {/* כרזת מנצח - שכבה עליונה, מעל קלפי הקהילה */}
-                            {gs.phase === 'showdown' && gs.lastWinners && (
-                                <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
-                                    <div className="bg-slate-950/90 backdrop-blur-md border border-amber-500/50 rounded-2xl px-8 py-4 text-center animate-pop-in shadow-[0_10px_50px_rgba(0,0,0,0.8)]">
-                                        <i className="fa-solid fa-trophy text-3xl text-amber-400 drop-shadow-[0_0_12px_#f59e0b]"></i>
-                                        <div className="text-white font-black text-base mt-1.5">{gs.lastWinners}</div>
-                                        {(gs.lastWinAmount || 0) > 0 && <div className="text-amber-400 font-black text-lg" dir="ltr">+{formatMoney(gs.lastWinAmount)}</div>}
-                                    </div>
-                                </div>
-                            )}
+                            {/* Winner: no big center banner (it covered the revealed cards) —
+                                the marker lives above the winning player's pod instead. */}
+
+                            {/* כפתור דילר — לצד האווטאר, מחוץ למניפת הקלפים (הקלפים נפרשים
+                                פנימה לכיוון המרכז, אז מציבים את ה-D בגובה השחקן עם היסט צדדי
+                                טנגנציאלי כדי שלא יֵשב על הקלפים) */}
+                            {gs.dealerUid && (() => {
+                                const di = displayList.findIndex(pp => pp.uid === gs.dealerUid);
+                                if (di < 0) return null;
+                                const ang = Math.PI / 2 + (di * 2 * Math.PI) / N;
+                                const rx = 36, ry = 35;                 // בטבעת השחקן, מתחת למניפה
+                                const tx = -Math.sin(ang), ty = Math.cos(ang); // כיוון טנגנציאלי (הצידה)
+                                const off = 13;                          // היסט הצידה שמפנה את ה-D מהקלפים ומהאווטאר
+                                const left = 50 + rx * Math.cos(ang) + off * tx;
+                                const top = 50 + ry * Math.sin(ang) + off * ty;
+                                return <div className="absolute z-30 w-6 h-6 rounded-full bg-gradient-to-b from-amber-300 to-amber-600 text-amber-950 text-[10px] font-black flex items-center justify-center shadow-[0_2px_6px_rgba(0,0,0,0.6)] border border-amber-200" style={{ left: `${left}%`, top: `${top}%`, transform: 'translate(-50%,-50%)' }}>D</div>;
+                            })()}
 
                             {/* Players */}
                             {displayList.map((p, i) => {
@@ -5702,18 +5976,22 @@
                                 // render backs by cardCount until made public (showdown/all-in/reveal) or GOD-peeked.
                                 let dispCards = p.cards || [];
                                 if (srvEngine) {
-                                    if (isMe) { dispCards = myPrivCards; hidden = false; }
+                                    // Only show my private cards when I'm actually DEALT IN this hand —
+                                    // the priv doc keeps last hand's cards, so a fresh sit-down must not show them.
+                                    if (isMe) { dispCards = (myPlayer?.cardCount || 0) > 0 ? myPrivCards : []; hidden = false; }
                                     else if ((p.cards || []).length) { dispCards = p.cards; hidden = false; }
                                     else if (godView && (godHands[p.uid] || []).length) { dispCards = godHands[p.uid]; hidden = false; }
                                     else { dispCards = Array(p.cardCount || 0).fill({ val: '', suit: '♠' }); hidden = true; }
                                 }
-                                const showCards = (dispCards || []).length > 0 && !['waiting'].includes(gs.phase) && p.status !== 'sitout';
+                                // Face-down cards mean "still in the hand": a folded player's backs disappear
+                                // (his own revealed/shown cards still render face-up).
+                                const showCards = (dispCards || []).length > 0 && !['waiting'].includes(gs.phase) && p.status !== 'sitout' && !(p.status === 'folded' && hidden && !isMe);
                                 const folded = p.status === 'folded';
                                 const timerPct = isTurn ? Math.max(0, timeLeft / (setts.actionTime || 30)) : 0;
                                 return (
                                     <div key={p.uid} className="absolute z-20" style={{ ...seatPos(i), transform: 'translate(-50%, -50%)' }}>
                                         {isTurn && <div className="player-spotlight"></div>}
-                                        {p.actionText && <div className={`action-badge ${!topSeat ? 'badge-bottom' : ''} ${p.actionText === 'Fold' ? 'badge-fold' : p.actionText === 'Check' ? 'badge-check' : p.actionText === 'Raise' || p.actionText === 'All-in' ? 'badge-raise' : p.actionText === 'WINNER' ? 'badge-win' : ['SB','BB'].includes(p.actionText) ? 'badge-blind' : 'badge-call'}`}>{p.actionText}</div>}
+                                        {p.actionText && <div className={`action-badge ${topSeat ? 'badge-bottom' : ''} ${p.actionText === 'Fold' ? 'badge-fold' : p.actionText === 'Check' ? 'badge-check' : p.actionText === 'Raise' || p.actionText === 'All-in' ? 'badge-raise' : p.actionText === 'WINNER' ? 'badge-win' : ['SB','BB'].includes(p.actionText) ? 'badge-blind' : 'badge-call'}`}>{p.actionText}</div>}
                                         <div className={`relative flex flex-col items-center ${folded ? (isMe ? 'opacity-75' : 'opacity-40 grayscale') : ''} ${p.sitOut ? 'opacity-50' : ''}`}>
                                             {ch.bubbles[p.uid] && <div className="chat-bubble">{ch.bubbles[p.uid]}</div>}
                                             {p.sitOut && (() => {
@@ -5721,12 +5999,14 @@
                                                 const mm = Math.floor(leftMs / 60000), ss = Math.floor((leftMs % 60000) / 1000);
                                                 return <div className="absolute -top-2 right-0 z-30 text-[9px] font-black bg-slate-950/90 border border-amber-500/50 text-amber-300 rounded-full px-2 py-0.5" dir="ltr">☕ {tableState.tournamentId ? 'Sit out' : `${mm}:${String(ss).padStart(2,'0')}`}{p.sitAuto ? ' 📵' : ''}</div>;
                                             })()}
+                                            {!p.sitOut && p.sitOutNext && <div className="absolute -top-2 right-0 z-30 text-[9px] font-black bg-slate-950/90 border border-amber-500/50 text-amber-300 rounded-full px-2 py-0.5" dir="ltr">☕ after hand</div>}
+                                            {p.leaveReq && !tableState.tournamentId && <div className="absolute -top-2 left-0 z-30 text-[9px] font-black bg-slate-950/90 border border-rose-500/50 text-rose-300 rounded-full px-2 py-0.5" dir="ltr">🚪 after hand</div>}
                                             {p.leavingAt && !tableState.tournamentId && (() => {
                                                 const lms = Math.max(0, p.leavingAt - Date.now());
                                                 return <div className="absolute right-0 z-30 text-[9px] font-black bg-slate-950/90 border border-rose-500/50 text-rose-300 rounded-full px-2 py-0.5" style={{ top: p.sitOut ? 12 : -8 }} dir="ltr">🚪 {Math.floor(lms/60000)}:{String(Math.floor((lms%60000)/1000)).padStart(2,'0')}</div>;
                                             })()}
                                             {!isMe && canManageGame(user, 'poker') && (
-                                                <button onClick={(e) => { e.stopPropagation(); if (window.confirm(`Remove ${p.name} from the table? Their stack returns to their wallet.`)) kickSeat(p.uid, true); }}
+                                                <button onClick={async (e) => { e.stopPropagation(); if (await askConfirm(`Remove ${p.name} from the table? Their stack returns to their wallet.`)) kickSeat(p.uid, true); }}
                                                         className="absolute bottom-0 -left-6 z-30 w-5 h-5 rounded-full bg-slate-900/90 border border-rose-500/50 text-rose-400 hover:bg-rose-800 hover:text-white text-[9px] font-black flex items-center justify-center opacity-60 hover:opacity-100">✕</button>
                                             )}
                                             {ch.gifts.filter(g => g.to === p.uid).map((g, gi) => <div key={'g'+gi} className="gift-fx">{g.giftE}</div>)}
@@ -5737,25 +6017,37 @@
                                                 const nC = dispCards.length;
                                                 const doFan = nC >= 3 && !(isMe && gs.phase === 'discard');
                                                 const midC = (nC - 1) / 2;
-                                                const ovl = isMe ? (nC > 4 ? -26 : nC === 4 ? -18 : -8) : (nC > 4 ? -22 : nC === 4 ? -16 : -9);
-                                                const ang = isMe ? (nC > 4 ? 6 : 5) : (nC > 4 ? 7 : 7);
+                                                // fewer cards → looser/roomier; more cards → tighter overlap so all fit
+                                                // on the narrow mobile edges and every card's corner stays visible.
+                                                // GG corner-index → cards can overlap heavily, only the left index peeks (still readable).
+                                                const ovl = isMe ? (nC >= 5 ? -28 : -32) : (hidden ? (nC >= 5 ? -16 : -13) : (nC >= 5 ? -22 : -18));
+                                                const ang = isMe ? (nC >= 5 ? 5 : 6) : (nC >= 5 ? 6 : 7);
                                                 return (
                                                 <div className={`flex ${isMe ? 'mb-[-8px]' : 'mb-[-10px]'} z-0 ${doFan ? '' : (isMe ? 'gap-1' : 'gap-0.5')}`} dir="ltr">
                                                     {dispCards.map((c, ci) => (
                                                         isMe && gs.phase === 'discard' && dispCards.length === 3
                                                         ? <div key={ci} onClick={() => handleDiscardCard(user.uid, ci)} className="cursor-pointer hover:-translate-y-2 transition-transform ring-2 ring-amber-400/70 rounded-lg"><PCard card={c} size="xl" /></div>
                                                         : doFan
-                                                        ? <span key={ci} className="inline-block" style={{ marginLeft: ci === 0 ? 0 : ovl, transform: `rotate(${(ci - midC) * ang}deg) translateY(${Math.abs(ci - midC) * (isMe ? 3.5 : 2.5)}px)`, transformOrigin: '50% 115%', zIndex: ci }}><PCard card={c} hidden={hidden} size={isMe ? (nC > 4 ? 'lg' : 'xl') : 'sm'} /></span>
-                                                        : <PCard key={ci} card={c} hidden={hidden} size={isMe ? (nC > 4 ? 'lg' : 'xl') : 'sm'} />
+                                                        ? <span key={ci} className="inline-block" style={{ marginLeft: ci === 0 ? 0 : ovl, transform: `rotate(${(ci - midC) * ang}deg) translateY(${Math.abs(ci - midC) * (isMe ? 3.5 : 2.5)}px)`, transformOrigin: '50% 115%', zIndex: ci }}><span className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size={isMe ? (nC > 4 ? 'lg' : 'xl') : (hidden ? 'sm' : 'md')} /></span></span>
+                                                        : <span key={ci} className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size={isMe ? (nC > 4 ? 'lg' : 'xl') : (hidden ? 'sm' : 'md')} /></span>
                                                     ))}
                                                 </div>
                                                 );
                                             })()}
 
                                             {gs.phase === 'showdown' && gs.lastWinners && String(gs.lastWinners).split(', ').includes(p.name) && (
-                                                <div className="win-tag" dir="ltr">WIN{(gs.lastWinAmount || 0) > 0 ? ' +' + formatShort(gs.lastWinAmount) : ''}</div>
+                                                (() => {
+                                                    let hn = null; // the winning hand's name — visible whenever the winner's cards are revealed
+                                                    try { if (!gs.earlyWin && !hidden && (dispCards || []).length >= 2 && (gs.board || []).length >= 3) hn = handName(bestScoreNow(dispCards, gs.board || [], gs.currentGameType)); } catch(e) {}
+                                                    return (
+                                                        <div className={'win-tag' + (topSeat ? ' win-top' : '')} dir="ltr">
+                                                            <span className="win-amt">🏆 {(gs.lastWinAmount || 0) > 0 ? '+' + formatShort(gs.lastWinAmount) : 'WIN'}</span>
+                                                            {hn && <span className="win-hand">{hn}</span>}
+                                                        </div>
+                                                    );
+                                                })()
                                             )}
-                                            <div className={`player-pod ${isTurn ? 'active-glow' : ''} ${isMe ? 'w-16 h-16' : ''}`} style={{ backgroundImage: `url(${avatarUrl(p)})` }}>
+                                            <div className={`player-pod ${isTurn ? 'active-glow' : ''} ${isMe ? 'w-14 h-14' : ''}`} style={{ backgroundImage: `url(${avatarUrl(p)})` }}>
                                                 {godView && godBestUid === p.uid && <React.Fragment><div className="god-best-ring"></div><div className="god-best-tag">👁 WINS</div></React.Fragment>}
                                                 {isTurn && (
                                                     <svg className="absolute inset-0 w-full h-full timer-ring" viewBox="0 0 40 40">
@@ -5763,26 +6055,29 @@
                                                             strokeDasharray={`${113 * timerPct} 113`} strokeLinecap="round" />
                                                     </svg>
                                                 )}
-                                                {/* dealer / dealer's-choice buttons live on the avatar corner — never over the cards */}
-                                                {gs.dealerUid === p.uid && <div className="absolute -bottom-1 -left-1 w-5 h-5 rounded-full bg-white text-slate-900 text-[9px] font-black flex items-center justify-center shadow-lg border border-slate-300 z-30">D</div>}
-                                                {setts.isDealerChoice && gs.dcUid === p.uid && <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-rose-500 text-white text-[8px] font-black flex items-center justify-center shadow-lg border border-rose-300 z-30">DC</div>}
                                             </div>
 
-                                            <div className="text-[10px] font-bold text-white mt-1 max-w-[70px] truncate text-center">{isMe ? 'You' : p.name}</div>
-                                            <div className="stack-capsule text-gold-400 font-black text-[11px]" dir="ltr">{formatShort(p.stack)}</div>
+                                            {/* dealer button is now rendered on the felt (see above), not on the pod */}
+                                            {setts.isDealerChoice && gs.dcUid === p.uid && <div className="absolute -right-3 top-0 w-5 h-5 rounded-full bg-rose-500 text-white text-[8px] font-black flex items-center justify-center shadow-lg border border-rose-300 z-30">DC</div>}
+
+                                            {/* GG-style name+stack pill: name truncated to the frame, balance clear below */}
+                                            <div className="mt-1 px-2.5 py-0.5 rounded-lg bg-slate-950/85 border border-white/10 shadow-md text-center" style={{ minWidth: '58px', maxWidth: '96px' }}>
+                                                <div className="text-[10px] font-bold text-white truncate leading-tight" title={isMe ? 'You' : p.name}>{isMe ? 'You' : ((p.name || '').length > 11 ? (p.name || '').slice(0, 10) + '…' : p.name)}</div>
+                                                <div className="text-cyan-300 font-black text-[12px] leading-tight" dir="ltr">{formatShort(p.stack)}</div>
+                                            </div>
 
                                             {showCards && !isMe && topSeat && (() => {
                                                 const nC = dispCards.length;
                                                 const doFan = nC >= 3;
                                                 const midC = (nC - 1) / 2;
-                                                const ovl = nC > 4 ? -22 : nC === 4 ? -16 : -9;
-                                                const ang = nC > 4 ? 7 : 7;
+                                                const ovl = nC >= 5 ? -18 : nC === 4 ? -15 : -11;
+                                                const ang = nC >= 5 ? 6 : 7;
                                                 return (
                                                 <div className={`flex mt-1 z-20 ${doFan ? '' : 'gap-0.5'}`} dir="ltr">
                                                     {dispCards.map((c, ci) => (
                                                         doFan
-                                                        ? <span key={ci} className="inline-block" style={{ marginLeft: ci === 0 ? 0 : ovl, transform: `rotate(${(midC - ci) * ang}deg) translateY(${-Math.abs(ci - midC) * 2.5}px)`, transformOrigin: '50% -15%', zIndex: ci }}><PCard card={c} hidden={hidden} size="sm" /></span>
-                                                        : <PCard key={ci} card={c} hidden={hidden} size="sm" />
+                                                        ? <span key={ci} className="inline-block" style={{ marginLeft: ci === 0 ? 0 : ovl, transform: `rotate(${(midC - ci) * ang}deg) translateY(${-Math.abs(ci - midC) * 2.5}px)`, transformOrigin: '50% -15%', zIndex: ci }}><span className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size="sm" /></span></span>
+                                                        : <span key={ci} className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size="sm" /></span>
                                                     ))}
                                                 </div>
                                                 );
@@ -5803,7 +6098,7 @@
 
                             {/* הימורים על השולחן */}
                             {displayList.map((p, i) => (p.bet || 0) > 0 && (
-                                <div key={'bet' + p.uid} className="absolute z-10" style={{ ...betPos(i), transform: 'translate(-50%, -50%)' }}>
+                                <div key={'bet' + p.uid} className="absolute z-[35]" style={{ ...betPos(i), transform: 'translate(-50%, -50%)' }}>
                                     <CasinoChipStack amount={p.bet} scale={0.85} />
                                 </div>
                             ))}
@@ -5843,35 +6138,57 @@
 
                     {/* פס פעולות */}
                     <div className="shrink-0 bg-slate-900/95 backdrop-blur-md border-t border-white/5 p-3 z-40 min-h-[110px] flex flex-col justify-center">
-                        {isSeated && myPlayer?.status === 'active' && (myPlayer.cards || []).length > 0 && !['waiting','showdown'].includes(gs.phase) && (
+                        {isSeated && myPlayer?.status === 'active' && myCards.length > 0 && !['waiting','showdown'].includes(gs.phase) && (
                             <div className="flex justify-center gap-2 mb-2">
                                 {!gs.allInReveal && myHand && <span className="bg-slate-950 border border-white/15 text-white text-[11px] font-black px-3 py-1 rounded-lg">{myHand}</span>}
                                 {!gs.allInReveal && myEquity !== null && <span className="bg-emerald-900/80 border border-emerald-500/40 text-emerald-300 text-[11px] font-black px-3 py-1 rounded-lg" dir="ltr">🎯 {myEquity}%</span>}
                                 {gs.allInReveal && realEq && realEq[user.uid] !== undefined && <span className="bg-amber-900/80 border border-amber-500/50 text-amber-300 text-[11px] font-black px-3 py-1 rounded-lg animate-pulse" dir="ltr">ALL-IN · {realEq[user.uid]}%</span>}
                             </div>
                         )}
-                        {isMyTurn ? (
-                            <div className="max-w-md mx-auto w-full flex flex-col gap-2.5">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-[10px] font-black text-amber-400 w-14 text-center" dir="ltr">{formatShort(raiseAmt)}</span>
-                                    <input type="range" min={Math.min(round2((gs.highestBet||0)+(gs.minRaise||BB)), myMaxBet)} max={myMaxBet} step={Number(setts.blinds) || 0.5} value={raiseAmt} onChange={e=>setRaiseAmt(parseFloat(e.target.value))} className="flex-1 accent-amber-500" dir="ltr" />
-                                    <div className="flex gap-1">
-                                        <button onClick={()=>setRaiseAmt(Math.min(round2((gs.highestBet||0)+(gs.minRaise||BB)), myMaxBet))} className="text-[9px] bg-slate-800 border border-white/10 px-2 py-1 rounded font-black text-slate-300">MIN</button>
-                                        <button onClick={()=>setRaiseAmt(Math.min(round2(totalPot + toCallMe*2), myMaxBet))} className="text-[9px] bg-slate-800 border border-white/10 px-2 py-1 rounded font-black text-slate-300">POT</button>
-                                        <button onClick={()=>setRaiseAmt(myMaxBet)} className="text-[9px] bg-slate-800 border border-white/10 px-2 py-1 rounded font-black text-rose-300">MAX</button>
+                        {isMyTurn ? (() => {
+                            const minRaiseTo = Math.min(round2((gs.highestBet || 0) + (gs.minRaise || BB)), myMaxBet);
+                            const allInTo = round2((myPlayer?.bet || 0) + (myPlayer?.stack || 0));
+                            const topIsAllIn = myMaxBet >= allInTo - 0.001; // in PLO the ceiling can be the pot cap instead
+                            const atTop = raiseAmt >= myMaxBet - 0.001;
+                            return (
+                            <div className="max-w-md mx-auto w-full relative">
+                                {/* Vertical raise slider — opens on demand; slide to the TOP = ALL IN */}
+                                {raiseOpen && (
+                                    <div className="absolute bottom-full right-0 mb-3 z-50 bg-slate-950/95 backdrop-blur border border-amber-500/40 rounded-3xl px-5 py-4 flex flex-col items-center gap-2.5 shadow-[0_12px_45px_rgba(0,0,0,0.75)] animate-pop-in">
+                                        <span className={`text-base font-black ${atTop && topIsAllIn ? 'text-rose-400' : 'text-amber-300'}`} dir="ltr">
+                                            {atTop && topIsAllIn ? '🔥 ALL IN' : formatShort(raiseAmt)}
+                                        </span>
+                                        <div className="flex items-stretch gap-2.5">
+                                            <div className="flex flex-col justify-between items-end text-[9px] font-black py-1">
+                                                <span className="text-rose-400">{topIsAllIn ? 'ALL IN' : 'MAX POT'}</span>
+                                                <span className="text-slate-500">MIN</span>
+                                            </div>
+                                            <input type="range" className="vslider" min={minRaiseTo} max={myMaxBet} step={Number(setts.blinds) || 0.5}
+                                                value={raiseAmt} onChange={e=>setRaiseAmt(parseFloat(e.target.value))} />
+                                        </div>
+                                        <div className="flex gap-1.5">
+                                            <button onClick={()=>setRaiseAmt(minRaiseTo)} className="text-[10px] bg-slate-800 border border-white/10 px-2.5 py-1.5 rounded-lg font-black text-slate-300">MIN</button>
+                                            <button onClick={()=>setRaiseAmt(Math.min(round2(totalPot + toCallMe*2), myMaxBet))} className="text-[10px] bg-slate-800 border border-white/10 px-2.5 py-1.5 rounded-lg font-black text-slate-300">POT</button>
+                                            <button onClick={()=>setRaiseAmt(myMaxBet)} className="text-[10px] bg-slate-800 border border-rose-500/40 px-2.5 py-1.5 rounded-lg font-black text-rose-300">{topIsAllIn ? 'ALL IN' : 'MAX'}</button>
+                                        </div>
+                                        <button disabled={acting} onClick={()=>{ setRaiseOpen(false); myAct('raise', raiseAmt); }}
+                                                className={`w-full py-3 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-transform text-white ${atTop && topIsAllIn ? 'bg-gradient-to-b from-rose-500 to-rose-800' : 'btn-raise'}`} dir="ltr">
+                                            {atTop && topIsAllIn ? '🔥 ALL IN' : `RAISE ${formatShort(raiseAmt)}`}
+                                        </button>
                                     </div>
-                                </div>
-                                <div className="grid grid-cols-3 gap-2.5">
-                                    <button onClick={()=>performAction(user.uid,'fold')} className="btn-fold text-white py-3.5 font-black text-sm shadow-lg active:scale-95 transition-transform">FOLD</button>
-                                    <button onClick={()=>performAction(user.uid,'call')} className="btn-call text-white py-3.5 font-black text-sm shadow-lg active:scale-95 transition-transform">
-                                        {toCallMe > 0 ? <span>CALL <span dir="ltr" className="block text-[10px] opacity-90">{formatShort(Math.min(toCallMe, myPlayer?.stack||0))}</span></span> : 'CHECK'}
+                                )}
+                                <div className={`grid grid-cols-3 gap-2.5 transition-opacity ${acting ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <button disabled={acting} onClick={()=>{ setRaiseOpen(false); myAct('fold'); }} className="btn-fold text-white py-4 font-black text-base shadow-lg active:scale-95 transition-transform">FOLD</button>
+                                    <button disabled={acting} onClick={()=>{ setRaiseOpen(false); myAct('call'); }} className="btn-call text-white py-4 font-black text-base shadow-lg active:scale-95 transition-transform">
+                                        {toCallMe > 0 ? <span>CALL <span dir="ltr" className="block text-[11px] opacity-90">{formatShort(Math.min(toCallMe, myPlayer?.stack||0))}</span></span> : 'CHECK'}
                                     </button>
-                                    <button onClick={()=>performAction(user.uid,'raise', raiseAmt)} className="btn-raise text-white py-3.5 font-black text-sm shadow-lg active:scale-95 transition-transform">
-                                        RAISE <span dir="ltr" className="block text-[10px] opacity-90">{formatShort(raiseAmt)}</span>
+                                    <button disabled={acting} onClick={()=>{ if (!raiseOpen) setRaiseAmt(minRaiseTo); setRaiseOpen(o=>!o); }} className={`btn-raise text-white py-4 font-black text-base shadow-lg active:scale-95 transition-transform ${raiseOpen ? 'ring-2 ring-amber-300/70' : ''}`}>
+                                        RAISE <span className="block text-[11px] opacity-90">{raiseOpen ? '▼ close' : '▲'}</span>
                                     </button>
                                 </div>
                             </div>
-                        ) : gs.phase === 'discard' && isSeated && (myPlayer?.cards||[]).length === 3 ? (
+                            );
+                        })() : gs.phase === 'discard' && isSeated && myCards.length === 3 ? (
                             <div className="text-center text-amber-300 font-black text-sm animate-pulse">🍍 Tap a top card to discard it</div>
                         ) : (
                             <div className="text-center text-slate-500 font-bold text-xs">
@@ -5997,8 +6314,8 @@
                     {isSeated && (
                         <div className="absolute bottom-20 left-3 z-[60] flex flex-col gap-2">
                             <button onClick={()=>ch.setChatOpen(!ch.chatOpen)} title="Table chat" className="w-11 h-11 rounded-2xl glass-panel text-slate-300 hover:text-white shadow-xl text-lg"><i className="fa-solid fa-comment-dots"></i></button>
-                            <button onClick={toggleSitOut} title={myPlayer?.sitOut ? 'Sit back in' : 'Sit out'} className={`w-11 h-11 rounded-2xl border shadow-xl text-lg ${myPlayer?.sitOut ? 'bg-amber-500 text-slate-900 border-amber-300 animate-pulse' : 'bg-slate-900/90 border-white/10 text-slate-300 hover:text-amber-300'}`}>{myPlayer?.sitOut ? '✋' : '☕'}</button>
-                            {!(tableState?.tournamentId) && <button onClick={topUpChips} title="Add chips" className="w-11 h-11 rounded-2xl glass-panel text-slate-300 hover:text-emerald-300 shadow-xl text-lg">💰</button>}
+                            <button onClick={toggleSitOut} title={myPlayer?.sitOut ? 'Sit back in' : myPlayer?.sitOutNext ? 'Cancel sit-out (queued for end of hand)' : 'Sit out'} className={`w-11 h-11 rounded-2xl border shadow-xl text-lg ${myPlayer?.sitOut ? 'bg-amber-500 text-slate-900 border-amber-300 animate-pulse' : myPlayer?.sitOutNext ? 'bg-amber-500/40 text-amber-200 border-amber-400/60 animate-pulse' : 'bg-slate-900/90 border-white/10 text-slate-300 hover:text-amber-300'}`}>{myPlayer?.sitOut ? '✋' : '☕'}</button>
+                            {!(tableState?.tournamentId) && <button onClick={topUpChips} title="Add chips" className="relative w-11 h-11 rounded-2xl glass-panel text-slate-300 hover:text-emerald-300 shadow-xl text-lg">💰{(myPlayer?.pendingTopUp || 0) > 0 && <span className="absolute -top-1 -right-1 bg-emerald-500 text-black text-[8px] font-black px-1 rounded-full shadow" dir="ltr" title="Queued — added at end of hand">+{formatShort(myPlayer.pendingTopUp)}</span>}</button>}
                             {gs.phase === 'showdown' && ((srvEngine ? myPrivCards : (myPlayer?.cards || [])).length > 0) && !myPlayer.reveal && (myPlayer.status === 'folded' || (gs.earlyWin && myPlayer.status === 'active')) && (
                                 <button onClick={async () => { try { if (srvEngine) { await window.fb.fx('pkReveal', { tableId: tableDocId }); } else { await window.fb.updateDoc(tblRef(), { [`players.${user.uid}.reveal`]: true }); } } catch(e) {} }}
                                         title="Show your cards to the table" className="px-3 h-11 rounded-2xl border border-sky-400/50 bg-sky-600/20 text-sky-200 shadow-xl text-xs font-black animate-pulse">SHOW 🃏</button>
@@ -6032,7 +6349,7 @@
                                 {!(isFull && !needRebuy) && <button onClick={needRebuy ? handleRebuy : handleSit} className="w-full bg-gradient-to-b from-amber-500 to-amber-700 hover:from-amber-400 text-white py-3.5 rounded-2xl font-black shadow-lg mb-2">
                                     {needRebuy ? 'Do Rebuy' : 'Sit back in'}
                                 </button>}
-                                {!needRebuy && <button onClick={()=>setSpectate(true)} className="text-slate-400 hover:text-white text-xs font-bold underline">Spectate</button>}
+                                {!needRebuy && <button onClick={()=>setSpectate(true)} className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 border border-cyan-500/30 text-cyan-200 hover:text-white py-3 rounded-2xl font-black text-sm shadow-lg mb-2"><i className="fa-solid fa-eye text-base"></i>Spectate the table</button>}
                                 {needRebuy && <button onClick={handleStandUp} className="text-slate-400 hover:text-white text-xs font-bold underline">Stand up</button>}
                                 <button onClick={onLeave} className="block mx-auto mt-2 text-slate-500 hover:text-white text-xs font-bold underline">Back to lobby</button>
                             </div>
@@ -8164,7 +8481,7 @@
                 const botQ = window.fb.query(window.fb.collection(window.fb.db, "users"), window.fb.where("isBot", "==", true));
                 let avail = (await window.fb.getDocs(botQ)).docs.map(d => ({ uid: d.id, ...d.data() })).filter(b => !already.has(b.uid) && b.botActive !== false);
                 for (let j = avail.length; j < need; j++) {
-                    const name = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)] + Math.floor(Math.random() * 100000);
+                    const name = botDisplayName();
                     const ref = await window.fb.addDoc(window.fb.collection(window.fb.db, "users"), {
                         username: name, email: `bot_${Date.now()}_${j}@pocketseven.com`, role: ROLES.PLAYER,
                         status: 'approved', balance: 50000, isBot: true, managedGames: [],
@@ -8312,7 +8629,7 @@
                         for (let i = 0; i < shortfall; i += 25) {
                             const batch = [];
                             for (let j = i; j < Math.min(i + 25, shortfall); j++) {
-                                const name = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)] + Math.floor(Math.random() * 100000);
+                                const name = botDisplayName();
                                 batch.push(window.fb.addDoc(window.fb.collection(window.fb.db, "users"), {
                                     username: name, email: `bot_${Date.now()}_${j}@pocketseven.com`, role: ROLES.PLAYER,
                                     status: 'approved', balance: 50000, isBot: true, managedGames: [],

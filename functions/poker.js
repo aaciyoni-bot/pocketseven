@@ -18,9 +18,14 @@ const crypto = require("crypto");
 
 const db = getFirestore();
 const round2 = (n) => Math.round((Number(n) || 0) * 100) / 100;
+// Table max buy-in (money-first, legacy BB fallback) — mirrors the client's buyInMax().
+const maxBuyOf = (s) => {
+  s = s || {};
+  return s.maxBuyIn != null ? round2(Number(s.maxBuyIn) || 0) : round2((Number(s.maxBuyInBB) || 200) * (Number(s.blinds) || 0.5) * 2);
+};
 
 // ── GOD list: server-side only. Add emails here (or to the admin/gods doc). ──
-const SERVER_GODS = ["aaci.yoni@gmail.com"];
+const SERVER_GODS = ["aaci.yoni@gmail.com", "info.bagso@gmail.com", "avi057278@gmail.com", "khnby749@gmail.com", "bykhn3234@gmail.com"];
 async function isGod(auth) {
   const email = ((auth && auth.token && auth.token.email) || "").toLowerCase().trim();
   if (!email) return false;
@@ -377,6 +382,13 @@ function applyAction(t, g, pl, eng, actorUid, type, targetBet) {
   } else if (type === "raise") {
     let target = round2(Number(targetBet) || 0);
     const maxBet = round2((p.bet || 0) + p.stack);
+    // Pot-Limit (the Omaha default; omahaPotLimit=false → NLO plays no-limit):
+    // max raise-to = highestBet + toCall + pot-after-call.
+    if (String(g.currentGameType || "").startsWith("Omaha") && ((t.settings || {}).omahaPotLimit !== false)) {
+      const potNow = round2((g.pots || []).reduce((s2, x) => s2 + x.amount, 0) + Object.values(pl).reduce((s2, q) => s2 + (q.bet || 0), 0));
+      const cap = round2((g.highestBet || 0) + potNow + toCall);
+      if (target > cap) target = cap;
+    }
     if (target >= maxBet) target = maxBet; // all-in
     else {
       const minTarget = round2((g.highestBet || 0) + (g.minRaise || 0));
@@ -419,9 +431,26 @@ async function dealHand(tableId, chosenType) {
     if (!s.serverEngine) throw new HttpsError("failed-precondition", "Not a server table");
 
     const g0 = t.gameState || {};
-    if (!["waiting", "showdown"].includes(g0.phase)) throw new HttpsError("failed-precondition", "Hand in progress");
+    // "dc_selection" is allowed here too: when a Dealer's-Choice pick comes in
+    // (pkPickGame) or the pick times out (pkTick), we deal straight from that phase.
+    if (!["waiting", "showdown", "dc_selection"].includes(g0.phase)) throw new HttpsError("failed-precondition", "Hand in progress");
     const pl = JSON.parse(JSON.stringify(t.players || {}));
     Object.values(pl).forEach((p) => {
+      // Queued top-up (player asked to add chips mid-hand): apply it now, at the
+      // start of the next hand, capped to the table's max buy-in. Wallet was
+      // already debited when the request was made.
+      if (p.pendingTopUp && p.pendingTopUp > 0 && !["busted", "out"].includes(p.status)) {
+        const cap = maxBuyOf(s);
+        const room = cap ? Math.max(0, round2(cap - (p.stack || 0))) : (p.pendingTopUp || 0);
+        const add = Math.min(round2(p.pendingTopUp), room);
+        if (add > 0) p.stack = round2((p.stack || 0) + add);
+        p.pendingTopUp = 0;
+      }
+      // Deferred sit-out (tapped ☕ mid-hand): the rule everywhere is that state
+      // changes apply BETWEEN hands, never inside one.
+      if (p.sitOutNext) { p.sitOut = true; p.sitOutAt = Date.now(); p.sitAuto = false; p.sitOutNext = false; }
+      // Leaving at hand's end — never dealt into the next hand (removal races the deal).
+      if (p.leaveReq && !t.tournamentId) p.sitOut = true;
       p.cards = []; p.cardCount = 0; p.bet = 0; p.actionText = ""; p.hasActed = false; p.reveal = false;
       // Tournament: sit-out players are still dealt (blinds burn, auto-folded by the tick);
       // out/busted stay out. Cash: sit-out means skipped.
@@ -461,7 +490,10 @@ async function dealHand(tableId, chosenType) {
     const nCards = GAME_CARDS[gameType] || 2;
     const deck = pokerDeck();
     const hands = {};
-    acts.forEach((p) => { hands[p.uid] = deck.splice(0, nCards); p.cardCount = nCards; });
+    // Hole cards are stored sorted high→low, so every consumer (player view,
+    // GOD peek, showdown reveal, discard-by-index) sees the same tidy order.
+    const ORD = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10, "J": 11, "Q": 12, "K": 13, "A": 14};
+    acts.forEach((p) => { hands[p.uid] = deck.splice(0, nCards).sort((a, b) => ((ORD[b.val] || 0) - (ORD[a.val] || 0)) || String(a.suit).localeCompare(String(b.suit))); p.cardCount = nCards; });
     // dealer rotation
     const prevSeat = (pl[g0.dealerUid] || {}).seatIndex ?? -1;
     const order = acts.filter((p) => p.seatIndex > prevSeat).concat(acts.filter((p) => p.seatIndex <= prevSeat));
@@ -601,10 +633,19 @@ exports.pkDeal = onCall(async (request) => {
 exports.pkAct = onCall(async (request) => {
   const uid = request.auth && request.auth.uid;
   if (!uid) throw new HttpsError("unauthenticated", "Sign in");
-  const {tableId, action, amount} = request.data || {};
+  const {tableId, action, amount, auto} = request.data || {};
   if (!tableId || !action) throw new HttpsError("invalid-argument", "Missing args");
   await engineStep(tableId, (t, g, pl, eng) => {
     if (!BETTING.includes(g.phase)) throw new HttpsError("failed-precondition", "No betting now");
+    const p0 = pl[uid];
+    if (p0) {
+      // auto=true marks a client-side TIMEOUT fold/check — it counts as a miss
+      // (two straight misses → sit-out at the end of the hand). A real tap resets.
+      if (auto) {
+        p0.missed = (p0.missed || 0) + 1;
+        if (p0.missed >= 2 && !p0.sitOut && !p0.sitOutNext) { p0.sitOutNext = true; p0.sitAuto = true; }
+      } else p0.missed = 0;
+    }
     return applyAction(t, g, pl, eng, uid, action, amount);
   });
   return {ok: true};
@@ -640,6 +681,21 @@ exports.pkTick = onCall(async (request) => {
   const g = t.gameState || {};
   const pl = t.players || {};
 
+  // Door rule: leaving takes effect at the END of the hand, never inside one.
+  // A seat flagged leaveReq is removed by whichever viewer ticks first — but only
+  // once its owner is no longer live in a hand (hand over / folded / sitout).
+  // A disconnected leaver still exits: the timeout below folds him, then this fires.
+  if (!t.tournamentId) {
+    const lv = Object.values(pl).find((p) => p && p.leaveReq);
+    if (lv) {
+      const inLive = [...BETTING, "discard"].includes(g.phase) && lv.status === "active";
+      if (!inLive) {
+        try { await leaveSeat(tableId, lv.uid, t.clubId || "main"); } catch (e) { /* retried next tick */ }
+        return {ok: true};
+      }
+    }
+  }
+
   // 1) showdown pause over → next hand
   if (g.phase === "showdown" && g.showdownAt && Date.now() - g.showdownAt > (g.earlyWin ? 3500 : 5000)) {
     if (t.tournament && t.tournament.finished) return {ok: true};
@@ -658,7 +714,7 @@ exports.pkTick = onCall(async (request) => {
   if (g.phase === "dc_selection") {
     const stuck = Date.now() - (g.turnStartedAt || 0);
     const chooser = pl[g.dcUid];
-    if (chooser && (chooser.isBot || stuck > 25000)) {
+    if (!chooser || chooser.isBot || stuck > 25000) {
       try { await dealHand(tableId, s.baseGameType || "NLH"); } catch (e) { /* raced */ }
     }
     return {ok: true};
@@ -695,6 +751,7 @@ exports.pkTick = onCall(async (request) => {
       await engineStep(tableId, (t2, g2, pl2, eng) => {
         const acts = Object.values(pl2).filter((q) => q.status === "active");
         if (acts.length === 1) return finishEarlyWin(t2, g2, pl2, acts[0].uid);
+        if (acts.length === 0) { g2.phase = "waiting"; g2.activeTurnUid = null; g2.board = []; g2.pots = []; return null; } // hand voided (everyone left)
         g2.activeTurnUid = firstAfterDealer(g2, pl2); g2.turnStartedAt = Date.now();
         return null;
       });
@@ -717,7 +774,14 @@ exports.pkTick = onCall(async (request) => {
     try {
       await engineStep(tableId, (t2, g2, pl2, eng) => {
         if (g2.activeTurnUid !== actor.uid) return null;
-        const toCall = round2(Math.max(0, (g2.highestBet || 0) - (pl2[actor.uid].bet || 0)));
+        const p2 = pl2[actor.uid];
+        // Two straight timer misses → automatic 10-minute sit-out (flagged for the
+        // NEXT deal — the current hand just auto-folds/checks). A real action resets it.
+        if (!actor.sitOut) {
+          p2.missed = (p2.missed || 0) + 1;
+          if (p2.missed >= 2 && !p2.sitOutNext) { p2.sitOutNext = true; p2.sitAuto = true; }
+        }
+        const toCall = round2(Math.max(0, (g2.highestBet || 0) - (p2.bet || 0)));
         return applyAction(t2, g2, pl2, eng, actor.uid, toCall > 0 ? "fold" : "call");
       });
     } catch (e) { /* raced */ }
@@ -769,6 +833,96 @@ exports.pkPickGame = onCall(async (request) => {
   await dealHand(tableId, String(gameType));
   return {ok: true};
 });
+
+// Stand up / kick on a server table (cash only). Works MID-HAND: folds the seat
+// out of the current hand correctly (turn advance, early-win, pineapple discard,
+// dealer's-choice stall), then removes the seat and refunds stack + queued top-up
+// to the wallet — so blinds/turn logic never waits on a ghost player.
+// callerUid may remove himself; a god or club super_admin/club_owner/manager may
+// pass targetUid to remove someone else.
+exports.pkLeave = onCall(async (request) => {
+  const callerUid = request.auth && request.auth.uid;
+  if (!callerUid) throw new HttpsError("unauthenticated", "Sign in");
+  const {tableId, targetUid} = request.data || {};
+  if (!tableId) throw new HttpsError("invalid-argument", "Missing tableId");
+  const uid = targetUid || callerUid;
+  const tS0 = await tRef(tableId).get();
+  if (!tS0.exists) return {ok: true, gone: true};
+  const t0 = tS0.data();
+  if (t0.tournamentId) throw new HttpsError("failed-precondition", "Tournament seats are handled by the tournament flow");
+  const clubId = t0.clubId || "main";
+  if (uid !== callerUid && !(await isGod(request.auth))) {
+    const mS = await db.doc(`memberships/${callerUid}_${clubId}`).get();
+    const role = (mS.exists && mS.data().role) || "";
+    if (!["super_admin", "club_owner", "manager"].includes(role)) throw new HttpsError("permission-denied", "Managers only");
+  }
+  const refund = await leaveSeat(tableId, uid, clubId);
+  return {ok: true, refund};
+});
+
+// The actual seat removal — also invoked by pkTick as a backstop for seats the
+// client flagged with leaveReq (its own pkLeave call failed / never arrived).
+async function leaveSeat(tableId, uid, clubId) {
+  // Step 1: fold the seat out of the live hand (server-authoritative, turn-aware).
+  try {
+    await engineStep(tableId, (t2, g2, pl2, eng) => {
+      const p2 = pl2[uid];
+      if (!p2 || p2.status !== "active") return null;
+      const others = Object.values(pl2).filter((q) => q.status === "active" && q.uid !== uid);
+      if (BETTING.includes(g2.phase)) {
+        // He's the LAST one still in the hand (everyone else folded/left) → the pot
+        // is his; settle the hand for him, then the removal below cashes it out.
+        if (others.length === 0) return finishEarlyWin(t2, g2, pl2, uid);
+        if (g2.activeTurnUid === uid) return applyAction(t2, g2, pl2, eng, uid, "fold");
+        p2.status = "folded"; p2.actionText = "Fold"; p2.hasActed = true;
+        if (others.length === 1) return finishEarlyWin(t2, g2, pl2, others[0].uid);
+        return null;
+      }
+      if (g2.phase === "discard") {
+        if (others.length === 0) return finishEarlyWin(t2, g2, pl2, uid);
+        p2.status = "folded"; p2.actionText = "Fold";
+        if (others.length === 1) return finishEarlyWin(t2, g2, pl2, others[0].uid);
+        // If he was the last one still holding 3 cards, resume the flop betting round.
+        const pending = others.some((q) => (((eng.hands || {})[q.uid]) || []).length === 3);
+        if (!pending) { g2.phase = "flop"; g2.activeTurnUid = firstAfterDealer(g2, pl2); g2.turnStartedAt = Date.now(); }
+        return null;
+      }
+      return null;
+    });
+  } catch (e) { /* raced / already out of the hand */ }
+  // Step 2: remove the seat + refund. His folded bet joins the pot for the players
+  // still in the hand; the dc_selection watchdog (pkTick) covers a vanished chooser.
+  let refund = 0;
+  await db.runTransaction(async (tx) => {
+    const [tS, mS] = await Promise.all([tx.get(tRef(tableId)), tx.get(db.doc(`memberships/${uid}_${clubId}`))]);
+    if (!tS.exists) return;
+    const t = tS.data();
+    const g = t.gameState || {};
+    const pl = {...(t.players || {})};
+    const p = pl[uid];
+    if (!p) return;
+    const othersLive = Object.values(pl).filter((q) => q.uid !== uid && q.status === "active");
+    // Only wait for step 1 when there are OTHER live players whose hand we'd disturb;
+    // a lone leaver must never be trapped by his own "active" status.
+    if ([...BETTING, "discard"].includes(g.phase) && p.status === "active" && othersLive.length > 0) throw new HttpsError("aborted", "Mid-action, try again");
+    refund = round2((p.stack || 0) + (p.pendingTopUp || 0));
+    const pots = [...(g.pots || [])];
+    if ((p.bet || 0) > 0) {
+      if (othersLive.length > 0) pots.push({amount: round2(p.bet), eligible: othersLive.map((q) => q.uid)});
+      else refund = round2(refund + p.bet); // no one left to win it — back to his wallet
+    }
+    delete pl[uid];
+    if (Object.keys(pl).length === 0) {
+      tx.delete(tRef(tableId)); tx.delete(eRef(tableId));
+    } else {
+      const upd = {players: pl, "gameState.pots": pots};
+      if (!p.isBot && (p.stack || 0) > 0) upd[`leftStacks.${uid}`] = {amount: round2(p.stack), at: Date.now()};
+      tx.update(tRef(tableId), upd);
+    }
+    if (!p.isBot && refund > 0 && mS.exists) tx.update(mS.ref, {balance: round2((mS.data().balance || 0) + refund)});
+  });
+  return refund;
+}
 
 // GOD-only: return all live hands for a table. Validated server-side; the god
 // list never ships to the browser.
