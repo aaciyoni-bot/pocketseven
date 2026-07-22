@@ -1670,7 +1670,7 @@
         // big suit bottom-right, clean white). The Pocket Seven card BACK is kept as-is.
         const PCard = ({ card, hidden, size }) => {
             // Match POKERTEN's on-table card sizes/proportions (px equivalents of its Tailwind widths).
-            const W = size === 'xl' ? 56 : size === 'lg' ? 48 : size === 'sm' ? 34 : 40;
+            const W = size === 'xl' ? 56 : size === 'lg' ? 48 : size === 'sm' ? 34 : size === 'xs' ? 24 : 40;
             const H = Math.round(W * 1.45);
             const rad = Math.max(5, Math.round(W * 0.15));
             if (!card || hidden) return <div className="card-back select-none shrink-0" style={{ width: W, height: H, borderRadius: rad }} />;
@@ -5702,11 +5702,10 @@
                 return { left: `${50 + 43 * Math.cos(ang)}%`, top: `${50 + 34 * Math.sin(ang)}%` };
             };
             const betPos = (i) => {
+                if (isSeated && i === 0) return { left: '29%', top: '64%' }; // hero: beside the big fan
                 const ang = Math.PI / 2 + (i * 2 * Math.PI) / N;
-                // Radial spot between seat and board, plus a tangential side-step (like the
-                // dealer button) so the chips never sit on the SB/BB/action badge line.
                 const tx = -Math.sin(ang), ty = Math.cos(ang);
-                return { left: `${50 + 29 * Math.cos(ang) + 7 * tx}%`, top: `${50 + 25 * Math.sin(ang) + 6 * ty}%` };
+                return { left: `${50 + 27 * Math.cos(ang) + 7 * tx}%`, top: `${50 + 22 * Math.sin(ang) + 6 * ty}%` };
             };
             const totalPot = round2((gs.pots || []).reduce((s, p) => s + p.amount, 0) + Object.values(players).reduce((s, p) => s + (p.bet || 0), 0));
             const toCallMe = round2(Math.max(0, (gs.highestBet || 0) - (myPlayer?.bet || 0)));
@@ -6020,7 +6019,7 @@
                                                 // fewer cards → looser/roomier; more cards → tighter overlap so all fit
                                                 // on the narrow mobile edges and every card's corner stays visible.
                                                 // GG corner-index → cards can overlap heavily, only the left index peeks (still readable).
-                                                const ovl = isMe ? (nC >= 5 ? -28 : -32) : (hidden ? (nC >= 5 ? -16 : -13) : (nC >= 5 ? -22 : -18));
+                                                const ovl = isMe ? (nC >= 5 ? -28 : -32) : (hidden ? (nC >= 5 ? -13 : -11) : (nC >= 5 ? -22 : -18));
                                                 const ang = isMe ? (nC >= 5 ? 5 : 6) : (nC >= 5 ? 6 : 7);
                                                 return (
                                                 <div className={`flex ${isMe ? 'mb-[-8px]' : 'mb-[-10px]'} z-0 ${doFan ? '' : (isMe ? 'gap-1' : 'gap-0.5')}`} dir="ltr">
@@ -6028,8 +6027,8 @@
                                                         isMe && gs.phase === 'discard' && dispCards.length === 3
                                                         ? <div key={ci} onClick={() => handleDiscardCard(user.uid, ci)} className="cursor-pointer hover:-translate-y-2 transition-transform ring-2 ring-amber-400/70 rounded-lg"><PCard card={c} size="xl" /></div>
                                                         : doFan
-                                                        ? <span key={ci} className="inline-block" style={{ marginLeft: ci === 0 ? 0 : ovl, transform: `rotate(${(ci - midC) * ang}deg) translateY(${Math.abs(ci - midC) * (isMe ? 3.5 : 2.5)}px)`, transformOrigin: '50% 115%', zIndex: ci }}><span className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size={isMe ? (nC > 4 ? 'lg' : 'xl') : (hidden ? 'sm' : 'md')} /></span></span>
-                                                        : <span key={ci} className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size={isMe ? (nC > 4 ? 'lg' : 'xl') : (hidden ? 'sm' : 'md')} /></span>
+                                                        ? <span key={ci} className="inline-block" style={{ marginLeft: ci === 0 ? 0 : ovl, transform: `rotate(${(ci - midC) * ang}deg) translateY(${Math.abs(ci - midC) * (isMe ? 3.5 : 2.5)}px)`, transformOrigin: '50% 115%', zIndex: ci }}><span className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size={isMe ? (nC > 4 ? 'lg' : 'xl') : (hidden ? 'xs' : 'md')} /></span></span>
+                                                        : <span key={ci} className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size={isMe ? (nC > 4 ? 'lg' : 'xl') : (hidden ? 'xs' : 'md')} /></span>
                                                     ))}
                                                 </div>
                                                 );
@@ -6076,8 +6075,8 @@
                                                 <div className={`flex mt-1 z-20 ${doFan ? '' : 'gap-0.5'}`} dir="ltr">
                                                     {dispCards.map((c, ci) => (
                                                         doFan
-                                                        ? <span key={ci} className="inline-block" style={{ marginLeft: ci === 0 ? 0 : ovl, transform: `rotate(${(midC - ci) * ang}deg) translateY(${-Math.abs(ci - midC) * 2.5}px)`, transformOrigin: '50% -15%', zIndex: ci }}><span className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size="sm" /></span></span>
-                                                        : <span key={ci} className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size="sm" /></span>
+                                                        ? <span key={ci} className="inline-block" style={{ marginLeft: ci === 0 ? 0 : ovl, transform: `rotate(${(midC - ci) * ang}deg) translateY(${-Math.abs(ci - midC) * 2.5}px)`, transformOrigin: '50% -15%', zIndex: ci }}><span className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size={hidden ? 'xs' : 'sm'} /></span></span>
+                                                        : <span key={ci} className="card-reveal" style={{ animationDelay: `${dealDelay(p.uid, ci)}ms` }}><PCard card={c} hidden={hidden} size={hidden ? 'xs' : 'sm'} /></span>
                                                     ))}
                                                 </div>
                                                 );
