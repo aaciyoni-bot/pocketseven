@@ -902,7 +902,7 @@
         if (window.__startPS) window.__startPS(); } // hand off to the PocketSeven intro
       el.addEventListener('click', out);
       el.addEventListener('touchstart', out, { passive: true });
-      setTimeout(out, 2600);
+      setTimeout(out, 3200);
     })();
   </script>
 </div>
@@ -933,7 +933,7 @@
       // Plays AFTER the ORIZIS intro hands off (brand splash first, then the product).
       window.__startPS = function(){ if (!el) return; el.style.opacity = '1'; el.style.pointerEvents = 'auto'; setTimeout(hide, 2600); };
       // Fallback: if ORIZIS was removed without handing off, start anyway.
-      setTimeout(function(){ if (el && getComputedStyle(el).opacity === '0') window.__startPS(); }, 3200);
+      setTimeout(function(){ if (el && getComputedStyle(el).opacity === '0') window.__startPS(); }, 4000);
     })();
   </script>
 </div>
