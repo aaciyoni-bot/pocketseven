@@ -1823,7 +1823,7 @@
             { k: 'bomb_win', e: '💣', label: 'Win a Bomb Pot', goal: 1 },
             { k: 'spin_win', e: '🎡', label: 'Win a Spin & Cash', goal: 1 },
             { k: 'bigpot', e: '🏔', label: 'Win a 100BB+ pot', goal: 1 },
-            { k: 'rabbit_1', e: '🐰', label: 'Rabbit-hunt a board', goal: 1 },
+            { k: 'rabbit_1', e: '🎩', label: 'Rabbit-hunt a board', goal: 1 },
         ];
         // Bots: plausible, DETERMINISTIC rings derived from the uid — stable per bot.
         const botMissions = (uid) => {
@@ -6653,7 +6653,7 @@
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-1.5 z-30" dir="ltr">
                                 {gs.phase !== 'waiting' && (gs.board || []).map((c, i) => <span key={i} className="card-reveal" style={{ animationDelay: `${(i % 3) * 220}ms` }}><PCard card={c} size="md" /></span>)}
                                 {rabbit.length > 0 && rabbit.map((c, i) => (
-                                    <div key={'rb'+i} className="relative opacity-75"><PCard card={c} size="md" /><span className="absolute -top-2 -right-1 text-xs">🐰</span></div>
+                                    <div key={'rb'+i} className="relative opacity-75"><PCard card={c} size="md" /><span className="absolute -top-2 -right-1 text-xs">🎩</span></div>
                                 ))}
                                 {gs.phase !== 'waiting' && [...Array(Math.max(0, 5 - (gs.board || []).length - rabbit.length))].map((_, i) => (
                                     <div key={'ph'+i} className="w-9 sm:w-10 opacity-0" style={{ height: '3.4rem' }}></div>
@@ -6854,7 +6854,7 @@
                                 return (
                                     <button onClick={() => { setRabbit(src.slice(0, need)); try { window.fb.updateDoc(memDoc(user.uid), { 'missions.rabbit_1': 1 }); } catch (e) {} }} title="Rabbit hunt — see what would have come"
                                             className="absolute z-[45] w-11 h-11 rounded-full bg-slate-900/90 border-2 border-amber-400/60 text-2xl shadow-[0_0_14px_rgba(245,200,96,0.35)] hover:scale-110 transition-transform animate-pop-in"
-                                            style={{ left: '68%', top: '80%', transform: 'translate(-50%,-50%)' }}>🐰</button>
+                                            style={{ left: '68%', top: '80%', transform: 'translate(-50%,-50%)' }}>🎩</button>
                                 );
                             })()}
                         </div>
