@@ -3277,7 +3277,7 @@
 
             const GAME_ORDER = ['NLH', 'Pineapple', 'Omaha 4', 'Omaha 5', 'Omaha 6']; // fixed lobby order: NLH → Pineapple → PLO/PLO5/PLO6
             const gtRank = (t) => { const idx = GAME_ORDER.indexOf((t.settings || {}).baseGameType || 'NLH'); return idx < 0 ? 99 : idx; };
-            const pokerTables = tables.filter(t => t.type === 'poker' && !t.tournamentId && (t.clubId || 'main') === CLUB_ID).sort((a,b)=> ((b.settings?.spinMode ? 1 : 0) - (a.settings?.spinMode ? 1 : 0)) || (gtRank(a) - gtRank(b)) || ((a.createdAt||0)-(b.createdAt||0)));
+            const pokerTables = tables.filter(t => t.type === 'poker' && !t.tournamentId && !t.spinDone && (t.clubId || 'main') === CLUB_ID).sort((a,b)=> ((b.settings?.spinMode ? 1 : 0) - (a.settings?.spinMode ? 1 : 0)) || (gtRank(a) - gtRank(b)) || ((a.createdAt||0)-(b.createdAt||0)));
             const [pokFilter, setPokFilter] = useState('all'); // all | <variant> | tours
             // Always show the full variant set (incl. all Omaha types) so players can filter by any game, even with no open table right now
             const ALL_POKER_VARIANTS = ['NLH', 'Omaha 4', 'Omaha 5', 'Omaha 6', 'Pineapple'];
