@@ -3675,6 +3675,7 @@
                                         const gt = s.baseGameType || 'NLH';
                                         const vs = variantStyle(gt);
                                         const inHand = t.gameState && !['waiting','showdown'].includes(t.gameState.phase);
+                                        const spinRunning = s.spinMode && !!t.spin;
                                         const minBuy = round2((Number(s.minBuyInBB) || 40) * (Number(s.blinds) || 0.5) * 2);
                                         const seated = Object.keys(t.players||{}).length;
                                         const cap = s.maxPlayers || 6;
@@ -3690,12 +3691,13 @@
                                                     <div className="tbl-stakes" dir="ltr">{formatShort(s.blinds)}/{formatShort(s.blinds*2)}</div>
                                                     <div className="tbl-sub">{(() => {
                                                         const h10 = (t.history || []).filter(h => Date.now() - (h.at || 0) < 600000).length;
+                                                        if (spinRunning) return <span className="tbl-live">● In progress</span>;
                                                         return inHand ? <span className="tbl-live">● Running{h10 > 0 ? ` · 🔥 ${h10} hands/10m` : ''}</span> : (h10 > 0 ? `🔥 ${h10} hands/10m` : 'Waiting');
                                                     })()}</div>
                                                 </div>
                                                 <div className="tbl-buyin" dir="ltr">
-                                                    <span className="tbl-buyin-label">Buy-in</span>
-                                                    <span className="tbl-buyin-val">{formatMoney(minBuy)}</span>
+                                                    <span className="tbl-buyin-label">{spinRunning ? 'Live' : 'Buy-in'}</span>
+                                                    <span className="tbl-buyin-val">{spinRunning ? '👁' : formatMoney(minBuy)}</span>
                                                 </div>
                                                 {canManageGame(user, 'poker') && (
                                                     <button onClick={(e) => handleDelete(e, t)} className="tbl-del"><i className="fa-solid fa-trash"></i></button>
