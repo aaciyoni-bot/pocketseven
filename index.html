@@ -877,7 +877,7 @@
 <!-- ═══ ORIZIS INTRO · standalone module · copy this whole block into any product ═══ -->
 <div id="orizis-intro">
   <style>
-    #orizis-intro { position: fixed; inset: 0; z-index: 999999; background: #05070f; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.45s ease; }
+    #orizis-intro { position: fixed; inset: 0; z-index: 1000000; background: #05070f; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.45s ease; }
     #orizis-intro.oi-out { opacity: 0; pointer-events: none; }
     #orizis-intro .oi-mark { font-family: 'Heebo', Arial, sans-serif; font-weight: 900; font-size: clamp(38px, 9vw, 72px); letter-spacing: 0.22em; margin-right: -0.22em; background: linear-gradient(100deg, #64748b 0%, #f8fafc 28%, #e3ae4e 50%, #f8fafc 72%, #64748b 100%); background-size: 240% auto; -webkit-background-clip: text; background-clip: text; color: transparent; opacity: 0; animation: oiShine 1.9s ease forwards, oiRise 0.9s cubic-bezier(0.22,1,0.36,1) forwards; }
     #orizis-intro .oi-sub { font-family: 'Heebo', Arial, sans-serif; font-weight: 700; font-size: clamp(10px, 2.2vw, 14px); letter-spacing: 0.55em; margin-right: -0.55em; color: #64748b; margin-top: 14px; opacity: 0; animation: oiFade 0.7s ease 0.55s forwards; }
@@ -898,10 +898,11 @@
     (function () {
       var el = document.getElementById('orizis-intro');
       var done = false;
-      function out() { if (done) return; done = true; el.classList.add('oi-out'); setTimeout(function () { el.remove(); }, 500); }
+      function out() { if (done) return; done = true; el.classList.add('oi-out'); setTimeout(function () { el.remove(); }, 500);
+        if (window.__startPS) window.__startPS(); } // hand off to the PocketSeven intro
       el.addEventListener('click', out);
       el.addEventListener('touchstart', out, { passive: true });
-      setTimeout(out, 3200);
+      setTimeout(out, 2600);
     })();
   </script>
 </div>
@@ -909,7 +910,7 @@
 <!-- ═══ POCKET SEVEN INTRO — gold wordmark on a bordeaux-black stage ═══ -->
 <div id="ps-intro">
   <style>
-    #ps-intro { position: fixed; inset: 0; z-index: 999999; background: radial-gradient(1000px 700px at 50% 30%, #1a0a0a, #0C0908 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.5s ease; font-family: 'Inter', sans-serif; overflow: hidden; }
+    #ps-intro { position: fixed; inset: 0; z-index: 999999; background: radial-gradient(1000px 700px at 50% 30%, #1a0a0a, #0C0908 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.5s ease; font-family: 'Inter', sans-serif; overflow: hidden; opacity: 0; pointer-events: none; }
     #ps-intro.ps-out { opacity: 0; pointer-events: none; }
     #ps-intro .ps-logo { width: min(66vw, 300px); opacity: 0; transform: scale(0.94); animation: psIn 0.9s cubic-bezier(0.2,0.7,0.2,1) 0.12s forwards; filter: drop-shadow(0 10px 34px rgba(248,200,48,0.18)); }
     #ps-intro .ps-rule { width: 66px; height: 2px; margin-top: 18px; background: linear-gradient(90deg, transparent, #F8C830, transparent); opacity: 0; animation: psFade 0.7s ease 1s forwards; }
@@ -929,7 +930,10 @@
       var el = document.getElementById('ps-intro');
       var hide = function(){ if (!el) return; el.classList.add('ps-out'); setTimeout(function(){ el && el.remove(); el = null; }, 520); };
       el.addEventListener('click', hide);
-      setTimeout(hide, 3200);
+      // Plays AFTER the ORIZIS intro hands off (brand splash first, then the product).
+      window.__startPS = function(){ if (!el) return; el.style.opacity = '1'; el.style.pointerEvents = 'auto'; setTimeout(hide, 2600); };
+      // Fallback: if ORIZIS was removed without handing off, start anyway.
+      setTimeout(function(){ if (el && getComputedStyle(el).opacity === '0') window.__startPS(); }, 3200);
     })();
   </script>
 </div>
@@ -2894,11 +2898,11 @@
 
             // GG-style SQUARE club tile: big centered logo (owner-uploadable, falls back to the
             // initial letter), name + meta below, action at the bottom. Rendered in a grid.
-            const ClubCard = ({ c, action }) => {
+            const ClubCard = ({ c, action, onClick }) => {
                 const m = memOf(c.id);
                 const isOwner = c.ownerUid === user.uid;
                 return (
-                    <div className="club-card relative flex items-center gap-3.5 p-3 pr-2" style={{ borderLeft: '3px solid #F8C830', borderRadius: '14px' }}>
+                    <div onClick={onClick} role={onClick ? 'button' : undefined} className={`club-card relative flex items-center gap-3.5 p-3 pr-2 ${onClick ? 'cursor-pointer transition-transform active:scale-[0.99] hover:brightness-110' : ''}`} style={{ borderLeft: '3px solid #F8C830', borderRadius: '14px' }}>
                         {c.logo
                             ? <img src={c.logo} alt="" className="rounded-xl object-cover shrink-0" style={{ width: 54, height: 54, border: '2px solid rgba(248,200,48,0.45)' }} />
                             : <div className="club-badge shrink-0" style={{ width: 54, height: 54, fontSize: 24, borderRadius: 14, fontFamily: "'Cinzel',serif", background: 'linear-gradient(140deg,#6B1414,#3A0A0A)', border: '2px solid #F8C830', color: '#F8C830', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{(c.name || '?').trim().charAt(0)}</div>}
@@ -2992,8 +2996,8 @@
                             <div className="mb-8">
                                 <h3 className="text-[11px] uppercase tracking-[0.18em] mb-3" style={{ color: 'var(--pt-text-3)', fontWeight: 600 }}>My Clubs</h3>
                                 <div className="flex flex-col gap-2.5">
-                                    {myClubs.map(c => <ClubCard key={c.id} c={c} action={
-                                        <button onClick={() => onEnter(c)} className="btn-gold w-full py-2.5 text-sm">Enter</button>
+                                    {myClubs.map(c => <ClubCard key={c.id} c={c} onClick={() => onEnter(c)} action={
+                                        <i className="fa-solid fa-chevron-right text-base pr-1" style={{ color: '#F8C830' }}></i>
                                     } />)}
                                 </div>
                             </div>
