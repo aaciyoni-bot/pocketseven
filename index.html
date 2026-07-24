@@ -5945,7 +5945,9 @@
                 const t = tableRef.current; if (!t || !t.players[user.uid]) { onLeave(); return; }
                 // Leave notice (table option): standing up must be announced N minutes ahead.
                 const noticeMs = (Number(setts.leaveNoticeMins) || 0) * 60000;
-                if (!t.tournament && noticeMs > 0 && !forceNow) {
+                const otherHumans = Object.values(t.players || {}).filter(p => p.uid !== user.uid && !p.isBot);
+                const alone = otherHumans.length === 0; // last human at the table — stand up immediately, no notice wait
+                if (!t.tournament && noticeMs > 0 && !forceNow && !alone) {
                     const meN = t.players[user.uid];
                     // Profit threshold: notice only binds a player who's up ≥ N BB over their buy-in
                     const bbV = (Number(setts.blinds) || 0.5) * 2;
