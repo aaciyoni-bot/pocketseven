@@ -4158,6 +4158,9 @@
                 } catch(e) { showToast("Error broadcasting", "error"); }
             };
             const [search, setSearch] = useState('');
+            const [chip, setChip] = useState(null);        // styled add/remove-chips modal: { target, mode }
+            const [chipAmt, setChipAmt] = useState('');
+            const [resetBusy, setResetBusy] = useState(false);
             const [roleEditUser, setRoleEditUser] = useState(null);
             const [roleDraft, setRoleDraft] = useState({ role: ROLES.PLAYER, managedGames: [] });
             const [rakeDraft, setRakeDraft] = useState(clubSettings.rakePct);
@@ -4266,9 +4269,10 @@
                 } catch(e) { showToast("Error sending message", "error"); }
             };
 
-            const adjustBalance = async (target, isDeposit) => {
-                const raw = window.prompt(isDeposit ? `How many chips to deposit to ${target.username}? (deducted from your balance)` : `How many chips to withdraw from ${target.username}? (added to your balance)`, "100");
-                const amount = parseFloat(raw);
+            // Open the styled chips window (replaces the ugly window.prompt).
+            const adjustBalance = (target, isDeposit) => { setChip({ target, mode: isDeposit ? 'deposit' : 'withdraw' }); setChipAmt(''); };
+            const doAdjust = async (target, amount, isDeposit) => {
+                amount = parseFloat(amount);
                 if (!amount || isNaN(amount) || amount <= 0) return;
                 try {
                     await window.fb.runTransaction(window.fb.db, async (tr) => {
@@ -4289,7 +4293,46 @@
                         tr.update(targetRef, { balance: round2(targetBal) });
                     });
                     showToast(isDeposit ? `Deposited ${formatMoney(amount)} to ${target.username}` : `Withdrew ${formatMoney(amount)} from ${target.username}`, "success");
+                    setChip(null);
                 } catch (e) { showToast(typeof e === 'string' ? e : "Action error", "error"); }
+            };
+            // Reset a single player's balance to 0 — the chips return to the owner.
+            const resetMember = async (target) => {
+                const bal = round2(Number(target.balance) || 0);
+                if (bal <= 0) return showToast(`${target.username} is already at 0`, "info");
+                if (!window.confirm(`Reset ${target.username}'s balance to 0?\n${formatMoney(bal)} returns to your balance.`)) return;
+                await doAdjust(target, bal, false);
+            };
+            // Reset Cycle: zero EVERY non-bot, non-owner member; the total returns to the
+            // owner. Bots keep their chips. For starting a fresh season after testing.
+            const resetCycle = async () => {
+                const targets = usersList.filter(u => !u.isBot && u.uid !== user.uid && (round2(Number(u.balance) || 0) !== 0));
+                const total = round2(targets.reduce((s, u) => s + (Number(u.balance) || 0), 0));
+                if (targets.length === 0) return showToast("All players are already at 0 — nothing to reset", "info");
+                const ok = window.prompt(`⚠️ RESET CYCLE\nZero the balance of ${targets.length} players and return ${formatMoney(total)} to you.\nBots keep their chips. This cannot be undone.\n\nType RESET to confirm:`);
+                if (ok !== 'RESET') return;
+                setResetBusy(true);
+                let reclaimed = 0;
+                try {
+                    for (const u of targets) {
+                        await window.fb.runTransaction(window.fb.db, async (tr) => {
+                            const r = window.fb.doc(window.fb.db, "memberships", u.id);
+                            const s = await tr.get(r);
+                            if (!s.exists()) return;
+                            const b = round2(Number(s.data().balance) || 0);
+                            if (b === 0) return;
+                            reclaimed = round2(reclaimed + b);
+                            tr.update(r, { balance: 0 });
+                        });
+                    }
+                    if (reclaimed > 0) await window.fb.runTransaction(window.fb.db, async (tr) => {
+                        const oRef = memDoc(user.uid);
+                        const s = await tr.get(oRef);
+                        tr.update(oRef, { balance: round2((s.data().balance || 0) + reclaimed) });
+                    });
+                    showToast(`Cycle reset — ${formatMoney(reclaimed)} returned to you. Players at 0, bots untouched.`, "success");
+                } catch (e) { showToast("Reset error — some players may not have reset", "error"); }
+                setResetBusy(false);
             };
 
             const saveClubSettings = async () => {
@@ -4547,6 +4590,35 @@
                         </div>
 
                         {/* Players: העברות צ'יפים + Roles */}
+                        {chip && ReactDOM.createPortal(
+                            <div dir="ltr" className="fixed inset-0 z-[340] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setChip(null)}>
+                                <div onClick={e => e.stopPropagation()} className="w-full max-w-sm rounded-3xl p-6 animate-pop-in" style={{ background: 'linear-gradient(160deg, #241312, #140B0A)', border: '1px solid rgba(248,200,48,0.3)', boxShadow: '0 20px 60px rgba(0,0,0,0.6)' }}>
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <img src={avatarUrl({ ...chip.target, uid: chip.target.id })} className="w-12 h-12 rounded-xl bg-slate-800 shrink-0" style={{ border: '2px solid rgba(248,200,48,0.4)' }} />
+                                        <div className="min-w-0">
+                                            <div className="font-black text-white truncate" style={{ fontFamily: "'Cinzel',serif" }}>{chip.target.username}</div>
+                                            <div className="text-[11px] text-slate-400 truncate" dir="ltr">{chip.target.playerId || ''}</div>
+                                        </div>
+                                    </div>
+                                    <div className="rounded-2xl px-4 py-3 mb-4 flex items-center justify-between" style={{ background: 'rgba(248,200,48,0.08)', border: '1px solid rgba(248,200,48,0.25)' }}>
+                                        <span className="text-[11px] uppercase tracking-widest font-bold text-slate-400">Current balance</span>
+                                        <span className="text-lg font-black" style={{ color: '#F8C830' }}><i className="fa-solid fa-coins mr-1.5 opacity-80"></i>{formatMoney(chip.target.balance || 0)}</span>
+                                    </div>
+                                    <div className="flex gap-2 mb-3">
+                                        <button onClick={() => setChip({ ...chip, mode: 'deposit' })} className={`flex-1 py-2.5 rounded-xl font-black text-sm border ${chip.mode === 'deposit' ? 'bg-emerald-600 border-emerald-300 text-white' : 'bg-slate-900 border-white/10 text-slate-300'}`}>+ Add</button>
+                                        <button onClick={() => setChip({ ...chip, mode: 'withdraw' })} className={`flex-1 py-2.5 rounded-xl font-black text-sm border ${chip.mode === 'withdraw' ? 'bg-rose-700 border-rose-400 text-white' : 'bg-slate-900 border-white/10 text-slate-300'}`}>− Remove</button>
+                                    </div>
+                                    <input autoFocus type="number" value={chipAmt} onChange={e => setChipAmt(e.target.value)} placeholder="Amount of chips" dir="ltr" className="w-full bg-slate-900 rounded-xl px-4 py-3 text-white font-black text-center text-lg outline-none mb-2" style={{ border: '1.5px solid rgba(248,200,48,0.4)' }} />
+                                    <div className="flex flex-wrap gap-1.5 mb-4 justify-center">
+                                        {[100, 500, 1000, 5000, 10000].map(v => <button key={v} onClick={() => setChipAmt(String((parseFloat(chipAmt) || 0) + v))} className="text-[11px] font-black px-3 py-1.5 rounded-full bg-slate-900 border border-white/10 text-slate-300 hover:border-amber-500/50">+{formatShort(v)}</button>)}
+                                        {chip.mode === 'withdraw' && <button onClick={() => setChipAmt(String(round2(Number(chip.target.balance) || 0)))} className="text-[11px] font-black px-3 py-1.5 rounded-full border text-amber-300" style={{ borderColor: 'rgba(248,200,48,0.5)' }}>All</button>}
+                                    </div>
+                                    {chip.mode === 'deposit' && (parseFloat(chipAmt) > 0) && <div className="text-center text-[11px] font-bold mb-2 text-slate-400">New balance: <span style={{ color: '#F8C830' }}>{formatMoney((Number(chip.target.balance) || 0) + (parseFloat(chipAmt) || 0))}</span></div>}
+                                    {chip.mode === 'withdraw' && (parseFloat(chipAmt) > 0) && <div className="text-center text-[11px] font-bold mb-2 text-slate-400">New balance: <span style={{ color: '#F8C830' }}>{formatMoney(Math.max(0, (Number(chip.target.balance) || 0) - (parseFloat(chipAmt) || 0)))}</span></div>}
+                                    <button onClick={() => doAdjust(chip.target, chipAmt, chip.mode === 'deposit')} disabled={!(parseFloat(chipAmt) > 0)} className={`w-full py-3.5 rounded-2xl font-black text-white shadow-lg disabled:opacity-40 ${chip.mode === 'deposit' ? 'bg-gradient-to-b from-emerald-500 to-emerald-700' : 'bg-gradient-to-b from-rose-600 to-rose-800'}`}>{chip.mode === 'deposit' ? 'Add chips' : 'Remove chips'}</button>
+                                    <button onClick={() => setChip(null)} className="w-full mt-2 text-slate-500 hover:text-white text-sm font-bold">Cancel</button>
+                                </div>
+                            </div>, document.body)}
                         {playerFile && <PlayerFileModal mem={playerFile} agentName={agentName} canEdit={isOwner || canManageAny || playerFile.agentUid === user.uid} onClose={() => setPlayerFile(null)} showToast={showToast} />}
                         {assignFor && ReactDOM.createPortal(
                             <div dir="ltr" className="fixed inset-0 z-[320] bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setAssignFor(null)}>
@@ -4624,9 +4696,12 @@
                                     <span className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center"><i className="fa-solid fa-money-bill-transfer text-emerald-400 text-sm"></i></span>
                                     Players · Chips · Roles
                                 </h3>
-                                <div className="relative">
-                                    <i className="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-                                    <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search player..." className="bg-slate-900/80 border border-white/10 rounded-full pr-9 pl-4 py-2 text-sm text-white w-52 outline-none focus:border-emerald-500/50" />
+                                <div className="flex items-center gap-2">
+                                    <div className="relative">
+                                        <i className="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                                        <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search player..." className="bg-slate-900/80 border border-white/10 rounded-full pr-9 pl-4 py-2 text-sm text-white w-40 sm:w-52 outline-none focus:border-emerald-500/50" />
+                                    </div>
+                                    {isOwner && <button onClick={resetCycle} disabled={resetBusy} className="text-xs font-black px-4 py-2 rounded-full border shrink-0 disabled:opacity-50 whitespace-nowrap" style={{ color: '#F8C830', borderColor: 'rgba(248,200,48,0.5)', background: 'rgba(248,200,48,0.08)' }} title="Zero all players, return the chips to you (bots keep theirs)">{resetBusy ? '…' : '♻ Reset cycle'}</button>}
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2 max-h-96 overflow-y-auto pl-1">
@@ -4641,15 +4716,18 @@
                                                     {isGodUser(u) && isGodUser(user) && <i className="fa-solid fa-eye text-purple-400 text-[10px]" title="GOD"></i>}
                                                     {u.role && u.role !== ROLES.PLAYER && <span className="text-[9px] bg-blue-500/15 border border-blue-500/40 text-blue-300 px-2 py-0.5 rounded-full font-bold">{ROLE_LABELS[u.role]}</span>}
                                                 </div>
+                                                <div className="text-[13px] font-black mt-0.5" style={{ color: '#F8C830' }} dir="ltr"><i className="fa-solid fa-coins mr-1 opacity-80"></i>{formatMoney(u.balance || 0)}</div>
                                                 <div className="text-[11px] text-slate-400 truncate" dir="ltr">{u.email} · <span className="text-slate-500 font-black">{u.playerId || ''}</span></div>
                                                 {u.googleName && u.googleName !== u.username && <div className="text-[10px] text-slate-500 font-bold truncate" dir="ltr">👤 {u.googleName}</div>}
                                                 {u.agentUid && <div className="text-[10px] text-purple-300/90 font-bold truncate">🤝 {agentName(u.agentUid)} ({u.agentPct || 0}%)</div>}
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                                            <Coin amount={u.balance} className="text-sm hidden sm:inline-flex" />
-                                            <button onClick={()=>adjustBalance(u, true)} className="w-9 h-9 rounded-xl bg-gradient-to-b from-emerald-500 to-emerald-800 hover:from-emerald-400 text-white font-black shadow-md" title="Deposit chips">+</button>
-                                            <button onClick={()=>adjustBalance(u, false)} className="w-9 h-9 rounded-full bg-slate-800 hover:bg-rose-900 text-white font-black border border-white/10" title="Withdraw chips">−</button>
+                                            <button onClick={()=>adjustBalance(u, true)} className="w-9 h-9 rounded-xl bg-gradient-to-b from-emerald-500 to-emerald-800 hover:from-emerald-400 text-white font-black shadow-md" title="Add chips">+</button>
+                                            <button onClick={()=>adjustBalance(u, false)} className="w-9 h-9 rounded-full bg-slate-800 hover:bg-rose-900 text-white font-black border border-white/10" title="Remove chips">−</button>
+                                            {!u.isBot && u.uid !== user.uid && (round2(Number(u.balance)||0) > 0) && (
+                                                <button onClick={()=>resetMember(u)} className="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-900 text-slate-300 hover:text-white border border-white/10" title="Reset balance to 0 (returns to you)"><i className="fa-solid fa-rotate-left text-xs"></i></button>
+                                            )}
                                             {!u.isBot && u.uid !== user.uid && (
                                                 <button onClick={()=>sendDirectMsg(u)} className="w-9 h-9 rounded-full bg-slate-800 hover:bg-sky-900 text-slate-300 hover:text-white border border-white/10" title="Send a personal message"><i className="fa-solid fa-envelope text-xs"></i></button>
                                             )}
