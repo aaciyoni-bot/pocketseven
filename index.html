@@ -4426,6 +4426,7 @@
             const copyText = async (txt, msg) => { try { await navigator.clipboard.writeText(txt); showToast(msg, "success"); } catch(e) { showToast(txt, "info"); } };
             const realPlayers = usersList.filter(u => u.status === 'approved' && !u.isBot);
             const players = usersList.filter(u => u.status === 'approved' && u.uid !== user.uid)
+                .filter(u => (isOwner || canManageAny) ? true : (u.agentUid === user.uid)) // an agent sees ONLY their own assigned players
                 .filter(u => !search || (u.username||'').toLowerCase().includes(search.toLowerCase()) || (u.email||'').toLowerCase().includes(search.toLowerCase()) || (u.playerId||'').toLowerCase().includes(search.toLowerCase()));
 
             const statTiles = [
