@@ -2060,6 +2060,7 @@
                     clubProfits: m.clubProfits || 0, agentProfits: m.agentProfits || 0,
                     lastBonusAt: m.lastBonusAt || 0, lastScratchAt: m.lastScratchAt || 0,
                     agentUid: m.agentUid || '', agentPct: m.agentPct || 0,
+                    creditLimit: m.creditLimit || 0, depositReq: m.depositReq || null,
                     managedGames: god ? GAMES.map(g => g.id) : (m.managedGames || []),
                 };
             }, [dbUser, activeClub, activeMem]);
@@ -3289,6 +3290,21 @@
         function LobbyView({ user, tables, tournaments, clubSettings, tab, setTab, onJoinPoker, onJoinDurak, onJoinOfc, onCreatePoker, showToast }) {
             const [showCreateDurak, setShowCreateDurak] = useState(false);
             const [durakOpts, setDurakOpts] = useState({ deckSize: 36, variant: 'podkidnoy', buyIn: 500, maxPlayers: 4, bluff: false });
+            // Player → agent deposit request. Pending request lives on the player's membership;
+            // the agent approves in the back office, or it auto-credits up to the player's limit.
+            const [depOpen, setDepOpen] = useState(false);
+            const [depAmt, setDepAmt] = useState('');
+            const myLimit = Number(user.creditLimit) || 0;
+            const pendingReq = user.depositReq && user.depositReq.amount ? user.depositReq : null;
+            const sendDepReq = async () => {
+                const amt = round2(Math.max(1, parseFloat(depAmt) || 0));
+                if (!amt) return;
+                try {
+                    await window.fb.updateDoc(memDoc(user.uid), { depositReq: { amount: amt, at: Date.now(), status: 'pending' } });
+                    showToast(`Requested ${formatMoney(amt)} from your agent 💵`, "success");
+                    setDepOpen(false); setDepAmt('');
+                } catch (e) { showToast("Couldn't send the request", "error"); }
+            };
 
             const GAME_ORDER = ['NLH', 'Pineapple', 'Omaha 4', 'Omaha 5', 'Omaha 6']; // fixed lobby order: NLH → Pineapple → PLO/PLO5/PLO6
             const gtRank = (t) => { const idx = GAME_ORDER.indexOf((t.settings || {}).baseGameType || 'NLH'); return idx < 0 ? 99 : idx; };
@@ -3508,6 +3524,9 @@
                                 <img src="assets/black-gold-chip.png" alt="" style={{ width: 20, height: 20 }} />
                                 <span className="text-[14px] font-extrabold" style={{ color: '#F3EBDE', fontVariantNumeric: 'tabular-nums' }}>{Math.round(Number(user.balance) || 0).toLocaleString()}</span>
                             </div>
+                            <button onClick={() => { setDepOpen(true); setDepAmt(''); }} className="shrink-0 flex items-center justify-center relative active:scale-95 transition-transform" style={{ width: 42, height: 42, borderRadius: '50%', background: 'linear-gradient(160deg,#F8C830,#C99A1E)', color: '#1A0E04', boxShadow: '0 4px 16px rgba(248,200,48,0.45)', fontWeight: 900, fontSize: 20 }} title="Request chips from your agent">$
+                                {pendingReq && <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#0C0908] flex items-center justify-center" style={{ fontSize: 8 }}>⏳</span>}
+                            </button>
                         </div>
 
                         {/* Rewards row — daily spin + scratch (design handoff §12 / 1e) */}
@@ -3532,6 +3551,33 @@
 
                         {/* Pocket Seven is poker-only — no other games are offered. */}
                         {/* poker-only: no game switcher; the variant filter lives inside the poker section */}
+
+                        {depOpen && ReactDOM.createPortal(
+                            <div dir="ltr" className="fixed inset-0 z-[360] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setDepOpen(false)}>
+                                <div onClick={e => e.stopPropagation()} className="w-full max-w-sm rounded-3xl p-6 animate-pop-in" style={{ background: 'linear-gradient(160deg,#241312,#140B0A)', border: '1px solid rgba(248,200,48,0.3)' }}>
+                                    <div className="text-center mb-4">
+                                        <div className="mx-auto mb-2 flex items-center justify-center" style={{ width: 54, height: 54, borderRadius: '50%', background: 'linear-gradient(160deg,#F8C830,#C99A1E)', color: '#1A0E04', fontWeight: 900, fontSize: 26 }}>$</div>
+                                        <h3 className="text-xl font-black text-white" style={{ fontFamily: "'Cinzel',serif" }}>Request chips</h3>
+                                        <p className="text-[12px] font-bold mt-1" style={{ color: '#B29B8B' }}>Ask your agent to top you up{myLimit > 0 ? ` · your limit is ${formatMoney(myLimit)}` : ''}</p>
+                                    </div>
+                                    {pendingReq ? (
+                                        <div className="rounded-2xl px-4 py-4 mb-4 text-center" style={{ background: 'rgba(248,200,48,0.08)', border: '1px solid rgba(248,200,48,0.25)' }}>
+                                            <div className="text-sm font-black" style={{ color: '#F8C830' }}>⏳ Pending: {formatMoney(pendingReq.amount)}</div>
+                                            <div className="text-[11px] font-bold mt-1" style={{ color: '#B29B8B' }}>Waiting for your agent{myLimit > 0 ? ' — auto-credited if they miss it' : ''}.</div>
+                                        </div>
+                                    ) : (
+                                        <React.Fragment>
+                                            <input autoFocus type="number" value={depAmt} onChange={e => setDepAmt(e.target.value)} placeholder="How many chips?" dir="ltr" className="w-full bg-slate-900 rounded-xl px-4 py-3 text-white font-black text-center text-lg outline-none mb-2" style={{ border: '1.5px solid rgba(248,200,48,0.4)' }} />
+                                            <div className="flex flex-wrap gap-1.5 mb-4 justify-center">
+                                                {[500, 1000, 5000, 10000].map(v => <button key={v} onClick={() => setDepAmt(String((parseFloat(depAmt) || 0) + v))} className="text-[11px] font-black px-3 py-1.5 rounded-full bg-slate-900 border border-white/10 text-slate-300">+{formatShort(v)}</button>)}
+                                                {myLimit > 0 && <button onClick={() => setDepAmt(String(myLimit))} className="text-[11px] font-black px-3 py-1.5 rounded-full border text-amber-300" style={{ borderColor: 'rgba(248,200,48,0.5)' }}>Limit</button>}
+                                            </div>
+                                            <button onClick={sendDepReq} disabled={!(parseFloat(depAmt) > 0)} className="w-full py-3.5 rounded-2xl font-black text-slate-900 shadow-lg disabled:opacity-40" style={{ background: 'linear-gradient(180deg,#F8C830,#C99A1E)' }}>Send request to agent</button>
+                                        </React.Fragment>
+                                    )}
+                                    <button onClick={() => setDepOpen(false)} className="w-full mt-2 text-slate-500 hover:text-white text-sm font-bold">Close</button>
+                                </div>
+                            </div>, document.body)}
 
                         {scrOpen && bonusEnabled && ReactDOM.createPortal(
                             <div dir="ltr" className="fixed inset-0 z-[250] bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => (!scr || scr.revealed) && setScrOpen(false)}>
@@ -4337,6 +4383,33 @@
                 setResetBusy(false);
             };
 
+            // Deposit requests: a player taps 💲 → their agent (or owner) approves here,
+            // depositing from the approver's balance. Clears the request atomically.
+            const approveDeposit = async (target, amountOverride) => {
+                const req = target.depositReq || {};
+                const amount = round2(amountOverride != null ? amountOverride : (Number(req.amount) || 0));
+                if (amount <= 0) { try { await window.fb.updateDoc(window.fb.doc(window.fb.db, "memberships", target.id), { depositReq: null }); } catch(e){} return; }
+                try {
+                    await window.fb.runTransaction(window.fb.db, async (tr) => {
+                        const oRef = memDoc(user.uid), r = window.fb.doc(window.fb.db, "memberships", target.id);
+                        const oS = await tr.get(oRef), s = await tr.get(r);
+                        if ((oS.data().balance || 0) < amount) throw "You don't have enough balance for this deposit.";
+                        tr.update(oRef, { balance: round2((oS.data().balance || 0) - amount) });
+                        tr.update(r, { balance: round2((s.data().balance || 0) + amount), depositReq: null });
+                    });
+                    showToast(`Deposited ${formatMoney(amount)} to ${target.username}`, "success");
+                } catch (e) { showToast(typeof e === 'string' ? e : "Deposit error", "error"); }
+            };
+            const dismissDeposit = async (target) => {
+                try { await window.fb.updateDoc(window.fb.doc(window.fb.db, "memberships", target.id), { depositReq: null }); showToast("Request dismissed", "info"); } catch(e){}
+            };
+            const setCreditLimit = async (target) => {
+                const raw = window.prompt(`Auto-credit limit for ${target.username} (chips). If the agent misses a request, it auto-tops up to this. 0 = off.`, String(Number(target.creditLimit) || 0));
+                if (raw == null) return;
+                const lim = round2(Math.max(0, parseFloat(raw) || 0));
+                try { await window.fb.updateDoc(window.fb.doc(window.fb.db, "memberships", target.id), { creditLimit: lim }); showToast(`Limit for ${target.username}: ${formatMoney(lim)}`, "success"); } catch(e){ showToast("Error", "error"); }
+            };
+
             const saveClubSettings = async () => {
                 const pct = parseFloat(rakeDraft);
                 if (isNaN(pct) || pct < 0 || pct > 20) return showToast("Invalid rake percentage (0-20)", "error");
@@ -4430,6 +4503,37 @@
             const players = usersList.filter(u => u.status === 'approved' && u.uid !== user.uid)
                 .filter(u => (isOwner || canManageAny) ? true : (u.agentUid === user.uid)) // an agent sees ONLY their own assigned players
                 .filter(u => !search || (u.username||'').toLowerCase().includes(search.toLowerCase()) || (u.email||'').toLowerCase().includes(search.toLowerCase()) || (u.playerId||'').toLowerCase().includes(search.toLowerCase()));
+
+            // Auto-credit: if a deposit request sits unanswered past the timeout AND the player
+            // has a limit, top up min(requested, limit) from the approver's balance. The
+            // transaction re-reads the request and clears it, so it can NEVER double-credit.
+            const AUTO_CREDIT_MS = Number(clubSettings?.autoCreditMins || 2) * 60000;
+            useEffect(() => {
+                if (!(isOwner || canManageAny || isAgentOnly)) return;
+                const iv = setInterval(() => {
+                    usersList.forEach(u => {
+                        if (u.isBot || u.uid === user.uid) return;
+                        if (!(isOwner || canManageAny) && u.agentUid !== user.uid) return; // agents auto-credit only their own
+                        const req = u.depositReq;
+                        if (!req || !(Number(req.amount) > 0)) return;
+                        const lim = round2(Number(u.creditLimit) || 0);
+                        if (lim <= 0) return;                                   // no limit → agent must approve manually
+                        if (Date.now() - (Number(req.at) || 0) < AUTO_CREDIT_MS) return;
+                        const amt = round2(Math.min(Number(req.amount) || 0, lim));
+                        if (amt <= 0) { window.fb.updateDoc(window.fb.doc(window.fb.db, "memberships", u.id), { depositReq: null }).catch(() => {}); return; }
+                        window.fb.runTransaction(window.fb.db, async (tr) => {
+                            const oRef = memDoc(user.uid), r = window.fb.doc(window.fb.db, "memberships", u.id);
+                            const oS = await tr.get(oRef), s = await tr.get(r);
+                            const cur = s.data().depositReq;
+                            if (!cur || Number(cur.at) !== Number(req.at)) return;   // already handled / changed
+                            if ((oS.data().balance || 0) < amt) return;             // approver can't cover — leave pending
+                            tr.update(oRef, { balance: round2((oS.data().balance || 0) - amt) });
+                            tr.update(r, { balance: round2((s.data().balance || 0) + amt), depositReq: null });
+                        }).then(() => showToast(`Auto-credited ${formatMoney(amt)} to ${u.username} (agent missed the request)`, "info")).catch(() => {});
+                    });
+                }, 20000);
+                return () => clearInterval(iv);
+            }, [usersList, isOwner, canManageAny, isAgentOnly]);
 
             const statTiles = [
                 { label: 'Your balance', value: formatMoney(user.balance), icon: 'fa-wallet', color: 'text-white' },
@@ -4728,7 +4832,8 @@
                                                     {isGodUser(u) && isGodUser(user) && <i className="fa-solid fa-eye text-purple-400 text-[10px]" title="GOD"></i>}
                                                     {u.role && u.role !== ROLES.PLAYER && <span className="text-[9px] bg-blue-500/15 border border-blue-500/40 text-blue-300 px-2 py-0.5 rounded-full font-bold">{ROLE_LABELS[u.role]}</span>}
                                                 </div>
-                                                <div className="text-[13px] font-black mt-0.5" style={{ color: '#F8C830' }} dir="ltr"><i className="fa-solid fa-coins mr-1 opacity-80"></i>{formatMoney(u.balance || 0)}</div>
+                                                <div className="text-[13px] font-black mt-0.5" style={{ color: '#F8C830' }} dir="ltr"><i className="fa-solid fa-coins mr-1 opacity-80"></i>{formatMoney(u.balance || 0)}{(Number(u.creditLimit) || 0) > 0 && <span className="text-[10px] font-bold ml-2" style={{ color: '#B29B8B' }}>limit {formatMoney(u.creditLimit)}</span>}</div>
+                                                {u.depositReq && u.depositReq.amount ? <div className="text-[11px] font-black mt-0.5 animate-pulse" style={{ color: '#34d399' }} dir="ltr">💵 requested {formatMoney(u.depositReq.amount)}</div> : null}
                                                 <div className="text-[11px] text-slate-400 truncate" dir="ltr">{u.email} · <span className="text-slate-500 font-black">{u.playerId || ''}</span></div>
                                                 {u.googleName && u.googleName !== u.username && <div className="text-[10px] text-slate-500 font-bold truncate" dir="ltr">👤 {u.googleName}</div>}
                                                 {u.agentUid && <div className="text-[10px] text-purple-300/90 font-bold truncate">🤝 {agentName(u.agentUid)} ({u.agentPct || 0}%)</div>}
@@ -4739,6 +4844,12 @@
                                             <button onClick={()=>adjustBalance(u, false)} className="w-9 h-9 rounded-full bg-slate-800 hover:bg-rose-900 text-white font-black border border-white/10" title="Remove chips">−</button>
                                             {!u.isBot && u.uid !== user.uid && (round2(Number(u.balance)||0) > 0) && (
                                                 <button onClick={()=>resetMember(u)} className="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-900 text-slate-300 hover:text-white border border-white/10" title="Reset balance to 0 (returns to you)"><i className="fa-solid fa-rotate-left text-xs"></i></button>
+                                            )}
+                                            {u.depositReq && u.depositReq.amount && (
+                                                <button onClick={()=>approveDeposit(u)} className="w-9 h-9 rounded-full bg-gradient-to-b from-emerald-500 to-emerald-700 hover:from-emerald-400 text-white font-black shadow-md animate-pulse" title={`Approve deposit of ${formatMoney(u.depositReq.amount)}`}><i className="fa-solid fa-check text-xs"></i></button>
+                                            )}
+                                            {!u.isBot && u.uid !== user.uid && (
+                                                <button onClick={()=>setCreditLimit(u)} className="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-900 text-slate-300 hover:text-white border border-white/10" title={(Number(u.creditLimit)||0) > 0 ? `Auto-credit limit: ${formatMoney(u.creditLimit)}` : 'Set auto-credit limit'}><i className="fa-solid fa-gauge-high text-xs"></i></button>
                                             )}
                                             {!u.isBot && u.uid !== user.uid && (
                                                 <button onClick={()=>sendDirectMsg(u)} className="w-9 h-9 rounded-full bg-slate-800 hover:bg-sky-900 text-slate-300 hover:text-white border border-white/10" title="Send a personal message"><i className="fa-solid fa-envelope text-xs"></i></button>
