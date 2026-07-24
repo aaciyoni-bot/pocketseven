@@ -4453,6 +4453,15 @@
                             )}
                         </div>
 
+                        {/* Quick actions — always visible at the top, no scrolling to hunt */}
+                        {isOwner && (
+                            <div className="flex flex-wrap items-center gap-2 mb-5">
+                                <button onClick={() => { const el = document.getElementById('bo-players'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="text-xs font-black px-4 py-2.5 rounded-xl border shrink-0" style={{ color: '#F8C830', borderColor: 'rgba(248,200,48,0.4)', background: 'rgba(248,200,48,0.06)' }}><i className="fa-solid fa-users mr-1.5"></i>Players</button>
+                                <button onClick={() => { const el = document.getElementById('bo-settings'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="text-xs font-black px-4 py-2.5 rounded-xl border shrink-0" style={{ color: '#F8C830', borderColor: 'rgba(248,200,48,0.4)', background: 'rgba(248,200,48,0.06)' }}><i className="fa-solid fa-gear mr-1.5"></i>Settings</button>
+                                <button onClick={resetCycle} disabled={resetBusy} className="text-xs font-black px-4 py-2.5 rounded-xl text-slate-900 shadow-lg disabled:opacity-50 shrink-0" style={{ background: 'linear-gradient(180deg,#F8C830,#C99A1E)' }} title="Zero all players, return chips to you (bots keep theirs)">{resetBusy ? 'Resetting…' : '♻ Reset cycle · players → 0'}</button>
+                            </div>
+                        )}
+
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                             {statTiles.map((t, i) => (
                                 <div key={i} className="stat-tile p-5 rounded-2xl">
@@ -4467,7 +4476,7 @@
 
                         {/* Settings מועדון - Global rake (Owner בלבד) */}
                         {isOwner && (
-                            <div className="glass-panel p-6 rounded-3xl mb-6 border border-amber-500/20">
+                            <div id="bo-settings" className="glass-panel p-6 rounded-3xl mb-6 border border-amber-500/20">
                                 <h3 className="text-lg font-black text-white mb-4 flex items-center gap-2">
                                     <span className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center"><i className="fa-solid fa-sliders text-amber-400 text-sm"></i></span>
                                     Club Settings
@@ -4691,7 +4700,7 @@
                             </div>
                         )}
 
-                        <div className="glass-panel p-6 rounded-3xl mb-6">
+                        <div id="bo-players" className="glass-panel p-6 rounded-3xl mb-6" style={{ scrollMarginTop: '12px' }}>
                             <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
                                 <h3 className="text-lg font-black text-white flex items-center gap-2">
                                     <span className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center"><i className="fa-solid fa-money-bill-transfer text-emerald-400 text-sm"></i></span>
