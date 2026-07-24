@@ -897,12 +897,14 @@
   <script>
     (function () {
       var el = document.getElementById('orizis-intro');
-      var done = false;
-      function out() { if (done) return; done = true; el.classList.add('oi-out'); setTimeout(function () { el.remove(); }, 500);
+      var done = false, start = Date.now();
+      // ev = a tap. Ignore taps in the first 900ms so the launch/ghost tap can't
+      // dismiss the splash the instant it appears. The auto-timer (no ev) always fires.
+      function out(ev) { if (done) return; if (ev && Date.now() - start < 900) return; done = true; el.classList.add('oi-out'); setTimeout(function () { el.remove(); }, 500);
         if (window.__startPS) window.__startPS(); } // hand off to the PocketSeven intro
       el.addEventListener('click', out);
       el.addEventListener('touchstart', out, { passive: true });
-      setTimeout(out, 3200);
+      setTimeout(function () { out(); }, 3200);
     })();
   </script>
 </div>
@@ -927,11 +929,11 @@
   <div class="ps-load"><div class="ps-spin"></div>LOADING</div>
   <script>
     (function(){
-      var el = document.getElementById('ps-intro');
-      var hide = function(){ if (!el) return; el.classList.add('ps-out'); setTimeout(function(){ el && el.remove(); el = null; }, 520); };
+      var el = document.getElementById('ps-intro'), revealAt = 0;
+      var hide = function(ev){ if (!el) return; if (ev && revealAt && Date.now() - revealAt < 700) return; el.classList.add('ps-out'); setTimeout(function(){ el && el.remove(); el = null; }, 520); };
       el.addEventListener('click', hide);
       // Plays AFTER the ORIZIS intro hands off (brand splash first, then the product).
-      window.__startPS = function(){ if (!el) return; el.style.opacity = '1'; el.style.pointerEvents = 'auto'; setTimeout(hide, 2600); };
+      window.__startPS = function(){ if (!el) return; revealAt = Date.now(); el.style.opacity = '1'; el.style.pointerEvents = 'auto'; setTimeout(function(){ hide(); }, 2600); };
       // Fallback: if ORIZIS was removed without handing off, start anyway.
       setTimeout(function(){ if (el && getComputedStyle(el).opacity === '0') window.__startPS(); }, 4000);
     })();
