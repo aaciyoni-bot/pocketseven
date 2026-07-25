@@ -1783,12 +1783,10 @@
             const bigF = Math.round(W * 0.5);
             return (
                 <div className="select-none shrink-0 relative" style={{ width: W, height: H, borderRadius: rad, background: 'linear-gradient(155deg, #ffffff 0%, #fafafa 46%, #f1f0ec 100%)', boxShadow: '0 3px 8px rgba(2,6,23,0.45), inset 0 0 0 1px rgba(15,23,42,0.10), 1px 0 2px rgba(2,6,23,0.30)', color: rankCol, overflow: 'hidden' }} dir="ltr">
-                    <div style={{ position: 'absolute', top: Math.round(H*0.05), left: Math.round(W*0.09), display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 0.82 }}>
-                        <span style={{ fontSize: rankF, fontWeight: 800, fontFamily: "'Rubik','Inter',sans-serif", letterSpacing: '-0.04em', color: rankCol }}>{card.val}</span>
-                        <span style={{ marginTop: 1, lineHeight: 1 }}><SuitGlyph s={card.suit} grad={!deck4} color={deck4 ? col : undefined} size={suitF + 'px'} /></span>
-                    </div>
-                    <div style={{ position: 'absolute', right: Math.round(W*0.06), bottom: Math.round(H*0.05) }}>
-                        <SuitGlyph s={card.suit} grad={!deck4} color={deck4 ? col : undefined} size={bigF + 'px'} />
+                    {/* Corner index only — one suit (readable when 6 cards are fanned), no duplicate big glyph */}
+                    <div style={{ position: 'absolute', top: Math.round(H*0.06), left: Math.round(W*0.10), display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 0.82 }}>
+                        <span style={{ fontSize: Math.round(rankF*1.16), fontWeight: 800, fontFamily: "'Rubik','Inter',sans-serif", letterSpacing: '-0.05em', color: rankCol }}>{card.val}</span>
+                        <span style={{ marginTop: 2, lineHeight: 1 }}><SuitGlyph s={card.suit} grad={!deck4} color={deck4 ? col : undefined} size={Math.round(suitF*1.16) + 'px'} /></span>
                     </div>
                 </div>
             );
