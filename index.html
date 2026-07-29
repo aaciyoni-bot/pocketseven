@@ -1367,7 +1367,7 @@
                     if (!e.uid) continue;
                     await window.fb.addDoc(window.fb.collection(window.fb.db, "gameLog"), {
                         uid: e.uid, username: e.username || '', game: e.game, clubId: CLUB_ID,
-                        profit: round2(e.profit || 0), tableId: tableId || '', at: Date.now()
+                        profit: round2(e.profit || 0), rake: round2(e.rake || 0), tableId: tableId || '', at: Date.now()
                     });
                 }
             } catch(err) {}
@@ -5511,6 +5511,7 @@
                 };
                 await saveGame(g, pl, { history: [...((histT && histT.history) || []), histEntry].slice(-100), ...tourExtra });
                 distributeRake(rake, Object.values(pl).filter(q => (q.cards || []).length).map(q => q.uid));
+                { const rkUids = Object.values(pl).filter(q => (q.cards || []).length && !q.isBot).map(q => q.uid); if (rake > 0 && rkUids.length) { const sh = round2(rake / rkUids.length); logGameResult(rkUids.map(uid => ({ uid, username: pl[uid].name, game: 'poker', profit: 0, rake: sh })), tableDocId); } }
                 clearTimeout(nextHandRef.current);
                 nextHandRef.current = setTimeout(() => startHand(), 4000);
             };
@@ -5556,6 +5557,7 @@
                 };
                 await saveGame(g, pl, { history: [...((histT && histT.history) || []), histEntry].slice(-100), ...tourExtra });
                 distributeRake(rakeTotal, Object.values(pl).filter(q => (q.cards || []).length).map(q => q.uid));
+                { const rkUids2 = Object.values(pl).filter(q => (q.cards || []).length && !q.isBot).map(q => q.uid); if (rakeTotal > 0 && rkUids2.length) { const sh2 = round2(rakeTotal / rkUids2.length); logGameResult(rkUids2.map(uid => ({ uid, username: pl[uid].name, game: 'poker', profit: 0, rake: sh2 })), tableDocId); } }
                 clearTimeout(nextHandRef.current);
                 nextHandRef.current = setTimeout(() => startHand(), 9000);
             };
