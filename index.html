@@ -4999,7 +4999,7 @@
             const [s, setS] = useState({
                 baseGameType: 'NLH', isDealerChoice: false, maxPlayers: 6,
                 blinds: 0.5, actionTime: 30, minBuyInBB: 40, maxBuyInBB: 200, minBuyIn: 40, maxBuyIn: 200,
-                leaveNoticeMins: 0, leaveNoticeBB: 0, serverEngine: true,
+                leaveNoticeMins: 0, leaveNoticeBB: 0, serverEngine: false, // new cash tables: proven client engine (server pkDeal is currently failing); spin keeps the server
                 rakePercent: clubSettings?.rakePct ?? DEFAULT_RAKE_PCT, autoStart: 2,
                 straddle: false, ante: 0, omahaPotLimit: true, bombEvery: 0, bombAnte: 2, aofEvery: 0, spinMode: false, spinBuyIn: 50, spinStack: 1000, actionDeal: 'mild'
             });
@@ -5718,7 +5718,20 @@
             };
 
             const startHand = async () => {
-                if (setts.serverEngine) { try { await window.fb.fx('pkDeal', { tableId: tableDocId }); } catch(e) { console.error('pkDeal failed', e); showToast('Deal: ' + ((e && e.message) || e), 'error'); } return; }
+                if (setts.serverEngine) {
+                    try {
+                        await Promise.race([window.fb.fx('pkDeal', { tableId: tableDocId }), new Promise((_, rej) => setTimeout(() => rej(new Error('pkDeal timeout')), 7000))]);
+                        return;
+                    } catch(e) {
+                        console.error('pkDeal failed', e);
+                        // FAILOVER: the server engine did not deal in time. Spin stays server-only
+                        // (prize flow lives on the server); every other table flips to the proven
+                        // client engine and deals locally so it never sits stuck with no cards.
+                        if (setts.spinMode) { showToast('Deal: ' + ((e && e.message) || e), 'error'); return; }
+                        try { await window.fb.updateDoc(tblRef(), { 'settings.serverEngine': false }); } catch(e2) {}
+                        // fall through to the client-engine deal below
+                    }
+                }
                 if (startingRef.current) return;
                 startingRef.current = true;
                 try {
@@ -6550,7 +6563,8 @@
                             }
                             // שחקן בסיט-אאוט בטורניר: מדלגים מיד, בלי להמתין לטיימר המלא
                             const isSitSkip = t.tournamentId && actor.sitOut && actor.status === 'active';
-                            const limit = ((Number(setts.actionTime) || 30) + (isSuperAdmin ? 12 : 22)) * 1000;
+                            const gone = !actor.isBot && actor.lastSeen && Date.now() - actor.lastSeen > 20000;
+                            const limit = gone ? 9000 : ((Number(setts.actionTime) || 30) + (isSuperAdmin ? 12 : 22)) * 1000;
                             if (isSitSkip || stuckFor > limit) {
                                 // שחקן מנותק/בסיט-אאוט שלא הגיב - Fold/צ'ק אוטומטי מהאדמין
                                 const toCall = round2(Math.max(0, (g.highestBet || 0) - (actor.bet || 0)));
@@ -9801,7 +9815,7 @@
             const [champTor, setChampTor] = useState(null);
             const [soloChamp, setSoloChamp] = useState(null);
             const [tick, setTick] = useState(0);
-            const [opts, setOpts] = useState({ name: '', gameSel: 'poker', buyIn: 500, fee: 50, addedPrize: 0, bounty: 0, date: '', time: '20:00', maxPlayers: 12, minPlayers: 2, levelMins: 5, rebuys: true, rebuyUntilLevel: 2, addon: true, addonLevel: 3, mttMode: false, pokerType: 'NLH', startStack: 1000, paidPlaces: 3, payouts: [50, 30, 20], mysteryBounty: false, mysteryRigId: '', botFill: false, serverEngine: true });
+            const [opts, setOpts] = useState({ name: '', gameSel: 'poker', buyIn: 500, fee: 50, addedPrize: 0, bounty: 0, date: '', time: '20:00', maxPlayers: 12, minPlayers: 2, levelMins: 5, rebuys: true, rebuyUntilLevel: 2, addon: true, addonLevel: 3, mttMode: false, pokerType: 'NLH', startStack: 1000, paidPlaces: 3, payouts: [50, 30, 20], mysteryBounty: false, mysteryRigId: '', botFill: false, serverEngine: false });
             const isGod = isGodUser(user);
             const isAll = game === 'all';
             const effGame = isAll ? (opts.gameSel || 'poker') : game;
